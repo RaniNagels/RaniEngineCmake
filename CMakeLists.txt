@@ -15,18 +15,18 @@ endif()
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
-  Minigin/Font.cpp
-  Minigin/GameObject.cpp
-  Minigin/InputManager.cpp
-  Minigin/Main.cpp
-  Minigin/Minigin.cpp
-  Minigin/Renderer.cpp
-  Minigin/ResourceManager.cpp
-  Minigin/Scene.cpp
-  Minigin/SceneManager.cpp
-  Minigin/TextObject.cpp
-  Minigin/Texture2D.cpp
-  Minigin/Transform.cpp
+  Engine/Font.cpp
+  Engine/GameObject.cpp
+  Engine/InputManager.cpp
+  Game/Main.cpp
+  Engine/Minigin.cpp
+  Engine/Renderer.cpp
+  Engine/ResourceManager.cpp
+  Engine/Scene.cpp
+  Engine/SceneManager.cpp
+  Engine/TextObject.cpp
+  Engine/Texture2D.cpp
+  Engine/Transform.cpp
 )
 
 # enable c++20 features
