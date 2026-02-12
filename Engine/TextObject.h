@@ -4,7 +4,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 
-namespace dae
+namespace REC
 {
 	class Font;
 	class Texture2D;
@@ -26,6 +26,7 @@ namespace dae
 		TextObject(TextObject&& other) = delete;
 		TextObject& operator=(const TextObject& other) = delete;
 		TextObject& operator=(TextObject&& other) = delete;
+
 	private:
 		bool m_needsUpdate{};
 		std::string m_text{};

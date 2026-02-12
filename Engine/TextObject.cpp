@@ -5,17 +5,17 @@
 #include "Font.h"
 #include "Texture2D.h"
 
-dae::TextObject::TextObject(const std::string& text, Font* font, const SDL_Color& color)
+REC::TextObject::TextObject(const std::string& text, Font* font, const SDL_Color& color)
 	: m_needsUpdate(true), m_text(text), m_color(color), m_font(font), m_textTexture(nullptr)
 { }
 
-dae::TextObject::~TextObject()
+REC::TextObject::~TextObject()
 {
 	delete m_textTexture;
 	m_textTexture = nullptr;
 }
 
-void dae::TextObject::Update()
+void REC::TextObject::Update()
 {
 	if (m_needsUpdate)
 	{
@@ -39,7 +39,7 @@ void dae::TextObject::Update()
 	}
 }
 
-void dae::TextObject::Render() const
+void REC::TextObject::Render() const
 {
 	if (m_textTexture != nullptr)
 	{
@@ -48,18 +48,18 @@ void dae::TextObject::Render() const
 	}
 }
 
-void dae::TextObject::SetText(const std::string& text)
+void REC::TextObject::SetText(const std::string& text)
 {
 	m_text = text;
 	m_needsUpdate = true;
 }
 
-void dae::TextObject::SetPosition(const float x, const float y)
+void REC::TextObject::SetPosition(const float x, const float y)
 {
 	m_transform.SetPosition(x, y);
 }
 
-void dae::TextObject::SetColor(const SDL_Color& color) 
+void REC::TextObject::SetColor(const SDL_Color& color) 
 { 
 	m_color = color; 
 	m_needsUpdate = true; 

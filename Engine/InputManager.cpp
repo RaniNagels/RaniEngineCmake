@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
 #include "InputManager.h"
 
-bool dae::InputManager::ProcessInput()
+bool REC::InputManager::ProcessInput()
 {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {

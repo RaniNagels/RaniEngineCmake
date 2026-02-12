@@ -185,8 +185,9 @@ elseif(WIN32)
     )
   endif()
 
+  message("starting to copy data folder")
   add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
+    COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Game/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
   )
 elseif(APPLE)
   set_target_properties(${TARGET_NAME} PROPERTIES
@@ -214,9 +215,10 @@ elseif(APPLE)
     )
   endif()
 
+   message("starting to copy data folder")
   # Copy Data folder to output directory after build
   add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
+    COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Game/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
   )
 else()
  if(Steamworks_FOUND)
@@ -231,8 +233,9 @@ else()
     )
   endif()
 
+  message("starting to copy data folder")
   # Copy Data folder to output directory after build
   add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
+    COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Game/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
   )
 endif()

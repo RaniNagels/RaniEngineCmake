@@ -5,9 +5,10 @@
 #include "Scene.h"
 #include "Singleton.h"
 
-namespace dae
+namespace REC
 {
 	class Scene;
+
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
@@ -15,6 +16,7 @@ namespace dae
 
 		void Update();
 		void Render();
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

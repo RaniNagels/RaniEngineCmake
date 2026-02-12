@@ -1,15 +1,13 @@
 #include <algorithm>
 #include "Scene.h"
 
-using namespace dae;
-
-void Scene::Add(std::unique_ptr<GameObject> object)
+void REC::Scene::Add(std::unique_ptr<GameObject> object)
 {
 	assert(object != nullptr && "Cannot add a null GameObject to the scene.");
 	m_objects.emplace_back(std::move(object));
 }
 
-void Scene::Remove(const GameObject& object)
+void REC::Scene::Remove(const GameObject& object)
 {
 	m_objects.erase(
 		std::remove_if(
@@ -21,12 +19,12 @@ void Scene::Remove(const GameObject& object)
 	);
 }
 
-void Scene::RemoveAll()
+void REC::Scene::RemoveAll()
 {
 	m_objects.clear();
 }
 
-void Scene::Update()
+void REC::Scene::Update()
 {
 	for(auto& object : m_objects)
 	{
@@ -34,7 +32,7 @@ void Scene::Update()
 	}
 }
 
-void Scene::Render() const
+void REC::Scene::Render() const
 {
 	for (const auto& object : m_objects)
 	{

@@ -1,5 +1,6 @@
 #pragma once
-namespace dae
+
+namespace REC
 {
 	template <typename T>
 	class Singleton

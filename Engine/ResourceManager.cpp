@@ -7,7 +7,7 @@
 
 namespace fs = std::filesystem;
 
-void dae::ResourceManager::Init(const std::filesystem::path& dataPath)
+void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 {
 	m_dataPath = dataPath;
 
@@ -17,7 +17,7 @@ void dae::ResourceManager::Init(const std::filesystem::path& dataPath)
 	}
 }
 
-dae::Texture2D* dae::ResourceManager::LoadTexture(const std::string& file)
+REC::Texture2D* REC::ResourceManager::LoadTexture(const std::string& file)
 {
 	const auto fullPath = m_dataPath/file;
 	const auto filename = fs::path(fullPath).filename().string();
@@ -26,7 +26,7 @@ dae::Texture2D* dae::ResourceManager::LoadTexture(const std::string& file)
 	return m_loadedTextures.at(filename).get();
 }
 
-dae::Font* dae::ResourceManager::LoadFont(const std::string& file, uint8_t size)
+REC::Font* REC::ResourceManager::LoadFont(const std::string& file, uint8_t size)
 {
 	const auto fullPath = m_dataPath/file;
 	const auto filename = fs::path(fullPath).filename().string();
@@ -36,7 +36,7 @@ dae::Font* dae::ResourceManager::LoadFont(const std::string& file, uint8_t size)
 	return m_loadedFonts.at(key).get();
 }
 
-//void dae::ResourceManager::UnloadUnusedResources()
+//void REC::ResourceManager::UnloadUnusedResources()
 //{
 //	for (auto it = m_loadedTextures.begin(); it != m_loadedTextures.end();)
 //	{

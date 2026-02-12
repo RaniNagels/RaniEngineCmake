@@ -6,7 +6,7 @@
 #include "Singleton.h"
 #include "Font.h"
 
-namespace dae
+namespace REC
 {
 	class Texture2D;
 	class Font;

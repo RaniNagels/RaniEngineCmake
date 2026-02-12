@@ -3,14 +3,14 @@
 #include <functional>
 #include <filesystem>
 
-namespace dae
+namespace REC
 {
 	class Minigin final
 	{
-		bool m_quit{};
 	public:
 		explicit Minigin(const std::filesystem::path& dataPath);
 		~Minigin();
+
 		void Run(const std::function<void()>& load);
 		void RunOneFrame();
 
@@ -18,5 +18,8 @@ namespace dae
 		Minigin(Minigin&& other) = delete;
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
+
+	private:
+		bool m_quit{};
 	};
 }

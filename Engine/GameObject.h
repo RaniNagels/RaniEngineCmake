@@ -3,7 +3,7 @@
 #include <memory>
 #include "Transform.h"
 
-namespace dae
+namespace REC
 {
 	class Texture2D;
 
