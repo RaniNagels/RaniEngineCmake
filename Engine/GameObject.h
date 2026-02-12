@@ -43,7 +43,7 @@ namespace REC
 #ifndef __EMSCRIPTEN__
 				if (typeid(*component) == typeid(C))
 #else
-				if (dynamic_cast<C>(component.get()) != nullptr)
+				if (dynamic_cast<C*>(component.get()) != nullptr)
 #endif
 					assert(false && "Cannot add 2 components of the same type");
 			}
@@ -66,7 +66,7 @@ namespace REC
 #ifndef __EMSCRIPTEN__
 				if (typeid(*m_Components[i]) == typeid(C))
 #else
-				if (dynamic_cast<C>(m_Components[i].get()) != nullptr)
+				if (dynamic_cast<C*>(m_Components[i].get()) != nullptr)
 #endif
 				{
 					m_Components[i]->Destroy();
@@ -101,7 +101,7 @@ namespace REC
 #ifndef __EMSCRIPTEN__
 				if (typeid(*component) == typeid(C))
 #else
-				if (dynamic_cast<C>(component.get()) != nullptr)
+				if (dynamic_cast<C*>(component.get()) != nullptr)
 #endif
 					return true;
 			}
