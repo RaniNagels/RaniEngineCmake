@@ -16,6 +16,10 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "Texture2D.h"
+#include "src/TimeSystem.h"
+
+#include <thread>
+#include <chrono>
 
 SDL_Window* g_window{};
 
@@ -32,6 +36,7 @@ void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
+#include <thread>
 
 void LoopCallback(void* arg)
 {
@@ -78,6 +83,8 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 
 	Renderer::GetInstance().Init(g_window);
 	ResourceManager::GetInstance().Init(dataPath);
+
+	m_pTimeSystem = std::make_unique<TimeSystem>();
 }
 
 REC::Minigin::~Minigin()
@@ -91,17 +98,19 @@ REC::Minigin::~Minigin()
 void REC::Minigin::Run(const std::function<void()>& load)
 {
 	load();
+
 #ifndef __EMSCRIPTEN__
 	while (!m_quit)
-		RunOneFrame();
+	{
+		m_pTimeSystem->Update();
+
+		m_quit = !InputManager::GetInstance().ProcessInput();
+		SceneManager::GetInstance().Update(m_pTimeSystem->GetDeltaTime());
+		Renderer::GetInstance().Render();
+
+		std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
+	}
 #else
 	emscripten_set_main_loop_arg(&LoopCallback, this, 0, true);
 #endif
-}
-
-void REC::Minigin::RunOneFrame()
-{
-	m_quit = !InputManager::GetInstance().ProcessInput();
-	SceneManager::GetInstance().Update();
-	Renderer::GetInstance().Render();
 }

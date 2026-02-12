@@ -1,11 +1,11 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-void REC::SceneManager::Update()
+void REC::SceneManager::Update(float deltaT)
 {
 	for(auto& scene : m_scenes)
 	{
-		scene->Update();
+		scene->Update(deltaT);
 	}
 }
 

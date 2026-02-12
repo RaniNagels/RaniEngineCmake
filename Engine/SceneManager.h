@@ -14,7 +14,7 @@ namespace REC
 	public:
 		Scene& CreateScene();
 
-		void Update();
+		void Update(float deltaT);
 		void Render();
 
 	private:

@@ -15,7 +15,7 @@ REC::TextObject::~TextObject()
 	m_textTexture = nullptr;
 }
 
-void REC::TextObject::Update()
+void REC::TextObject::Update(float)
 {
 	if (m_needsUpdate)
 	{

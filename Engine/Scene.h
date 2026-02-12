@@ -13,7 +13,7 @@ namespace REC
 		void Remove(const GameObject& object);
 		void RemoveAll();
 
-		void Update();
+		void Update(float deltaT);
 		void Render() const;
 
 		~Scene() = default;

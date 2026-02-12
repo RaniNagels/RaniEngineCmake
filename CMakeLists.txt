@@ -27,6 +27,10 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Engine/TextObject.cpp
   Engine/Texture2D.cpp
   Engine/Transform.cpp
+  Engine/inc/Component.h
+  Engine/inc/RenderComponent.h
+  Engine/inc/TransformComponent.h
+  Engine/src/TimeSystem.cpp
 )
 
 # enable c++20 features

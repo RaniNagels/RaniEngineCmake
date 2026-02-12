@@ -7,7 +7,7 @@
 
 REC::GameObject::~GameObject() = default;
 
-void REC::GameObject::Update(){}
+void REC::GameObject::Update(float){}
 
 void REC::GameObject::Render() const
 {

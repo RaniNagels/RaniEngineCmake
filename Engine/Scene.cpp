@@ -24,11 +24,11 @@ void REC::Scene::RemoveAll()
 	m_objects.clear();
 }
 
-void REC::Scene::Update()
+void REC::Scene::Update(float deltaT)
 {
 	for(auto& object : m_objects)
 	{
-		object->Update();
+		object->Update(deltaT);
 	}
 }
 
