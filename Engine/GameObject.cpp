@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
+#include "Font.h"
+#include "Texture2D.h"
 
 dae::GameObject::~GameObject() = default;
 

@@ -6,10 +6,9 @@
 namespace dae
 {
 	class Texture2D;
-	class GameObject 
+
+	class GameObject
 	{
-		Transform m_transform{};
-		std::shared_ptr<Texture2D> m_texture{};
 	public:
 		virtual void Update();
 		virtual void Render() const;
@@ -23,5 +22,9 @@ namespace dae
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
+
+	private:
+		Transform m_transform{};
+		Texture2D* m_texture = nullptr;
 	};
 }

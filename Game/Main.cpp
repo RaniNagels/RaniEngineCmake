@@ -10,6 +10,8 @@
 #include "../Engine/ResourceManager.h"
 #include "../Engine/TextObject.h"
 #include "../Engine/Scene.h"
+#include "../Engine/Font.h"
+#include "../Engine/Texture2D.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
