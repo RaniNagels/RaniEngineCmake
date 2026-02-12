@@ -102,15 +102,20 @@ void REC::Minigin::Run(const std::function<void()>& load)
 #ifndef __EMSCRIPTEN__
 	while (!m_quit)
 	{
-		m_pTimeSystem->Update();
-
-		m_quit = !InputManager::GetInstance().ProcessInput();
-		SceneManager::GetInstance().Update(m_pTimeSystem->GetDeltaTime());
-		Renderer::GetInstance().Render();
-
-		std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
+		RunOneFrame();
 	}
 #else
 	emscripten_set_main_loop_arg(&LoopCallback, this, 0, true);
 #endif
+}
+
+void REC::Minigin::RunOneFrame()
+{
+	m_pTimeSystem->Update();
+
+	m_quit = !InputManager::GetInstance().ProcessInput();
+	SceneManager::GetInstance().Update(m_pTimeSystem->GetDeltaTime());
+	Renderer::GetInstance().Render();
+
+	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
 }

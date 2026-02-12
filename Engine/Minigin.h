@@ -16,6 +16,7 @@ namespace REC
 		~Minigin();
 
 		void Run(const std::function<void()>& load);
+		void RunOneFrame();
 
 		Minigin(const Minigin& other) = delete;
 		Minigin(Minigin&& other) = delete;
