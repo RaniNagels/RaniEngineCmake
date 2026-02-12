@@ -16,7 +16,6 @@ namespace REC
 		void Render() const override;
 
 		void SetText(const std::string& text);
-		void SetPosition(float x, float y);
 		void SetColor(const SDL_Color& color);
 
 		TextObject(const std::string& text, Font* font, const SDL_Color& color = { 255, 255, 255, 255 });
@@ -31,7 +30,6 @@ namespace REC
 		bool m_needsUpdate{};
 		std::string m_text{};
 		SDL_Color m_color{ 255, 255, 255, 255 };
-		Transform m_transform{};
 		Font* m_font{};
 		Texture2D* m_textTexture{};
 	};

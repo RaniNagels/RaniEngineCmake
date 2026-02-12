@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
+#include "inc/TransformComponent.h"
 
 REC::TextObject::TextObject(const std::string& text, Font* font, const SDL_Color& color)
 	: m_needsUpdate(true), m_text(text), m_color(color), m_font(font), m_textTexture(nullptr)
@@ -43,7 +44,9 @@ void REC::TextObject::Render() const
 {
 	if (m_textTexture != nullptr)
 	{
-		const auto& pos = m_transform.GetPosition();
+		auto* transform = GetComponent<TransformComponent>();
+		glm::vec2 pos{};
+		if (transform) pos = transform->GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
 	}
 }
@@ -52,11 +55,6 @@ void REC::TextObject::SetText(const std::string& text)
 {
 	m_text = text;
 	m_needsUpdate = true;
-}
-
-void REC::TextObject::SetPosition(const float x, const float y)
-{
-	m_transform.SetPosition(x, y);
 }
 
 void REC::TextObject::SetColor(const SDL_Color& color) 

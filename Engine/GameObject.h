@@ -3,11 +3,16 @@
 #include <memory>
 #include "Transform.h"
 #include "inc/Component.h"
+#include <vector>
 
 namespace REC
 {
 	template <typename C>
 	concept Cpt = std::derived_from<C, Component>;
+
+	//https://en.cppreference.com/w/cpp/language/constraints.html
+	// a concept is a named set of requirements for template arguments
+	// must appear in the SAME namespace as the template that uses it
 
 	class Texture2D;
 
@@ -25,16 +30,75 @@ namespace REC
 		virtual void Render() const;
 
 		void SetTexture(const std::string& filename);
-		void SetPosition(float x, float y);
 
-		//template <Cpt C>
-		//void AddComponent(std::unique_ptr<C> component)
-		//{
-		//
-		//}
+		//== COMPONENTS ===============================================================================================
+
+		// arguments must match exactly the constructor of the component!!
+		// passing an int when the constructor expects a float -> C4244
+		template <Cpt C, typename... Args>
+		C* AddComponent(Args&&... args)
+		{
+			for (const auto& component : m_Components)
+			{
+				if (typeid(*component) == typeid(C))
+					assert(false && "Cannot add 2 components of the same type");
+			}
+
+			//https://en.cppreference.com/w/cpp/utility/forward.html
+			auto component = std::make_unique<C>(std::forward<Args>(args)...);
+
+			component->SetOwner(this);
+			auto* compPtr = component.get();
+			m_Components.emplace_back(std::move(component));
+
+			return compPtr;
+		}
+
+		template <Cpt C>
+		bool RemoveComponent()
+		{
+			for (unsigned int i{}; i < m_Components.size(); ++i)
+			{
+				if (typeid(*m_Components[i]) == typeid(C))
+				{
+					m_Components[i]->Destroy();
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		// returns a component pointer, nullptr if not found
+		// dynamic_cast is slower than typeid
+		template <Cpt C>
+		C* GetComponent() const
+		{
+			for (const auto& component : m_Components)
+			{
+				if (C* castComp = dynamic_cast<C*>(component.get()))
+					return castComp;
+			}
+
+			return nullptr;
+		}
+
+		// checks if a gameobject has a component of type C
+		// typeid is faster than dynamic_cast
+		template <Cpt C>
+		bool HasComponent() const
+		{
+			for (const auto& component : m_Components)
+			{
+				if (typeid(*component) == typeid(C))
+					return true;
+			}
+			return false;
+		}
 
 	private:
-		Transform m_transform{};
 		Texture2D* m_texture = nullptr;
+
+		std::vector<std::unique_ptr<Component>> m_Components{};
 	};
 }
