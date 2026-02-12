@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "Transform.h"
 #include "inc/Component.h"
 #include <vector>
+#include <assert.h>
 
 namespace REC
 {
