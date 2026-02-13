@@ -15,7 +15,6 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "Texture2D.h"
 #include "src/TimeSystem.h"
 
 #include <thread>

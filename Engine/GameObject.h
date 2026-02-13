@@ -39,12 +39,15 @@ namespace REC
 		{
 			for (const auto& component : m_Components)
 			{
-#ifndef __EMSCRIPTEN__
+//#ifndef __EMSCRIPTEN__
 				if (typeid(*component) == typeid(C))
-#else
-				if (dynamic_cast<C*>(component.get()) != nullptr)
-#endif
+//#else
+//				if (dynamic_cast<C*>(component.get()))
+//#endif
+				{
 					assert(false && "Cannot add 2 components of the same type");
+					return nullptr;
+				}
 			}
 
 			//https://en.cppreference.com/w/cpp/utility/forward.html

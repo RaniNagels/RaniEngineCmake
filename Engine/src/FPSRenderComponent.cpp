@@ -3,12 +3,12 @@
 #include <iomanip>
 
 REC::FPSRenderComponent::FPSRenderComponent(Font* font, const SDL_Color& color)
-	: TextRenderComponent("0.00 FPS", font, color)
+	: TextRenderComponent("00.0 FPS", font, color)
 {
 }
 
 REC::FPSRenderComponent::FPSRenderComponent(const std::string& font, const SDL_Color& color)
-	: TextRenderComponent("0.00 FPS", font, color)
+	: TextRenderComponent("00.0 FPS", font, color)
 {
 }
 
