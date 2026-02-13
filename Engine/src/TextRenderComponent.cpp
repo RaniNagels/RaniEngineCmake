@@ -27,10 +27,6 @@ REC::TextRenderComponent::TextRenderComponent(const std::string& text, const std
 	SetFont(font);
 }
 
-REC::TextRenderComponent::~TextRenderComponent()
-{
-}
-
 void REC::TextRenderComponent::Update(float)
 {
 	if (m_NeedsUpdate)

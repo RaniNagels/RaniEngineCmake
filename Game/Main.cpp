@@ -15,6 +15,7 @@
 #include "../Engine/inc/SpriteRenderComponent.h"
 #include "../Engine/inc/TextRenderComponent.h"
 #include "../Engine/inc/ResourceDescriptors.h"
+#include "../Engine/inc/FPSRenderComponent.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -56,6 +57,11 @@ static void load()
 	go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>(292.f, 20.f);
 	go->AddComponent<REC::TextRenderComponent>("Programming 4 Assignment", "lingua36", SDL_Color{ 255, 255, 0, 255 });
+	scene.Add(std::move(go));
+
+	go = std::make_unique<REC::GameObject>();
+	go->AddComponent<REC::TransformComponent>(20.f, 20.f);
+	go->AddComponent<REC::FPSRenderComponent>("lingua36");
 	scene.Add(std::move(go));
 }
 

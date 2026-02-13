@@ -10,12 +10,12 @@ namespace REC
 	class Font;
 	class Texture2D;
 
-	class TextRenderComponent final : public SpriteRenderComponent
+	class TextRenderComponent : public SpriteRenderComponent
 	{
 	public:
 		explicit TextRenderComponent(const std::string& text, Font* font, const SDL_Color& color = { 255, 255, 255, 255 });
 		explicit TextRenderComponent(const std::string& text, const std::string& font, const SDL_Color& color = { 255, 255, 255, 255 });
-		virtual ~TextRenderComponent();
+		virtual ~TextRenderComponent() = default;
 	
 		TextRenderComponent(const TextRenderComponent& other) = delete;
 		TextRenderComponent(TextRenderComponent&& other) = delete;

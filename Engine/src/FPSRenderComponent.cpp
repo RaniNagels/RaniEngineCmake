@@ -1,0 +1,36 @@
+#include "../inc/FPSRenderComponent.h"
+#include <chrono>
+#include <iomanip>
+
+REC::FPSRenderComponent::FPSRenderComponent(Font* font, const SDL_Color& color)
+	: TextRenderComponent("0.00 FPS", font, color)
+{
+}
+
+REC::FPSRenderComponent::FPSRenderComponent(const std::string& font, const SDL_Color& color)
+	: TextRenderComponent("0.00 FPS", font, color)
+{
+}
+
+void REC::FPSRenderComponent::Update(float deltaT)
+{
+	// !! do not forget to call the baseclass when overriding
+	// otherwise no texture is created at all -> error!
+	TextRenderComponent::Update(deltaT);
+
+	m_AccumulatedTime += deltaT;
+	m_FrameCount++;
+
+	if (m_AccumulatedTime >= 0.1f)
+	{
+		auto averageDeltaT = m_AccumulatedTime / m_FrameCount;
+		auto fps = std::chrono::duration<float, std::milli>(1 / averageDeltaT);
+		std::ostringstream ss;
+		ss << std::fixed << std::setprecision(1) << fps.count();
+		SetText(ss.str() + " FPS");
+
+		m_AccumulatedTime -= 0.1f;
+		m_FrameCount = 0;
+	}
+
+}
