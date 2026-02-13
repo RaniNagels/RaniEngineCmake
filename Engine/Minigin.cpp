@@ -16,11 +16,10 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "src/TimeSystem.h"
+#include "src/Window.h"
 
 #include <thread>
 #include <chrono>
-
-SDL_Window* g_window{};
 
 void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 {
@@ -69,18 +68,9 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 
-	g_window = SDL_CreateWindow(
-		"Programming 4 assignment",
-		1024,
-		576,
-		SDL_WINDOW_OPENGL
-	);
-	if (g_window == nullptr) 
-	{
-		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
-	}
+	m_pWindow = std::make_unique<Window>("Programming 4 assignment", 1024, 576);
 
-	Renderer::GetInstance().Init(g_window);
+	Renderer::GetInstance().Init(m_pWindow->GetSDLWindow());
 	ResourceManager::GetInstance().Init(dataPath);
 
 	m_pTimeSystem = std::make_unique<TimeSystem>();
@@ -89,14 +79,13 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 REC::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
-	SDL_DestroyWindow(g_window);
-	g_window = nullptr;
 	SDL_Quit();
 }
 
 void REC::Minigin::Run(const std::function<void()>& load)
 {
 	load();
+	m_pWindow->DisplayWindow();
 
 #ifndef __EMSCRIPTEN__
 	while (!m_quit)

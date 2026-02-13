@@ -8,6 +8,7 @@
 namespace REC
 {
 	class TimeSystem;
+	class Window;
 
 	class Minigin final
 	{
@@ -25,6 +26,7 @@ namespace REC
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;
+		std::unique_ptr<Window> m_pWindow;
 		bool m_quit{};
 	};
 }
