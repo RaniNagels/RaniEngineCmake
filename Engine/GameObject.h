@@ -40,7 +40,7 @@ namespace REC
 			for (const auto& component : m_Components)
 			{
 //#ifndef __EMSCRIPTEN__
-				if (typeid(*component) == typeid(C))
+				if (typeid(component.get()) == typeid(C))
 //#else
 //				if (dynamic_cast<C*>(component.get()))
 //#endif
