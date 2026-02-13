@@ -1,5 +1,4 @@
-﻿#include <stdexcept>
-#include <SDL3_ttf/SDL_ttf.h>
+﻿#include <SDL3_ttf/SDL_ttf.h>
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "Texture2D.h"
@@ -9,7 +8,7 @@ namespace fs = std::filesystem;
 
 void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 {
-	m_dataPath = dataPath;
+	m_DataPath = dataPath;
 
 	if (!TTF_Init())
 	{
@@ -17,40 +16,43 @@ void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 	}
 }
 
-REC::Texture2D* REC::ResourceManager::LoadTexture(const std::string& file)
+bool REC::ResourceManager::AddResource(const ResourceDesc& resource)
 {
-	const auto fullPath = m_dataPath/file;
-	const auto filename = fs::path(fullPath).filename().string();
-	if(m_loadedTextures.find(filename) == m_loadedTextures.end())
-		m_loadedTextures.insert(std::pair(filename,std::make_unique<Texture2D>(fullPath.string())));
-	return m_loadedTextures.at(filename).get();
-}
+	switch (resource.GetType())
+	{
+	case ResourceType::Texture:
+	{
+		const auto& tdesc = static_cast<const TextureResourceDesc&>(resource);
 
-REC::Font* REC::ResourceManager::LoadFont(const std::string& file, uint8_t size)
-{
-	const auto fullPath = m_dataPath/file;
-	const auto filename = fs::path(fullPath).filename().string();
-	const auto key = std::pair<std::string, uint8_t>(filename, size);
-	if(m_loadedFonts.find(key) == m_loadedFonts.end())
-		m_loadedFonts.insert(std::pair(key,std::make_unique<Font>(fullPath.string(), size)));
-	return m_loadedFonts.at(key).get();
-}
+		if (m_TextureResources.find(tdesc.name) != m_TextureResources.end())
+		{
+			assert(false && "Name already exists in Texture Resources");
+			return false;
+		}
 
-//void REC::ResourceManager::UnloadUnusedResources()
-//{
-//	for (auto it = m_loadedTextures.begin(); it != m_loadedTextures.end();)
-//	{
-//		if (it->second.use_count() == 1)
-//			it = m_loadedTextures.erase(it);
-//		else
-//			++it;
-//	}
-//
-//	for (auto it = m_loadedFonts.begin(); it != m_loadedFonts.end();)
-//	{
-//		if (it->second.use_count() == 1)
-//			it = m_loadedFonts.erase(it);
-//		else
-//			++it;
-//	}
-//}
+		const auto fullPath = (m_DataPath / tdesc.filePath).string();
+		m_TextureResources.insert({ tdesc.name, std::make_unique<Texture2D>(fullPath) });
+		return true;
+	}
+
+	case ResourceType::Font:
+	{
+		const auto& fdesc = static_cast<const FontResourceDesc&>(resource);
+
+		if (m_FontResources.find(fdesc.name) != m_FontResources.end())
+		{
+			assert(false && "Name already exists in Font Resources");
+			return false;
+		}
+
+		const auto fullPath = (m_DataPath / fdesc.filePath).string();
+		m_FontResources.insert({ fdesc.name, std::make_unique<Font>(fullPath, fdesc.size) });
+		return true;
+	}
+
+	case ResourceType::Unknown:
+		assert("Resource could not be added to ResourceManager: No Type Defined");
+		break;
+	}
+	return false;
+}

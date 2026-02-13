@@ -8,18 +8,6 @@ REC::Texture2D::~Texture2D()
 	SDL_DestroyTexture(m_texture);
 }
 
-glm::vec2 REC::Texture2D::GetSize() const
-{
-    float w{}, h{};
-    SDL_GetTextureSize(m_texture, &w, &h);
-    return { w, h };
-}
-
-SDL_Texture* REC::Texture2D::GetSDLTexture() const
-{
-	return m_texture;
-}
-
 REC::Texture2D::Texture2D(const std::string &fullPath)
 {
     SDL_Surface* surface = SDL_LoadPNG(fullPath.c_str());
@@ -50,3 +38,14 @@ REC::Texture2D::Texture2D(SDL_Texture* texture)	: m_texture{ texture }
 	assert(m_texture != nullptr);
 }
 
+glm::vec2 REC::Texture2D::GetSize() const
+{
+    float w{}, h{};
+    SDL_GetTextureSize(m_texture, &w, &h);
+    return { w, h };
+}
+
+SDL_Texture* REC::Texture2D::GetSDLTexture() const
+{
+    return m_texture;
+}

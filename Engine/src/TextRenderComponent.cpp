@@ -5,15 +5,26 @@
 #include "../Texture2D.h"
 #include <memory>
 #include <stdexcept>
+#include "../ResourceManager.h"
 
 REC::TextRenderComponent::TextRenderComponent(const std::string& text, Font* font, const SDL_Color& color)
 	: SpriteRenderComponent(nullptr)
-	, m_needsUpdate{ true }
-	, m_textTexture{}
-	, m_text{ text }
-	, m_color{ color }
-	, m_font{ font }
+	, m_NeedsUpdate{true}
+	, m_TextTexture{}
+	, m_Text{text}
+	, m_Color{color}
+	, m_Font{font}
 {
+}
+
+REC::TextRenderComponent::TextRenderComponent(const std::string& text, const std::string& font, const SDL_Color& color)
+	: SpriteRenderComponent(nullptr)
+	, m_NeedsUpdate{true}
+	, m_TextTexture{}
+	, m_Text{text}
+	, m_Color{color}
+{
+	SetFont(font);
 }
 
 REC::TextRenderComponent::~TextRenderComponent()
@@ -22,9 +33,9 @@ REC::TextRenderComponent::~TextRenderComponent()
 
 void REC::TextRenderComponent::Update(float)
 {
-	if (m_needsUpdate)
+	if (m_NeedsUpdate)
 	{
-		const auto surf = TTF_RenderText_Blended(m_font->GetFont(), m_text.c_str(), m_text.length(), m_color);
+		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Text.length(), m_Color);
 		if (surf == nullptr)
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
@@ -36,25 +47,33 @@ void REC::TextRenderComponent::Update(float)
 		}
 		SDL_DestroySurface(surf);
 
-		m_textTexture = std::make_unique<Texture2D>(texture);
-		SetTexture(m_textTexture.get());
+		m_TextTexture = std::make_unique<Texture2D>(texture);
+		SetTexture(m_TextTexture.get());
 
-		m_needsUpdate = false;
+		m_NeedsUpdate = false;
 	}
 }
 
 void REC::TextRenderComponent::SetText(const std::string& text)
 {
-	if (text == m_text) return;
+	if (text == m_Text) return;
 
-	m_needsUpdate = true;
-	m_text = text;
+	m_NeedsUpdate = true;
+	m_Text = text;
 }
 
 void REC::TextRenderComponent::SetColor(const SDL_Color& color)
 {
-	if (m_color.r == color.r && m_color.g == color.g && m_color.b == color.b && m_color.a == color.a) return;
+	if (m_Color.r == color.r && m_Color.g == color.g && m_Color.b == color.b && m_Color.a == color.a) return;
 
-	m_needsUpdate = true;
-	m_color = color;
+	m_NeedsUpdate = true;
+	m_Color = color;
+}
+
+void REC::TextRenderComponent::SetFont(const std::string& font)
+{
+	// TODO: maybe use messenger system here. send request for resource and receive resource
+	// prevent using resourcemanager directly in this class
+	m_Font = ResourceManager::GetInstance().GetResource<Font>(font);
+	m_NeedsUpdate = true;
 }

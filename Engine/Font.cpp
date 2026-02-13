@@ -2,10 +2,6 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include "Font.h"
 
-TTF_Font* REC::Font::GetFont() const {
-	return m_font;
-}
-
 REC::Font::Font(const std::string& fullPath, float size) : m_font(nullptr)
 {
 	m_font = TTF_OpenFont(fullPath.c_str(), size);
@@ -18,4 +14,9 @@ REC::Font::Font(const std::string& fullPath, float size) : m_font(nullptr)
 REC::Font::~Font()
 {
 	TTF_CloseFont(m_font);
+}
+
+TTF_Font* REC::Font::GetFont() const 
+{
+	return m_font;
 }

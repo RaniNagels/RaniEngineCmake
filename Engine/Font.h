@@ -10,7 +10,6 @@ namespace REC
 	class Font final
 	{
 	public:
-		TTF_Font* GetFont() const;
 		explicit Font(const std::string& fullPath, float size);
 		~Font();
 
@@ -18,6 +17,9 @@ namespace REC
 		Font(Font &&) = delete;
 		Font & operator= (const Font &) = delete;
 		Font & operator= (const Font &&) = delete;
+
+		TTF_Font* GetFont() const;
+
 	private:
 		TTF_Font* m_font;
 	};
