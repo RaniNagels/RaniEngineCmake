@@ -14,7 +14,6 @@ namespace REC
 		TimeSystem& operator=(const TimeSystem& other) = delete;
 		TimeSystem& operator=(TimeSystem&& other) = delete;
 
-		void Init();
 		void Update();
 
 		float GetDeltaTime() const { return m_DeltaTime; }
