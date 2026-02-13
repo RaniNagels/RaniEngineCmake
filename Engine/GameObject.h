@@ -21,6 +21,7 @@ namespace REC
 	public:
 		explicit GameObject() = default;
 		virtual ~GameObject();
+
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -106,7 +107,13 @@ namespace REC
 			return false;
 		}
 
+		// remove any component that has been marked for destruction
+		void CleanUpComponents();
+
+		void ShouldCleanUpComponents() { m_ShouldCleanUpComponents = true; }
+
 	private:
 		std::vector<std::unique_ptr<Component>> m_Components{};
+		bool m_ShouldCleanUpComponents = false;
 	};
 }

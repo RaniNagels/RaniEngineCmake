@@ -15,6 +15,9 @@ void REC::GameObject::Update(float deltaT)
 	{
 		component->Update(deltaT);
 	}
+
+	if (m_ShouldCleanUpComponents)
+		CleanUpComponents();
 }
 
 void REC::GameObject::Render() const
@@ -27,4 +30,18 @@ void REC::GameObject::Render() const
 			dynamic_cast<RenderComponent*>(component.get())->Render();
 		}
 	}
+}
+
+void REC::GameObject::CleanUpComponents()
+{
+	m_Components.erase(
+		std::remove_if(m_Components.begin(), m_Components.end(),
+		[](const std::unique_ptr<Component>& component)
+		{
+			return component->IsAboutToBeDestroyed();
+		}), 
+		m_Components.end()
+	);
+
+	m_ShouldCleanUpComponents = false;
 }

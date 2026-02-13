@@ -12,14 +12,17 @@ namespace REC
 	class SceneManager final : public Singleton<SceneManager>
 	{
 	public:
-		Scene& CreateScene();
+		Scene* CreateScene();
 
 		void Update(float deltaT);
 		void Render();
+
+		void SetActiveScene(Scene* scene) { m_pActiveScene = scene; }
 
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::unique_ptr<Scene>> m_scenes{};
+		Scene* m_pActiveScene = nullptr;
 	};
 }

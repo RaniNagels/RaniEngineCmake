@@ -24,7 +24,7 @@ namespace REC
 
 		GameObject* GetOwner() const { return m_pOwner; }
 
-		virtual void Destroy() { m_IsAboutToBeDestroyed = true; }
+		virtual void Destroy();
 		virtual bool IsAboutToBeDestroyed() const { return m_IsAboutToBeDestroyed; }
 		virtual bool CanRender() const { return false; }
 
@@ -35,6 +35,6 @@ namespace REC
 		bool m_IsAboutToBeDestroyed = false;
 
 		friend class GameObject;
-		// friend void GameObject::SetComponentOwner(Component* comp); // does not seem to work as SetComponentOwner is private
+		//friend void GameObject::SetComponentOwner(Component* comp); // does not seem to work as SetComponentOwner is private
 	};
 }

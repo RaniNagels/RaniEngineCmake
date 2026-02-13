@@ -3,22 +3,20 @@
 
 void REC::SceneManager::Update(float deltaT)
 {
-	for(auto& scene : m_scenes)
-	{
-		scene->Update(deltaT);
-	}
+	m_pActiveScene->Update(deltaT);
 }
 
 void REC::SceneManager::Render()
 {
-	for (const auto& scene : m_scenes)
-	{
-		scene->Render();
-	}
+	m_pActiveScene->Render();
 }
 
-REC::Scene& REC::SceneManager::CreateScene()
+REC::Scene* REC::SceneManager::CreateScene()
 {
 	m_scenes.emplace_back(new Scene());
-	return *m_scenes.back();
+
+	if (m_pActiveScene == nullptr) 
+		m_pActiveScene = m_scenes.back().get();
+
+	return m_scenes.back().get();
 }

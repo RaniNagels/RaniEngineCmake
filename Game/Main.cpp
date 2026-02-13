@@ -42,27 +42,27 @@ static void load()
 	RM.AddResource(font);
 
 	// === SCENE =======================================================================================
-	auto& scene = REC::SceneManager::GetInstance().CreateScene();
+	auto* scene = REC::SceneManager::GetInstance().CreateScene();
 
 	auto go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>();
 	go->AddComponent<REC::SpriteRenderComponent>("background");
-	scene.Add(std::move(go));
+	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>(358.f, 180.f);
 	go->AddComponent<REC::SpriteRenderComponent>("logo");
-	scene.Add(std::move(go));
+	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>(292.f, 20.f);
 	go->AddComponent<REC::TextRenderComponent>("Programming 4 Assignment", "lingua36", SDL_Color{ 255, 255, 0, 255 });
-	scene.Add(std::move(go));
+	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>(20.f, 20.f);
 	go->AddComponent<REC::FPSRenderComponent>("lingua36");
-	scene.Add(std::move(go));
+	scene->Add(std::move(go));
 }
 
 int main(int, char*[]) {

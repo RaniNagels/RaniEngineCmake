@@ -25,7 +25,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Engine/Scene.cpp
   Engine/SceneManager.cpp
   Engine/Texture2D.cpp
-  Engine/inc/Component.h
+  Engine/src/Component.cpp
   Engine/inc/RenderComponent.h
   Engine/src/TransformComponent.cpp
   Engine/src/SpriteRenderComponent.cpp
