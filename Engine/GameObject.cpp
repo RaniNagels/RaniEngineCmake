@@ -5,20 +5,26 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include "inc/TransformComponent.h"
+#include "inc/RenderComponent.h"
 
 REC::GameObject::~GameObject() = default;
 
-void REC::GameObject::Update(float){}
+void REC::GameObject::Update(float deltaT)
+{
+	for (const auto& component : m_Components)
+	{
+		component->Update(deltaT);
+	}
+}
 
 void REC::GameObject::Render() const
 {
-	auto* transform = GetComponent<TransformComponent>();
-	glm::vec2 pos{};
-	if (transform) pos = transform->GetPosition();
-	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
-}
-
-void REC::GameObject::SetTexture(const std::string& filename)
-{
-	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
+	for (const auto& component : m_Components)
+	{
+		if (component->CanRender())
+		{
+			// expensive
+			dynamic_cast<RenderComponent*>(component.get())->Render();
+		}
+	}
 }

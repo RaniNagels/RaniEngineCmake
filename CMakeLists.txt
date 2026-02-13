@@ -24,11 +24,12 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Engine/ResourceManager.cpp
   Engine/Scene.cpp
   Engine/SceneManager.cpp
-  Engine/TextObject.cpp
   Engine/Texture2D.cpp
   Engine/inc/Component.h
   Engine/inc/RenderComponent.h
-  Engine/inc/TransformComponent.cpp
+  Engine/src/TransformComponent.cpp
+  Engine/src/SpriteRenderComponent.cpp
+  Engine/src/TextRenderComponent.cpp
   Engine/src/TimeSystem.cpp
 )
 

@@ -16,7 +16,7 @@ namespace REC
 
 	class Texture2D;
 
-	class GameObject
+	class GameObject final
 	{
 	public:
 		explicit GameObject() = default;
@@ -28,8 +28,6 @@ namespace REC
 
 		virtual void Update(float deltaT);
 		virtual void Render() const;
-
-		void SetTexture(const std::string& filename);
 
 		//== COMPONENTS ===============================================================================================
 
@@ -109,8 +107,6 @@ namespace REC
 		}
 
 	private:
-		Texture2D* m_texture = nullptr;
-
 		std::vector<std::unique_ptr<Component>> m_Components{};
 	};
 }
