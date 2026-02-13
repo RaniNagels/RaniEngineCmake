@@ -39,11 +39,7 @@ namespace REC
 		{
 			for (const auto& component : m_Components)
 			{
-//#ifndef __EMSCRIPTEN__
 				if (typeid(component.get()) == typeid(C))
-//#else
-//				if (dynamic_cast<C*>(component.get()))
-//#endif
 				{
 					assert(false && "Cannot add 2 components of the same type");
 					return nullptr;
@@ -65,11 +61,7 @@ namespace REC
 		{
 			for (unsigned int i{}; i < m_Components.size(); ++i)
 			{
-#ifndef __EMSCRIPTEN__
-				if (typeid(*m_Components[i]) == typeid(C))
-#else
-				if (dynamic_cast<C*>(m_Components[i].get()) != nullptr)
-#endif
+				if (typeid(m_Components[i].get()) == typeid(C))
 				{
 					m_Components[i]->Destroy();
 					return true;
@@ -100,11 +92,7 @@ namespace REC
 		{
 			for (const auto& component : m_Components)
 			{
-#ifndef __EMSCRIPTEN__
-				if (typeid(*component) == typeid(C))
-#else
-				if (dynamic_cast<C*>(component.get()) != nullptr)
-#endif
+				if (typeid(component.get()) == typeid(C))
 					return true;
 			}
 			return false;
