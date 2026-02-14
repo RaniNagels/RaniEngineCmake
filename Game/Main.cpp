@@ -5,7 +5,7 @@
 #include <vld.h>
 #endif
 
-#include "../Engine/Minigin.h"
+#include "../Engine/Engine.h"
 #include "../Engine/SceneManager.h"
 #include "../Engine/ResourceManager.h"
 #include "../Engine/Scene.h"
@@ -73,7 +73,7 @@ int main(int, char*[]) {
 	if(!fs::exists(data_location))
 		data_location = "../Data/";
 #endif
-	REC::Minigin engine(data_location);
+	REC::Engine engine(data_location);
 	engine.Run(load);
     return 0;
 }

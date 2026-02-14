@@ -1,38 +1,38 @@
 cmake_minimum_required(VERSION 3.26)
-project(Minigin)
+project(REC)
 
 if(EMSCRIPTEN)
   message("Using Emscripten!")
 endif()
 
 if(EMSCRIPTEN)
-  set(TARGET_NAME minigin_web)
+  set(TARGET_NAME REC_web)
   set(TARGET_PARAM )
 else()
-  set(TARGET_NAME minigin)
+  set(TARGET_NAME REC)
   set(TARGET_PARAM WIN32)
 endif()
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
-  Engine/Font.cpp
-  Engine/GameObject.cpp
-  Engine/InputManager.cpp
-  Game/Main.cpp
-  Engine/Minigin.cpp
-  Engine/Renderer.cpp
-  Engine/ResourceManager.cpp
-  Engine/Scene.cpp
-  Engine/SceneManager.cpp
-  Engine/Texture2D.cpp
-  Engine/src/Component.cpp
-  Engine/inc/RenderComponent.h
-  Engine/src/TransformComponent.cpp
-  Engine/src/SpriteRenderComponent.cpp
-  Engine/src/TextRenderComponent.cpp
-  Engine/src/TimeSystem.cpp
-  Engine/src/FPSRenderComponent.cpp
-  Engine/src/Window.cpp
+  "Engine/Font.cpp"
+  "Engine/GameObject.cpp"
+  "Engine/InputManager.cpp"
+  "Game/Main.cpp"
+  "Engine/Engine.cpp"
+  "Engine/Renderer.cpp"
+  "Engine/ResourceManager.cpp"
+  "Engine/Scene.cpp"
+  "Engine/SceneManager.cpp"
+  "Engine/Texture2D.cpp"
+  "Engine/src/Component.cpp"
+  "Engine/inc/RenderComponent.h"
+  "Engine/src/TransformComponent.cpp"
+  "Engine/src/SpriteRenderComponent.cpp"
+  "Engine/src/TextRenderComponent.cpp"
+  "Engine/src/TimeSystem.cpp"
+  "Engine/src/FPSRenderComponent.cpp"
+  "Engine/src/Window.cpp"
 )
 
 # enable c++20 features

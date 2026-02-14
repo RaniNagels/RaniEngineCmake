@@ -10,7 +10,7 @@
 #include <SDL3/SDL.h>
 //#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include "Minigin.h"
+#include "Engine.h"
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
@@ -58,7 +58,7 @@ void PrintSDLVersion()
 	LogSDLVersion("Linked with SDL_ttf ", SDL_VERSIONNUM_MAJOR(version), SDL_VERSIONNUM_MINOR(version),	SDL_VERSIONNUM_MICRO(version));
 }
 
-REC::Minigin::Minigin(const std::filesystem::path& dataPath)
+REC::Engine::Engine(const std::filesystem::path& dataPath)
 {
 	PrintSDLVersion();
 	
@@ -76,13 +76,13 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 	m_pTimeSystem = std::make_unique<TimeSystem>();
 }
 
-REC::Minigin::~Minigin()
+REC::Engine::~Engine()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_Quit();
 }
 
-void REC::Minigin::Run(const std::function<void()>& load)
+void REC::Engine::Run(const std::function<void()>& load)
 {
 	load();
 	m_pWindow->DisplayWindow();
@@ -97,7 +97,7 @@ void REC::Minigin::Run(const std::function<void()>& load)
 #endif
 }
 
-void REC::Minigin::RunOneFrame()
+void REC::Engine::RunOneFrame()
 {
 	m_pTimeSystem->Update();
 
