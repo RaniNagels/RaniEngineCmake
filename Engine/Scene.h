@@ -9,6 +9,14 @@ namespace REC
 	class Scene final
 	{
 	public:
+		explicit Scene() = default;
+		~Scene() = default;
+
+		Scene(const Scene&) = delete;
+		Scene(Scene&&) = delete;
+		Scene& operator= (const Scene&) = delete;
+		Scene& operator= (const Scene&&) = delete;
+
 		void Add(std::unique_ptr<GameObject> object);
 		void Remove(const GameObject& object);
 		void RemoveAll();
@@ -16,16 +24,7 @@ namespace REC
 		void Update(float deltaT);
 		void Render() const;
 
-		~Scene() = default;
-		Scene(const Scene& other) = delete;
-		Scene(Scene&& other) = delete;
-		Scene& operator=(const Scene& other) = delete;
-		Scene& operator=(Scene&& other) = delete;
-
 	private:
-		friend class SceneManager;
-		explicit Scene() = default;
-
 		std::vector < std::unique_ptr<GameObject>> m_objects{};
 	};
 

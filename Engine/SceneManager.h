@@ -22,6 +22,7 @@ namespace REC
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
+
 		std::vector<std::unique_ptr<Scene>> m_scenes{};
 		Scene* m_pActiveScene = nullptr;
 	};
