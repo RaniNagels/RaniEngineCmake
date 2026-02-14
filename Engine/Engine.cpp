@@ -38,7 +38,7 @@ void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 
 void LoopCallback(void* arg)
 {
-	static_cast<REC::Minigin*>(arg)->RunOneFrame();
+	static_cast<REC::Engine*>(arg)->RunOneFrame();
 }
 #endif
 
