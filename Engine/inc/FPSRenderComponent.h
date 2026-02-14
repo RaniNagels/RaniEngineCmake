@@ -19,6 +19,5 @@ namespace REC
 
 	private:
 		float m_AccumulatedTime{};
-		int m_FrameCount{};
 	};
 }

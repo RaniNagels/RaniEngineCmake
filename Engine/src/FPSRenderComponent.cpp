@@ -19,18 +19,16 @@ void REC::FPSRenderComponent::Update(float deltaT)
 	TextRenderComponent::Update(deltaT);
 
 	m_AccumulatedTime += deltaT;
-	m_FrameCount++;
-
-	if (m_AccumulatedTime >= 0.1f)
+	float updateRate = 0.1f;
+	
+	if (m_AccumulatedTime >= updateRate)
 	{
-		auto averageDeltaT = m_AccumulatedTime / m_FrameCount;
-		auto fps = std::chrono::duration<float, std::milli>(1 / averageDeltaT);
+		auto fps = std::chrono::duration<float, std::milli>(1 / deltaT);
 		std::ostringstream ss;
 		ss << std::fixed << std::setprecision(1) << fps.count();
 		SetText(ss.str() + " FPS");
 
-		m_AccumulatedTime -= 0.1f;
-		m_FrameCount = 0;
+		m_AccumulatedTime -= updateRate;
 	}
 
 }
