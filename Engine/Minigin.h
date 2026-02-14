@@ -10,19 +10,19 @@ namespace REC
 	class TimeSystem;
 	class Window;
 
-	class Engine final
+	class Minigin final
 	{
 	public:
-		explicit Engine(const std::filesystem::path& dataPath);
-		~Engine();
+		explicit Minigin(const std::filesystem::path& dataPath);
+		~Minigin();
 
 		void Run(const std::function<void()>& load);
 		void RunOneFrame();
 
-		Engine(const Engine& other) = delete;
-		Engine(Engine&& other) = delete;
-		Engine& operator=(const Engine& other) = delete;
-		Engine& operator=(Engine&& other) = delete;
+		Minigin(const Minigin& other) = delete;
+		Minigin(Minigin&& other) = delete;
+		Minigin& operator=(const Minigin& other) = delete;
+		Minigin& operator=(Minigin&& other) = delete;
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;
