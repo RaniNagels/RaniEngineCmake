@@ -33,6 +33,11 @@ jobs:
           version: latest
           actions-cache-folder: emsdk-cache
 
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
+        with: 
+          cmakeVersion: '4.1.0'
+
       - name: Verify Emscripten
         run: |
           emcc --version
