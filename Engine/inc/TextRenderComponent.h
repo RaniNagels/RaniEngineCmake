@@ -3,7 +3,7 @@
 #include <memory>
 #include "SpriteRenderComponent.h"
 #include <SDL3/SDL_pixels.h>
-#include "../Texture2D.h"
+#include "../src/Texture2D.h"
 
 namespace REC
 {

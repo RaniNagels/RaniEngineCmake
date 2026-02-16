@@ -4,12 +4,12 @@
 #include <memory>
 #include <map>
 #include "Singleton.h"
-#include "inc/ResourceDescriptors.h"
+#include "ResourceDescriptors.h"
 #include <unordered_map>
 #include <stdexcept>
 #include <assert.h>
-#include "Font.h"
-#include "Texture2D.h"
+#include "../src/Font.h"
+#include "../src/Texture2D.h"
 
 namespace REC
 {

@@ -2,7 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include "Renderer.h"
-#include "SceneManager.h"
+#include "../inc/SceneManager.h"
 #include "Texture2D.h"
 
 void REC::Renderer::Init(SDL_Window* window)

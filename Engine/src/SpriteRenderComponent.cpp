@@ -1,8 +1,8 @@
 #include "../inc/SpriteRenderComponent.h"
-#include "../Renderer.h"
+#include "Renderer.h"
 #include "../inc/TransformComponent.h"
-#include "../GameObject.h"
-#include "../ResourceManager.h"
+#include "../inc/GameObject.h"
+#include "../inc/ResourceManager.h"
 
 REC::SpriteRenderComponent::SpriteRenderComponent(Texture2D* texture)
 	: m_pTexture(texture)

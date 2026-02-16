@@ -15,24 +15,24 @@ endif()
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
-  Engine/Font.cpp
-  Engine/GameObject.cpp
-  Engine/InputManager.cpp
-  Game/Main.cpp
-  Engine/Minigin.cpp
-  Engine/Renderer.cpp
-  Engine/ResourceManager.cpp
-  Engine/Scene.cpp
-  Engine/SceneManager.cpp
-  Engine/Texture2D.cpp
-  Engine/src/Component.cpp
-  Engine/inc/RenderComponent.h
-  Engine/src/TransformComponent.cpp
-  Engine/src/SpriteRenderComponent.cpp
-  Engine/src/TextRenderComponent.cpp
-  Engine/src/TimeSystem.cpp
-  Engine/src/FPSRenderComponent.cpp
-  Engine/src/Window.cpp
+  "Game/Main.cpp"
+  "Engine/src/Font.cpp"
+  "Engine/src/GameObject.cpp"
+  "Engine/src/InputManager.cpp"
+  "Engine/src/Minigin.cpp"
+  "Engine/src/Renderer.cpp"
+  "Engine/src/ResourceManager.cpp"
+  "Engine/src/Scene.cpp"
+  "Engine/src/SceneManager.cpp"
+  "Engine/src/Texture2D.cpp"
+  "Engine/src/Component.cpp"
+  "Engine/inc/RenderComponent.h"
+  "Engine/src/TransformComponent.cpp"
+  "Engine/src/SpriteRenderComponent.cpp"
+  "Engine/src/TextRenderComponent.cpp"
+  "Engine/src/TimeSystem.cpp"
+  "Engine/src/FPSRenderComponent.cpp"
+  "Engine/src/Window.cpp"
 )
 
 # enable c++20 features

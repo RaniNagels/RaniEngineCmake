@@ -5,12 +5,12 @@
 #include <vld.h>
 #endif
 
-#include "../Engine/Minigin.h"
-#include "../Engine/SceneManager.h"
-#include "../Engine/ResourceManager.h"
-#include "../Engine/Scene.h"
-#include "../Engine/Font.h"
-#include "../Engine/Texture2D.h"
+#include "../Engine/inc/Minigin.h"
+#include "../Engine/inc/SceneManager.h"
+#include "../Engine/inc/ResourceManager.h"
+#include "../Engine/inc/Scene.h"
+#include "../Engine/src/Font.h"
+#include "../Engine/src/Texture2D.h"
 #include "../Engine/inc/TransformComponent.h"
 #include "../Engine/inc/SpriteRenderComponent.h"
 #include "../Engine/inc/TextRenderComponent.h"

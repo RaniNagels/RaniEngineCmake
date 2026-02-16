@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include "Singleton.h"
+#include "../inc/Singleton.h"
 
 namespace REC
 {

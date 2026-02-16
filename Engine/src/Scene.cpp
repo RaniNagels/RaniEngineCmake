@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "Scene.h"
+#include "../inc/Scene.h"
 #include <assert.h>
 
 void REC::Scene::Add(std::unique_ptr<GameObject> object)

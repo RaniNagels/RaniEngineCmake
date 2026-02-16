@@ -10,13 +10,13 @@
 #include <SDL3/SDL.h>
 //#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include "Minigin.h"
-#include "InputManager.h"
-#include "SceneManager.h"
+#include "../inc/Minigin.h"
+#include "../inc/InputManager.h"
+#include "../inc/SceneManager.h"
 #include "Renderer.h"
-#include "ResourceManager.h"
-#include "src/TimeSystem.h"
-#include "src/Window.h"
+#include "../inc/ResourceManager.h"
+#include "TimeSystem.h"
+#include "Window.h"
 
 #include <thread>
 #include <chrono>
