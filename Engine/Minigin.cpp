@@ -74,6 +74,7 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 	ResourceManager::GetInstance().Init(dataPath);
 
 	m_pTimeSystem = std::make_unique<TimeSystem>();
+	m_pTimeSystem->SetFrameRate(60);
 }
 
 REC::Minigin::~Minigin()
