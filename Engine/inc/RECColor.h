@@ -3,7 +3,7 @@
 
 namespace REC
 {
-	// and SDL independant color struct
+	// an SDL independant color struct
 	struct Color
 	{
 		uint8_t r;

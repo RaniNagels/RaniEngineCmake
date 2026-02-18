@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
-#include "../inc/InputManager.h"
+#include "../inc/InputSystem.h"
 
-bool REC::InputManager::ProcessInput()
+bool REC::InputSystem::ProcessInput()
 {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {

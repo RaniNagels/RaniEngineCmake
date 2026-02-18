@@ -11,7 +11,7 @@
 //#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "../inc/Minigin.h"
-#include "../inc/InputManager.h"
+#include "../inc/InputSystem.h"
 #include "../inc/SceneManager.h"
 #include "Renderer.h"
 #include "../inc/ResourceManager.h"
@@ -103,7 +103,7 @@ void REC::Minigin::RunOneFrame()
 {
 	m_pTimeSystem->Update();
 
-	m_quit = !InputManager::GetInstance().ProcessInput();
+	m_quit = !InputSystem::GetInstance().ProcessInput();
 	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Render();
 

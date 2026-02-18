@@ -1,7 +1,9 @@
 #include "TimeSystem.h"
 
+namespace ch = std::chrono;
+
 REC::TimeSystem::TimeSystem()
-	: m_CurrentTime{ std::chrono::steady_clock::now() }
+	: m_CurrentTime{ ch::steady_clock::now() }
 	, m_LastFrameTime{ m_CurrentTime } // m_StartTime must be initialized/declared before m_LastFrameTime!
 	, m_DeltaTime{ 0.f }
 	, m_MiliSecPerFrame{ 1000.f / 60.f } // default to 60 fps
@@ -9,8 +11,8 @@ REC::TimeSystem::TimeSystem()
 
 void REC::TimeSystem::Update()
 {
-	m_CurrentTime = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<float> delta = m_CurrentTime - m_LastFrameTime;
+	m_CurrentTime = ch::high_resolution_clock::now();
+	ch::duration<float> delta = m_CurrentTime - m_LastFrameTime;
 
 	m_LastFrameTime = m_CurrentTime;
 	m_DeltaTime = delta.count();
@@ -18,14 +20,14 @@ void REC::TimeSystem::Update()
 
 std::chrono::nanoseconds REC::TimeSystem::GetSleepTime() const
 {
-	auto frameTime = std::chrono::high_resolution_clock::now() - m_LastFrameTime;
-	auto targetFrameDuration = std::chrono::milliseconds(long(m_MiliSecPerFrame));
+	auto frameTime = ch::high_resolution_clock::now() - m_LastFrameTime;
+	auto targetFrameDuration = ch::milliseconds(long(m_MiliSecPerFrame));
 	
 	// in case the frame took longer than the recerved amound of milliseconds per frame
 	// do not sleep if all time has been spend already! 
 	// avoid sleeping for a negative amount of time
 	if (frameTime >= targetFrameDuration)
-		return std::chrono::nanoseconds(0);
+		return ch::nanoseconds(0);
 
 	auto sleeptime = targetFrameDuration - frameTime;
 

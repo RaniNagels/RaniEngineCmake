@@ -3,7 +3,7 @@
 
 namespace REC
 {
-	class InputManager final : public Singleton<InputManager>
+	class InputSystem final : public Singleton<InputSystem>
 	{
 	public:
 		bool ProcessInput();

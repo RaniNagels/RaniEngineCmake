@@ -18,7 +18,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Game/Main.cpp"
   "Engine/src/Font.cpp"
   "Engine/src/GameObject.cpp"
-  "Engine/src/InputManager.cpp"
+  "Engine/src/InputSystem.cpp"
   "Engine/src/Minigin.cpp"
   "Engine/src/Renderer.cpp"
   "Engine/src/ResourceManager.cpp"
