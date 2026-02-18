@@ -75,6 +75,7 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 
 	m_pTimeSystem = std::make_unique<TimeSystem>();
 	m_pTimeSystem->SetFrameRate(60);
+	m_pSceneManager = std::make_unique<SceneManager>();
 }
 
 REC::Minigin::~Minigin()
@@ -103,8 +104,9 @@ void REC::Minigin::RunOneFrame()
 	m_pTimeSystem->Update();
 
 	m_quit = !InputManager::GetInstance().ProcessInput();
-	SceneManager::GetInstance().Update(m_pTimeSystem->GetDeltaTime());
-	Renderer::GetInstance().Render();
+	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
+	m_pSceneManager->Render();
+	//Renderer::GetInstance().Render();
 
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
 }
@@ -114,4 +116,9 @@ void REC::Minigin::SetEngineData(const EngineDesc& data)
 	m_pTimeSystem->SetFrameRate(data.frameRate);
 	m_pWindow->SetSize(data.windowWidth, data.windowHeight);
 	m_pWindow->SetTitle(data.windowTitle);
+}
+
+REC::SceneManager* REC::Minigin::GetSceneManager() const
+{
+	return m_pSceneManager.get();
 }

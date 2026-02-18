@@ -3,26 +3,29 @@
 #include <string>
 #include <memory>
 #include "Scene.h"
-#include "Singleton.h"
 
 namespace REC
 {
 	class Scene;
 
-	class SceneManager final : public Singleton<SceneManager>
+	class SceneManager final
 	{
 	public:
-		Scene* CreateScene();
+		SceneManager() = default;
+		~SceneManager() = default;
+
+		SceneManager(const SceneManager&) = delete;
+		SceneManager(SceneManager&&) = delete;
+		SceneManager& operator= (const SceneManager&) = delete;
+		SceneManager& operator= (const SceneManager&&) = delete;
 
 		void Update(float deltaT);
 		void Render();
 
+		Scene* CreateScene();
 		void SetActiveScene(Scene* scene) { m_pActiveScene = scene; }
 
 	private:
-		friend class Singleton<SceneManager>;
-		SceneManager() = default;
-
 		std::vector<std::unique_ptr<Scene>> m_scenes{};
 		Scene* m_pActiveScene = nullptr;
 	};

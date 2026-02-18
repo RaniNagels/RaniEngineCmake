@@ -5,6 +5,7 @@
 namespace REC
 {
 	class Texture2D;
+	class Scene;
 	/**
 	 * Simple RAII wrapper for the SDL renderer
 	 */
@@ -12,7 +13,7 @@ namespace REC
 	{
 	public:
 		void Init(SDL_Window* window);
-		void Render() const;
+		void Render(Scene* scene) const;
 		void Destroy();
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;

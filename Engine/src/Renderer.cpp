@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Renderer.h"
 #include "../inc/SceneManager.h"
+#include "../inc/Scene.h"
 #include "Texture2D.h"
 
 void REC::Renderer::Init(SDL_Window* window)
@@ -24,13 +25,13 @@ void REC::Renderer::Init(SDL_Window* window)
 	}
 }
 
-void REC::Renderer::Render() const
+void REC::Renderer::Render(Scene* scene) const
 {
 	const auto& color = GetBackgroundColor();
 	SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_renderer);
 
-	SceneManager::GetInstance().Render();
+	scene->Render();
 
 	SDL_RenderPresent(m_renderer);
 }

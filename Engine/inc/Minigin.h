@@ -8,6 +8,7 @@ namespace REC
 {
 	class TimeSystem;
 	class Window;
+	class SceneManager;
 
 	class Minigin final
 	{
@@ -24,10 +25,12 @@ namespace REC
 		Minigin& operator=(Minigin&& other) = delete;
 
 		void SetEngineData(const EngineDesc& data);
+		SceneManager* GetSceneManager() const;
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;
 		std::unique_ptr<Window> m_pWindow;
+		std::unique_ptr<SceneManager> m_pSceneManager;
 		bool m_quit{};
 	};
 }

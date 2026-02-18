@@ -1,5 +1,6 @@
 #include "../inc/SceneManager.h"
 #include "../inc/Scene.h"
+#include "../src/Renderer.h"
 
 void REC::SceneManager::Update(float deltaT)
 {
@@ -8,7 +9,7 @@ void REC::SceneManager::Update(float deltaT)
 
 void REC::SceneManager::Render()
 {
-	m_pActiveScene->Render();
+	Renderer::GetInstance().Render(m_pActiveScene);
 }
 
 REC::Scene* REC::SceneManager::CreateScene()

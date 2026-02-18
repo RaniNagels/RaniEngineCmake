@@ -51,7 +51,8 @@ static void load(REC::Minigin* engine)
 	RM.AddResource(font);
 
 	// === SCENE =======================================================================================
-	auto* scene = REC::SceneManager::GetInstance().CreateScene();
+	auto* SM = engine->GetSceneManager();
+	auto* scene = SM->CreateScene();
 
 	auto go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>(0.f, 80.f);
