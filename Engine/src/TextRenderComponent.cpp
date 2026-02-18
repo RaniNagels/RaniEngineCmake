@@ -6,8 +6,9 @@
 #include <memory>
 #include <stdexcept>
 #include "../inc/ResourceManager.h"
+#include "SDLHelpers.h"
 
-REC::TextRenderComponent::TextRenderComponent(const std::string& text, Font* font, const SDL_Color& color)
+REC::TextRenderComponent::TextRenderComponent(const std::string& text, Font* font, const Color& color)
 	: SpriteRenderComponent(nullptr)
 	, m_NeedsUpdate{true}
 	, m_TextTexture{}
@@ -17,7 +18,7 @@ REC::TextRenderComponent::TextRenderComponent(const std::string& text, Font* fon
 {
 }
 
-REC::TextRenderComponent::TextRenderComponent(const std::string& text, const std::string& font, const SDL_Color& color)
+REC::TextRenderComponent::TextRenderComponent(const std::string& text, const std::string& font, const Color& color)
 	: SpriteRenderComponent(nullptr)
 	, m_NeedsUpdate{true}
 	, m_TextTexture{}
@@ -31,7 +32,7 @@ void REC::TextRenderComponent::Update(float)
 {
 	if (m_NeedsUpdate)
 	{
-		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Text.length(), m_Color);
+		const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), m_Text.length(), ToSDL(m_Color));
 		if (surf == nullptr)
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
@@ -58,7 +59,7 @@ void REC::TextRenderComponent::SetText(const std::string& text)
 	m_Text = text;
 }
 
-void REC::TextRenderComponent::SetColor(const SDL_Color& color)
+void REC::TextRenderComponent::SetColor(const Color& color)
 {
 	if (m_Color.r == color.r && m_Color.g == color.g && m_Color.b == color.b && m_Color.a == color.a) return;
 

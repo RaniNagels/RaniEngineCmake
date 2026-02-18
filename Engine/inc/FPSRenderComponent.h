@@ -6,8 +6,8 @@ namespace REC
 	class FPSRenderComponent final : public TextRenderComponent
 	{
 	public:
-		explicit FPSRenderComponent(Font* font, const SDL_Color& color = { 255, 255, 255, 255 });
-		explicit FPSRenderComponent(const std::string& font, const SDL_Color& color = { 255, 255, 255, 255 });
+		explicit FPSRenderComponent(Font* font, const Color& color = { 255, 255, 255, 255 });
+		explicit FPSRenderComponent(const std::string& font, const Color& color = { 255, 255, 255, 255 });
 		virtual ~FPSRenderComponent() = default;
 
 		FPSRenderComponent(const FPSRenderComponent& other) = delete;

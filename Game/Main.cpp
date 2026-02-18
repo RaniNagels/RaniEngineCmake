@@ -66,7 +66,7 @@ static void load(REC::Minigin* engine)
 
 	go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>(292.f, 20.f);
-	go->AddComponent<REC::TextRenderComponent>("Programming 4 Assignment", "lingua36", SDL_Color{ 255, 255, 0, 255 });
+	go->AddComponent<REC::TextRenderComponent>("Programming 4 Assignment", "lingua36", REC::Color{ 255, 255, 0 });
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>();
@@ -75,7 +75,8 @@ static void load(REC::Minigin* engine)
 	scene->Add(std::move(go));
 }
 
-int main(int, char*[]) {
+int main(int, char*[]) 
+{
 #if __EMSCRIPTEN__
 	fs::path data_location = "";
 #else
