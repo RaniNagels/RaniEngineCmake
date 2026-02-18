@@ -21,6 +21,8 @@ namespace REC
 
 		// prevent a black screen as the resources are loading
 		void DisplayWindow() const;
+		void SetSize(uint16_t width, uint16_t height);
+		void SetTitle(const std::string& title);
 
 	private:
 		SDL_Window* m_Window; 

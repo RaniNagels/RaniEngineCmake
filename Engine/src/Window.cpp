@@ -19,3 +19,13 @@ void REC::Window::DisplayWindow() const
 {
 	SDL_ShowWindow(m_Window);
 }
+
+void REC::Window::SetSize(uint16_t width, uint16_t height)
+{
+	SDL_SetWindowSize(m_Window, width, height);
+}
+
+void REC::Window::SetTitle(const std::string& title)
+{
+	SDL_SetWindowTitle(m_Window, title.c_str());
+}

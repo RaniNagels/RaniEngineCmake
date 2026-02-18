@@ -16,14 +16,20 @@
 #include "../Engine/inc/TextRenderComponent.h"
 #include "../Engine/inc/ResourceDescriptors.h"
 #include "../Engine/inc/FPSRenderComponent.h"
+#include "../Engine/inc/EngineDescriptor.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
 
-static void load()
+static void load(REC::Minigin* engine)
 {
 	// === ENGINE SETTINGS =============================================================================
-
+	REC::EngineDesc engineData{};
+	engineData.frameRate = 60;
+	engineData.windowTitle = "Bomberman";
+	engineData.windowWidth = 1000;
+	engineData.windowHeight = 600;
+	engine->SetEngineData(engineData);
 
 	// === RESOURCES ===================================================================================
 	REC::TextureResourceDesc background{};

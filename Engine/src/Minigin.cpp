@@ -83,9 +83,9 @@ REC::Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void REC::Minigin::Run(const std::function<void()>& load)
+void REC::Minigin::Run(const std::function<void(Minigin*)>& load)
 {
-	load();
+	load(this);
 	m_pWindow->DisplayWindow();
 
 #ifndef __EMSCRIPTEN__
@@ -107,4 +107,11 @@ void REC::Minigin::RunOneFrame()
 	Renderer::GetInstance().Render();
 
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
+}
+
+void REC::Minigin::SetEngineData(const EngineDesc& data)
+{
+	m_pTimeSystem->SetFrameRate(data.frameRate);
+	m_pWindow->SetSize(data.windowWidth, data.windowHeight);
+	m_pWindow->SetTitle(data.windowTitle);
 }
