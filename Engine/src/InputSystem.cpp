@@ -1,21 +1,35 @@
 #include <SDL3/SDL.h>
 #include "../inc/InputSystem.h"
 
-bool REC::InputSystem::ProcessInput()
+REC::InputSystem::InputSystem()
+{
+
+}
+
+void REC::InputSystem::ProcessInput()
+{
+	DetectInput();
+	ProcessKeyboardButtons();
+}
+
+void REC::InputSystem::DetectInput()
 {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_EVENT_QUIT) {
-			return false;
+			m_ShouldQuit = true;
 		}
 		if (e.type == SDL_EVENT_KEY_DOWN) {
-			
+
 		}
 		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-			
+
 		}
 		// etc...
 	}
+}
 
-	return true;
+
+void REC::InputSystem::ProcessKeyboardButtons()
+{
 }

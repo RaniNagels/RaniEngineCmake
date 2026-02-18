@@ -58,7 +58,7 @@ static void load(REC::Minigin* engine)
 
 	auto go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>(0.f, 80.f);
-	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 540);
+	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 565);
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>();

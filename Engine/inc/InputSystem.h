@@ -1,12 +1,26 @@
 #pragma once
-#include "Singleton.h"
 
 namespace REC
 {
-	class InputSystem final : public Singleton<InputSystem>
+	class InputSystem final
 	{
 	public:
-		bool ProcessInput();
+		explicit InputSystem();
+		~InputSystem() = default;
+
+		InputSystem(const InputSystem& other) = delete;
+		InputSystem(InputSystem&& other) = delete;
+		InputSystem& operator=(const InputSystem& other) = delete;
+		InputSystem& operator=(InputSystem&& other) = delete;
+
+		void ProcessInput();
+		bool ShouldQuit() const { return m_ShouldQuit; }
+
+	private:
+		bool m_ShouldQuit{ false };
+
+		void DetectInput();
+		void ProcessKeyboardButtons();
 	};
 
 }
