@@ -9,8 +9,8 @@ namespace REC
 	class SpriteRenderComponent : public RenderComponent
 	{
 	public:
-		explicit SpriteRenderComponent(Texture2D* texture);
-		explicit SpriteRenderComponent(const std::string& textureName);
+		explicit SpriteRenderComponent(Texture2D* texture, uint16_t width = 0, uint16_t height = 0);
+		explicit SpriteRenderComponent(const std::string& textureName, uint16_t width = 0, uint16_t height = 0);
 		virtual ~SpriteRenderComponent() = default;
 
 		SpriteRenderComponent(const SpriteRenderComponent& other) = delete;
@@ -24,7 +24,11 @@ namespace REC
 		void SetTexture(Texture2D* texture) { m_pTexture = texture; }
 		void SetTexture(const std::string& textureName);
 
+		void SetDrawSize(uint16_t width = 0, uint16_t height = 0);
+
 	private:
 		Texture2D* m_pTexture;
+		uint16_t m_DrawWidth;
+		uint16_t m_DrawHeight;
 	};
 }

@@ -22,10 +22,13 @@ namespace fs = std::filesystem;
 
 static void load()
 {
+	// === ENGINE SETTINGS =============================================================================
+
+
 	// === RESOURCES ===================================================================================
 	REC::TextureResourceDesc background{};
 	background.name = "background";
-	background.filePath = "background.png";
+	background.filePath = "NES - Bomberman - Backgrounds - Playfield.png";
 
 	REC::TextureResourceDesc logo{};
 	logo.name = "logo";
@@ -45,13 +48,13 @@ static void load()
 	auto* scene = REC::SceneManager::GetInstance().CreateScene();
 
 	auto go = std::make_unique<REC::GameObject>();
-	go->AddComponent<REC::TransformComponent>();
-	go->AddComponent<REC::SpriteRenderComponent>("background");
+	go->AddComponent<REC::TransformComponent>(0.f, 80.f);
+	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 540);
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>();
-	go->AddComponent<REC::TransformComponent>(358.f, 180.f);
-	go->AddComponent<REC::SpriteRenderComponent>("logo");
+	go->AddComponent<REC::TransformComponent>(810.f, 10.f);
+	go->AddComponent<REC::SpriteRenderComponent>("logo", 0, 60);
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>();
