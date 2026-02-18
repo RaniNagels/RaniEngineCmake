@@ -1,5 +1,5 @@
-#include "../inc/Component.h"
-#include "../inc/GameObject.h"
+#include "../../inc/Components/Component.h"
+#include "../../inc/GameObject.h"
 
 void REC::Component::Destroy()
 {

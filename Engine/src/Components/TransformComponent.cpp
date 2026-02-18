@@ -1,4 +1,4 @@
-#include "../inc/TransformComponent.h"
+#include "../../inc/Components/TransformComponent.h"
 
 REC::TransformComponent::TransformComponent(const glm::vec3& position)
 	: m_Position{position}

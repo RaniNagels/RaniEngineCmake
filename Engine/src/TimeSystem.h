@@ -3,6 +3,7 @@
 
 namespace REC
 {
+	// do not call it Time!!! Conflicts with windows Time.h
 	class TimeSystem final
 	{
 	public:

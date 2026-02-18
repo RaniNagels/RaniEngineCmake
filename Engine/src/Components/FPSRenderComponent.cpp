@@ -1,4 +1,4 @@
-#include "../inc/FPSRenderComponent.h"
+#include "../../inc/Components/FPSRenderComponent.h"
 #include <chrono>
 #include <iomanip>
 

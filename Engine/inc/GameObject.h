@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "Component.h"
+#include "Components/Component.h"
 #include <vector>
 #include <assert.h>
 

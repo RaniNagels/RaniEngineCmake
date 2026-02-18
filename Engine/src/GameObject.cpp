@@ -4,8 +4,8 @@
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
-#include "../inc/TransformComponent.h"
-#include "../inc/RenderComponent.h"
+#include "../inc/Components/TransformComponent.h"
+#include "../inc/Components/RenderComponent.h"
 
 REC::GameObject::~GameObject() = default;
 

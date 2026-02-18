@@ -106,7 +106,6 @@ void REC::Minigin::RunOneFrame()
 	m_quit = !InputManager::GetInstance().ProcessInput();
 	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Render();
-	//Renderer::GetInstance().Render();
 
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
 }

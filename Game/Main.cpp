@@ -11,11 +11,13 @@
 #include "../Engine/inc/Scene.h"
 #include "../Engine/src/Font.h"
 #include "../Engine/src/Texture2D.h"
-#include "../Engine/inc/TransformComponent.h"
-#include "../Engine/inc/SpriteRenderComponent.h"
-#include "../Engine/inc/TextRenderComponent.h"
+
+#include "../Engine/inc/Components/TransformComponent.h"
+#include "../Engine/inc/Components/SpriteRenderComponent.h"
+#include "../Engine/inc/Components/TextRenderComponent.h"
+#include "../Engine/inc/Components/FPSRenderComponent.h"
+
 #include "../Engine/inc/ResourceDescriptors.h"
-#include "../Engine/inc/FPSRenderComponent.h"
 #include "../Engine/inc/EngineDescriptor.h"
 
 #include <filesystem>
