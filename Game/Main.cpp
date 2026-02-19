@@ -16,6 +16,7 @@
 #include "../Engine/inc/Components/SpriteRenderComponent.h"
 #include "../Engine/inc/Components/TextRenderComponent.h"
 #include "../Engine/inc/Components/FPSComponent.h"
+#include "../Engine/inc/Components/RotatorComponent.h"
 
 #include "../Engine/inc/ResourceDescriptors.h"
 #include "../Engine/inc/EngineDescriptor.h"
@@ -30,7 +31,7 @@ static void load(REC::Minigin* engine)
 	engineData.frameRate = 60;
 	engineData.windowTitle = "Bomberman";
 	engineData.windowWidth = 1000;
-	engineData.windowHeight = 600;
+	engineData.windowHeight = 750;
 	engine->SetEngineData(engineData);
 
 	// === RESOURCES ===================================================================================
@@ -57,7 +58,7 @@ static void load(REC::Minigin* engine)
 	auto* scene = SM->CreateScene();
 
 	auto go = std::make_unique<REC::GameObject>(0.f, 80.f);
-	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 565);
+	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 725);
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>(810.f, 10.f);
@@ -72,14 +73,21 @@ static void load(REC::Minigin* engine)
 	go->AddComponent<REC::FPSComponent>("lingua36");
 	scene->Add(std::move(go));
 
-	go = std::make_unique<REC::GameObject>(200.f, 200.f);
-	go->AddComponent<REC::TextRenderComponent>("0", "lingua36", REC::Color{ 255, 0, 255 });
+	// if this is not set as the root of the parent and child, parent will rotate around 0,0 instead
+	go = std::make_unique<REC::GameObject>(230.f, 200.f);
+
+	auto parent = std::make_unique<REC::GameObject>(200.f, 200.f);
+	parent->AddComponent<REC::TextRenderComponent>("0", "lingua36", REC::Color{ 255, 0, 255 });
+	parent->AddComponent<REC::RotatorComponent>(-3.f);
+	parent->SetParent(go.get(), true);
 
 	auto child = std::make_unique<REC::GameObject>(50.f, 50.f);
 	child->AddComponent<REC::TextRenderComponent>("1", "lingua36", REC::Color(0, 255, 255));
-	child->SetParent(go.get(), false);
+	child->AddComponent<REC::RotatorComponent>(3.f);
+	child->SetParent(parent.get());
 
 	scene->Add(std::move(go));
+	scene->Add(std::move(parent));
 	scene->Add(std::move(child));
 }
 

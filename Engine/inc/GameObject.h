@@ -36,7 +36,7 @@ namespace REC
 		void Update(float deltaT);
 		void Render() const;
 
-		void SetParent(GameObject* parent, bool keepWorldPosition);
+		void SetParent(GameObject* parent, bool keepWorldPosition = false);
 		GameObject* GetParent() const { return m_pParent; }
 		const std::vector<GameObject*>& GetChildren() const { return m_pChildren; }
 

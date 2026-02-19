@@ -36,6 +36,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Engine/src/Components/SpriteRenderComponent.cpp"
   "Engine/src/Components/TextRenderComponent.cpp"
   "Engine/src/Components/FPSComponent.cpp"
+  "Engine/src/Components/RotatorComponent.cpp"
 
   "Engine/src/TimeSystem.cpp"
   "Engine/src/Window.cpp"
