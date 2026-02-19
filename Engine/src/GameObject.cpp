@@ -20,6 +20,11 @@ void REC::GameObject::Update(float deltaT)
 		CleanUpComponents();
 }
 
+void REC::GameObject::Destroy()
+{
+	m_IsAboutToBeDestroyed = true;
+}
+
 void REC::GameObject::Render() const
 {
 	for (const auto& component : m_Components)

@@ -18,14 +18,15 @@ namespace REC
 		Scene& operator= (const Scene&&) = delete;
 
 		void Add(std::unique_ptr<GameObject> object);
-		void Remove(const GameObject& object);
 		void RemoveAll();
 
 		void Update(float deltaT);
 		void Render() const;
 
 	private:
-		std::vector < std::unique_ptr<GameObject>> m_objects{};
+		void RemoveMarkedObjects();
+
+		std::vector<std::unique_ptr<GameObject>> m_objects{};
 	};
 
 }

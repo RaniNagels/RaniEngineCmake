@@ -8,13 +8,14 @@ void REC::Scene::Add(std::unique_ptr<GameObject> object)
 	m_objects.emplace_back(std::move(object));
 }
 
-void REC::Scene::Remove(const GameObject& object)
+void REC::Scene::RemoveMarkedObjects()
 {
 	m_objects.erase(
 		std::remove_if(
 			m_objects.begin(),
 			m_objects.end(),
-			[&object](const auto& ptr) { return ptr.get() == &object; }
+			[](const std::unique_ptr<GameObject>& object) 
+			{ return object->IsAboutToBeDestroyed(); }
 		),
 		m_objects.end()
 	);
@@ -31,6 +32,8 @@ void REC::Scene::Update(float deltaT)
 	{
 		object->Update(deltaT);
 	}
+
+	RemoveMarkedObjects();
 }
 
 void REC::Scene::Render() const
