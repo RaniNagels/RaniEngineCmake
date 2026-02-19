@@ -61,7 +61,10 @@ void REC::GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 
 	// update position, rotation and scale
 	if (parent == nullptr)
-		GetTransform()->SetLocalPosition(GetTransform()->GetWorldPosition());
+	{
+		if (keepWorldPosition)
+			GetTransform()->SetLocalPosition(GetTransform()->GetWorldPosition());
+	}
 	else
 	{
 		if (keepWorldPosition)

@@ -37,6 +37,7 @@ namespace REC
 		void Render() const;
 
 		void SetParent(GameObject* parent, bool keepWorldPosition = false);
+		void RemoveParent(bool keepWorldPosition = false) { SetParent(nullptr, keepWorldPosition); }
 		GameObject* GetParent() const { return m_pParent; }
 		const std::vector<GameObject*>& GetChildren() const { return m_pChildren; }
 

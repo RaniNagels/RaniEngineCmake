@@ -16,6 +16,13 @@ void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 	}
 }
 
+void REC::ResourceManager::Destroy()
+{
+	m_FontResources.clear();
+	m_TextureResources.clear();
+	TTF_Quit();
+}
+
 bool REC::ResourceManager::AddResource(const ResourceDesc& resource)
 {
 	switch (resource.GetType())

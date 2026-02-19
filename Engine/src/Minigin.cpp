@@ -81,7 +81,10 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 
 REC::Minigin::~Minigin()
 {
+	ResourceManager::GetInstance().Destroy();
 	Renderer::GetInstance().Destroy();
+	m_pWindow->Destroy();
+	TTF_Quit();
 	SDL_Quit();
 }
 

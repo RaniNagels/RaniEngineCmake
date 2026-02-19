@@ -11,6 +11,12 @@ REC::Window::Window(const std::string& title, int width, int height)
 
 REC::Window::~Window()
 {
+	//SDL_DestroyWindow(m_Window);
+	//m_Window = nullptr;
+}
+
+void REC::Window::Destroy()
+{
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
 }

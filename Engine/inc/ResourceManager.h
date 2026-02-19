@@ -20,6 +20,7 @@ namespace REC
 	{
 	public:
 		void Init(const std::filesystem::path& data);
+		void Destroy();
 
 		bool AddResource(const ResourceDesc& resource);
 

@@ -17,6 +17,8 @@ namespace REC
 		Window& operator=(const Window& other) = delete;
 		Window& operator=(Window&& other) = delete;
 
+		void Destroy();
+
 		SDL_Window* GetSDLWindow() const { return m_Window; }
 
 		// prevent a black screen as the resources are loading
