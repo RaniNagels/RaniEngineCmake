@@ -71,6 +71,12 @@ void REC::TextRenderComponent::SetFont(const std::string& font)
 {
 	// TODO: maybe use messenger system here. send request for resource and receive resource
 	// prevent using resourcemanager directly in this class
-	m_Font = ResourceManager::GetInstance().GetResource<Font>(font);
+	SetFont(ResourceManager::GetInstance().GetResource<Font>(font));
+}
+
+void REC::TextRenderComponent::SetFont(Font* font)
+{
+	if (m_Font == font) return;
+	m_Font = font;
 	m_NeedsUpdate = true;
 }

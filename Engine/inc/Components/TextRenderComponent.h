@@ -28,6 +28,7 @@ namespace REC
 		void SetText(const std::string& text);
 		void SetColor(const Color& color);
 		void SetFont(const std::string& font);
+		void SetFont(Font* font);
 
 	private:
 		bool m_NeedsUpdate{};
