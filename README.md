@@ -37,3 +37,9 @@ not required:
 * Ovape
 * Pass
 * Pontan
+
+# Engine
+## GameObject
+The GameObject is heavily component based.
+Each type of component can only exist ones. so one sprite component and/or one text component even though the text component inherits from the spritecomponent.
+Upon Creating a new GameObject a TransformComponent is automatically created in the constructor of the GameObject. and the GameObject has a GetTransform() Method for easy and fast access.

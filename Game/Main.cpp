@@ -56,23 +56,19 @@ static void load(REC::Minigin* engine)
 	auto* SM = engine->GetSceneManager();
 	auto* scene = SM->CreateScene();
 
-	auto go = std::make_unique<REC::GameObject>();
-	go->AddComponent<REC::TransformComponent>(0.f, 80.f);
+	auto go = std::make_unique<REC::GameObject>(0.f, 80.f);
 	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 565);
 	scene->Add(std::move(go));
 
-	go = std::make_unique<REC::GameObject>();
-	go->AddComponent<REC::TransformComponent>(810.f, 10.f);
+	go = std::make_unique<REC::GameObject>(810.f, 10.f);
 	go->AddComponent<REC::SpriteRenderComponent>("logo", 0, 60);
 	scene->Add(std::move(go));
 
-	go = std::make_unique<REC::GameObject>();
-	go->AddComponent<REC::TransformComponent>(292.f, 20.f);
+	go = std::make_unique<REC::GameObject>(280.f, 20.f);
 	go->AddComponent<REC::TextRenderComponent>("Programming 4 Assignment", "lingua36", REC::Color{ 255, 255, 0 });
 	scene->Add(std::move(go));
 
-	go = std::make_unique<REC::GameObject>();
-	go->AddComponent<REC::TransformComponent>(20.f, 20.f);
+	go = std::make_unique<REC::GameObject>(20.f, 20.f);
 	go->AddComponent<REC::FPSComponent>("lingua36");
 	scene->Add(std::move(go));
 }

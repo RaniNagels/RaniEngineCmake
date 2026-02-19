@@ -26,9 +26,9 @@ void REC::SpriteRenderComponent::Update(float)
 
 void REC::SpriteRenderComponent::Render()
 {
-	auto* transform = this->GetOwner()->GetComponent<TransformComponent>();
+	auto* transform = this->GetOwner()->GetTransform();
 	glm::vec2 pos{};
-	if (transform) pos = transform->GetPosition();
+	if (transform) pos = transform->GetWorldPosition();
 
 	glm::vec2 size{};
 	auto originalSize = m_pTexture->GetSize();

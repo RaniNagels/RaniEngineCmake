@@ -4,6 +4,7 @@
 #include "Components/Component.h"
 #include <vector>
 #include <assert.h>
+#include <glm/glm.hpp>
 
 namespace REC
 {
@@ -15,11 +16,14 @@ namespace REC
 	// must appear in the SAME namespace as the template that uses it
 
 	class Texture2D;
+	class TransformComponent;
 
 	class GameObject final
 	{
 	public:
-		explicit GameObject() = default;
+		explicit GameObject();
+		explicit GameObject(float x, float y, float z = 0);
+		explicit GameObject(glm::vec3 position);
 		~GameObject();
 
 		GameObject(const GameObject& other) = delete;
@@ -32,9 +36,9 @@ namespace REC
 		void Update(float deltaT);
 		void Render() const;
 
-		//== SCENE GRAPH ==============================================================================================
-
-		void SetParent(GameObject* parent);
+		void SetParent(GameObject* parent, bool keepWorldPosition);
+		GameObject* GetParent() const { return m_pParent; }
+		const std::vector<GameObject*>& GetChildren() const { return m_pChildren; }
 
 		//== COMPONENTS ===============================================================================================
 
@@ -90,6 +94,8 @@ namespace REC
 			return nullptr;
 		}
 
+		TransformComponent* GetTransform() const { return m_pTransform; }
+
 		// checks if a gameobject has a component of type C
 		// typeid is faster than dynamic_cast
 		template <Cpt C>
@@ -111,30 +117,18 @@ namespace REC
 	private:
 		//== SCENE GRAPH ==============================================================================================
 
-		// these functions are actually not needed
-		//void AddChild(GameObject* child)
-		//{
-		//	// check new child (validity)
-		//	// remove from previous child
-		//	// set itself as parent
-		//	// add to list of children
-		//	// update position, rotation and scale
-		//}
-		//
-		//void RemoveChild(GameObject* child)
-		//{
-		//	// check if the child is valid
-		//	// remove child from list
-		//	// remove itself as parent of the child
-		//	// update position, rotation and scale
-		//}
+		bool IsChild(const GameObject* object) const;
+		void AddChild(GameObject* child);
+		void RemoveChild(GameObject* child);
 
 		//== DATA MEMBERS =============================================================================================
 		std::vector<std::unique_ptr<Component>> m_Components{};
+		TransformComponent* m_pTransform = nullptr; // store transform pointer seperatly for quick look-ups, vector still owns it
+
 		bool m_ShouldCleanUpComponents = false;
 		bool m_IsAboutToBeDestroyed = false;
 
 		GameObject* m_pParent = nullptr;
-		std::vector<GameObject*> m_pComponent{};
+		std::vector<GameObject*> m_pChildren{};
 	};
 }

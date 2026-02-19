@@ -1,4 +1,5 @@
 #include "../../inc/Components/TransformComponent.h"
+#include "../../inc/GameObject.h"
 
 REC::TransformComponent::TransformComponent(GameObject* owner)
 	: Component(owner)
@@ -14,16 +15,53 @@ REC::TransformComponent::TransformComponent(GameObject* owner, float x, float y,
 	: TransformComponent(owner, glm::vec3{x, y, z})
 { }
 
-void REC::TransformComponent::Update(float)
+void REC::TransformComponent::Update(float) { }
+
+glm::vec3 REC::TransformComponent::GetWorldPosition()
 {
+	if (m_NeedsUpdate)
+	{
+		auto parent = GetOwner()->GetParent();
+		if (parent != nullptr)
+		{
+			m_WorldPosition = parent->GetTransform()->GetWorldPosition() + GetLocalPosition();
+		}
+		else
+			m_WorldPosition = GetLocalPosition();
+		
+		m_NeedsUpdate = false;
+	}
+
+	return m_WorldPosition;
 }
 
-void REC::TransformComponent::SetPosition(float x, float y, float z)
+void REC::TransformComponent::AddToLocalPosition(float x, float y, float z)
 {
-	SetPosition(glm::vec3{ x, y, z });
+	AddToLocalPosition(glm::vec3{ x, y, z });
 }
 
-void REC::TransformComponent::SetPosition(const glm::vec3& position)
+void REC::TransformComponent::AddToLocalPosition(const glm::vec3& position)
+{
+	m_Position += position;
+	RequiresUpdate();
+}
+
+void REC::TransformComponent::SetLocalPosition(float x, float y, float z)
+{
+	SetLocalPosition(glm::vec3{ x, y, z });
+}
+
+void REC::TransformComponent::SetLocalPosition(const glm::vec3& position)
 {
 	m_Position = position;
+	RequiresUpdate();
+}
+
+void REC::TransformComponent::RequiresUpdate()
+{
+	m_NeedsUpdate = true;
+	for (auto* child : GetOwner()->GetChildren())
+	{
+		child->GetTransform()->RequiresUpdate();
+	}
 }

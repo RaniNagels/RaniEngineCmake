@@ -17,7 +17,6 @@ REC::FPSComponent::FPSComponent(GameObject* owner, Font* font, const Color& colo
 		m_pTextRenderComponent->SetFont(font);
 		m_pTextRenderComponent->SetText("00.0 FPS");
 		m_pTextRenderComponent->SetColor(color);
-
 	}
 }
 

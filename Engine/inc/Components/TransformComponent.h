@@ -4,6 +4,8 @@
 
 namespace REC
 {
+	// this component stores the transform of a gameobject but does not modify it!
+	// acts as a glorified struct
 	class TransformComponent final : public Component
 	{
 	public:
@@ -17,14 +19,24 @@ namespace REC
 		TransformComponent& operator=(const TransformComponent& other) = delete;
 		TransformComponent& operator=(TransformComponent&& other) = delete;
 
-		virtual void Update(float deltaT) override;
+		virtual void Update(float deltaT) override; // left empty
 
-		const glm::vec3& GetPosition() const { return m_Position; }
-		void SetPosition(float x, float y, float z = 0);
-		void SetPosition(const glm::vec3& position);
+		glm::vec3 GetLocalPosition() const { return m_Position; }
+		glm::vec3 GetWorldPosition();
+
+		// local position!
+		void AddToLocalPosition(float x, float y, float z = 0);
+		void AddToLocalPosition(const glm::vec3& position);
+		void SetLocalPosition(float x, float y, float z = 0);
+		void SetLocalPosition(const glm::vec3& position);
+
+		void RequiresUpdate();
 
 	private:
 		glm::vec3 m_Position{};
-		bool m_IsWorldPositionValid{ false };
+		glm::vec3 m_Rotation{};
+
+		glm::vec3 m_WorldPosition{};
+		bool m_NeedsUpdate{ true };
 	};
 }
