@@ -71,6 +71,16 @@ static void load(REC::Minigin* engine)
 	go = std::make_unique<REC::GameObject>(20.f, 20.f);
 	go->AddComponent<REC::FPSComponent>("lingua36");
 	scene->Add(std::move(go));
+
+	go = std::make_unique<REC::GameObject>(200.f, 200.f);
+	go->AddComponent<REC::TextRenderComponent>("0", "lingua36", REC::Color{ 255, 0, 255 });
+
+	auto child = std::make_unique<REC::GameObject>(50.f, 50.f);
+	child->AddComponent<REC::TextRenderComponent>("1", "lingua36", REC::Color(0, 255, 255));
+	child->SetParent(go.get(), false);
+
+	scene->Add(std::move(go));
+	scene->Add(std::move(child));
 }
 
 int main(int, char*[]) 

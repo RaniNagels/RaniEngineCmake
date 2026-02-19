@@ -34,7 +34,7 @@ namespace REC
 
 	private:
 		glm::vec3 m_Position{};
-		glm::vec3 m_Rotation{};
+		//glm::vec3 m_Rotation{};
 
 		glm::vec3 m_WorldPosition{};
 		bool m_NeedsUpdate{ true };
