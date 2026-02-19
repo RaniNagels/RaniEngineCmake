@@ -2,13 +2,13 @@
 #include <chrono>
 #include <iomanip>
 
-REC::FPSRenderComponent::FPSRenderComponent(Font* font, const Color& color)
-	: TextRenderComponent("00.0 FPS", font, color)
+REC::FPSRenderComponent::FPSRenderComponent(GameObject* owner, Font* font, const Color& color)
+	: TextRenderComponent(owner, "00.0 FPS", font, color)
 {
 }
 
-REC::FPSRenderComponent::FPSRenderComponent(const std::string& font, const Color& color)
-	: TextRenderComponent("00.0 FPS", font, color)
+REC::FPSRenderComponent::FPSRenderComponent(GameObject* owner, const std::string& font, const Color& color)
+	: TextRenderComponent(owner, "00.0 FPS", font, color)
 {
 }
 

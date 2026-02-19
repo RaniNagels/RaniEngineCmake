@@ -27,6 +27,8 @@ namespace REC
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
+		void Destroy();
+		bool IsAboutToBeDestroyed() { return m_IsAboutToBeDestroyed; }
 		void Update(float deltaT);
 		void Render() const;
 
@@ -47,9 +49,8 @@ namespace REC
 			}
 
 			//https://en.cppreference.com/w/cpp/utility/forward.html
-			auto component = std::make_unique<C>(std::forward<Args>(args)...);
+			auto component = std::make_unique<C>(this, std::forward<Args>(args)...);
 
-			component->SetOwner(this);
 			auto* compPtr = component.get();
 			m_Components.emplace_back(std::move(component));
 
@@ -106,5 +107,6 @@ namespace REC
 	private:
 		std::vector<std::unique_ptr<Component>> m_Components{};
 		bool m_ShouldCleanUpComponents = false;
+		bool m_IsAboutToBeDestroyed = false;
 	};
 }

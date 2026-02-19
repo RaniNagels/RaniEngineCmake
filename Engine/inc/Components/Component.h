@@ -10,7 +10,7 @@ namespace REC
 	{
 	protected:
 		// enforce that only derived classes can create components!
-		explicit Component() = default;
+		explicit Component(GameObject* owner) : m_pOwner{ owner } {}
 
 	public:
 		virtual ~Component() = default;
@@ -29,12 +29,7 @@ namespace REC
 		virtual bool CanRender() const { return false; }
 
 	private:
-		void SetOwner(GameObject* owner) { m_pOwner = owner; }
-
 		GameObject* m_pOwner = nullptr;
 		bool m_IsAboutToBeDestroyed = false;
-
-		friend class GameObject;
-		//friend void GameObject::SetComponentOwner(Component* comp); // does not seem to work as SetComponentOwner is private
 	};
 }

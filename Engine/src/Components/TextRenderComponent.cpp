@@ -8,8 +8,8 @@
 #include "../../inc/ResourceManager.h"
 #include "../SDLHelpers.h"
 
-REC::TextRenderComponent::TextRenderComponent(const std::string& text, Font* font, const Color& color)
-	: SpriteRenderComponent(nullptr)
+REC::TextRenderComponent::TextRenderComponent(GameObject* owner, const std::string& text, Font* font, const Color& color)
+	: SpriteRenderComponent(owner, nullptr)
 	, m_NeedsUpdate{true}
 	, m_TextTexture{}
 	, m_Text{text}
@@ -18,8 +18,8 @@ REC::TextRenderComponent::TextRenderComponent(const std::string& text, Font* fon
 {
 }
 
-REC::TextRenderComponent::TextRenderComponent(const std::string& text, const std::string& font, const Color& color)
-	: SpriteRenderComponent(nullptr)
+REC::TextRenderComponent::TextRenderComponent(GameObject* owner, const std::string& text, const std::string& font, const Color& color)
+	: SpriteRenderComponent(owner, nullptr)
 	, m_NeedsUpdate{true}
 	, m_TextTexture{}
 	, m_Text{text}

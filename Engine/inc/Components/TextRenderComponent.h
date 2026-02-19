@@ -14,8 +14,8 @@ namespace REC
 	class TextRenderComponent : public SpriteRenderComponent
 	{
 	public:
-		explicit TextRenderComponent(const std::string& text, Font* font, const Color& color = { 255, 255, 255, 255 });
-		explicit TextRenderComponent(const std::string& text, const std::string& font, const Color& color = { 255, 255, 255, 255 });
+		explicit TextRenderComponent(GameObject* owner, const std::string& text, Font* font, const Color& color = { 255, 255, 255, 255 });
+		explicit TextRenderComponent(GameObject* owner, const std::string& text, const std::string& font, const Color& color = { 255, 255, 255, 255 });
 		virtual ~TextRenderComponent() = default;
 	
 		TextRenderComponent(const TextRenderComponent& other) = delete;

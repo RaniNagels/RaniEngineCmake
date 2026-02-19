@@ -7,9 +7,9 @@ namespace REC
 	class TransformComponent final : public Component
 	{
 	public:
-		explicit TransformComponent() = default;
-		explicit TransformComponent(const glm::vec3& position);
-		explicit TransformComponent(float x, float y, float z = 0.f);
+		explicit TransformComponent(GameObject* owner);
+		explicit TransformComponent(GameObject* owner, const glm::vec3& position);
+		explicit TransformComponent(GameObject* owner, float x, float y, float z = 0.f);
 		virtual ~TransformComponent() = default;
 
 		TransformComponent(const TransformComponent& other) = delete;

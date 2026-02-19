@@ -4,15 +4,17 @@
 #include "../../inc/ResourceManager.h"
 #include "../Renderer.h"
 
-REC::SpriteRenderComponent::SpriteRenderComponent(Texture2D* texture, uint16_t width, uint16_t height)
-	: m_pTexture(texture)
+REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* texture, uint16_t width, uint16_t height)
+	: RenderComponent(owner)
+	, m_pTexture{texture}
 	, m_DrawWidth{width}
 	, m_DrawHeight{height}
 {
 }
 
-REC::SpriteRenderComponent::SpriteRenderComponent(const std::string& textureName, uint16_t width, uint16_t height)
-	: m_DrawWidth{width}
+REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const std::string& textureName, uint16_t width, uint16_t height)
+	: RenderComponent(owner)
+	, m_DrawWidth{width}
 	, m_DrawHeight{height}
 {
 	SetTexture(textureName);
