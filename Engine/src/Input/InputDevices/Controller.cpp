@@ -2,10 +2,10 @@
 
 REC::Controller::Controller(uint8_t index)
 	: m_ID{ index }
+	, m_PreviousState{}
+	, m_CurrentState{}
 	, m_ButtonsPressedThisFrame{ 0 }
 	, m_ButtonsReleasedThisFrame{ 0 }
-	, m_CurrentState{}
-	, m_PreviousState{}
 {
 }
 
