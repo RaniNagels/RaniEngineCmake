@@ -15,7 +15,7 @@
 #include "../Engine/inc/Components/TransformComponent.h"
 #include "../Engine/inc/Components/SpriteRenderComponent.h"
 #include "../Engine/inc/Components/TextRenderComponent.h"
-#include "../Engine/inc/Components/FPSRenderComponent.h"
+#include "../Engine/inc/Components/FPSComponent.h"
 
 #include "../Engine/inc/ResourceDescriptors.h"
 #include "../Engine/inc/EngineDescriptor.h"
@@ -73,7 +73,7 @@ static void load(REC::Minigin* engine)
 
 	go = std::make_unique<REC::GameObject>();
 	go->AddComponent<REC::TransformComponent>(20.f, 20.f);
-	go->AddComponent<REC::FPSRenderComponent>("lingua36");
+	go->AddComponent<REC::FPSComponent>("lingua36");
 	scene->Add(std::move(go));
 }
 
