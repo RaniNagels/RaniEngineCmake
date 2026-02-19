@@ -16,22 +16,28 @@ endif()
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Game/Main.cpp"
+
   "Engine/src/Font.cpp"
   "Engine/src/GameObject.cpp"
-  "Engine/src/InputSystem.cpp"
+
+  "Engine/src/Input/InputSystem.cpp"
+  "Engine/src/Input/InputDevices/Keyboard.cpp"
+  "Engine/src/Input/InputDevices/Controller.cpp"
+
   "Engine/src/Minigin.cpp"
   "Engine/src/Renderer.cpp"
   "Engine/src/ResourceManager.cpp"
   "Engine/src/Scene.cpp"
   "Engine/src/SceneManager.cpp"
   "Engine/src/Texture2D.cpp"
+
   "Engine/src/Components/Component.cpp"
-  "Engine/inc/Components/RenderComponent.h"
   "Engine/src/Components/TransformComponent.cpp"
   "Engine/src/Components/SpriteRenderComponent.cpp"
   "Engine/src/Components/TextRenderComponent.cpp"
+  "Engine/src/Components/FPSComponent.cpp"
+
   "Engine/src/TimeSystem.cpp"
-  "Engine/src/Components/FPSRenderComponent.cpp"
   "Engine/src/Window.cpp"
 )
 

@@ -25,5 +25,6 @@ namespace REC
 
 	private:
 		glm::vec3 m_Position{};
+		bool m_IsWorldPositionValid{ false };
 	};
 }

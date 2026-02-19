@@ -11,7 +11,7 @@
 //#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "../inc/Minigin.h"
-#include "../inc/InputSystem.h"
+#include "../inc/Input/InputSystem.h"
 #include "../inc/SceneManager.h"
 #include "Renderer.h"
 #include "../inc/ResourceManager.h"

@@ -23,7 +23,10 @@ void REC::Scene::RemoveMarkedObjects()
 
 void REC::Scene::RemoveAll()
 {
-	m_objects.clear();
+	for (auto& object : m_objects)
+	{
+		object->Destroy();
+	}
 }
 
 void REC::Scene::Update(float deltaT)

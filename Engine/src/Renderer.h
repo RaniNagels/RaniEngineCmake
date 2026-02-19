@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL3/SDL.h>
+#include "../inc/RECColor.h"
 #include "../inc/Singleton.h"
 
 namespace REC
@@ -21,13 +22,13 @@ namespace REC
 
 		SDL_Renderer* GetSDLRenderer() const;
 
-		const SDL_Color& GetBackgroundColor() const { return m_clearColor; }
-		void SetBackgroundColor(const SDL_Color& color) { m_clearColor = color; }
+		const Color& GetBackgroundColor() const { return m_clearColor; }
+		void SetBackgroundColor(const Color& color) { m_clearColor = color; }
 
 	private:
 		SDL_Renderer* m_renderer{};
 		SDL_Window* m_window{};
-		SDL_Color m_clearColor{};	
+		Color m_clearColor{};	
 	};
 }
 

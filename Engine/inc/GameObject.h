@@ -32,6 +32,10 @@ namespace REC
 		void Update(float deltaT);
 		void Render() const;
 
+		//== SCENE GRAPH ==============================================================================================
+
+		void SetParent(GameObject* parent);
+
 		//== COMPONENTS ===============================================================================================
 
 		// arguments must match exactly the constructor of the component!!
@@ -105,8 +109,32 @@ namespace REC
 		void ShouldCleanUpComponents() { m_ShouldCleanUpComponents = true; }
 
 	private:
+		//== SCENE GRAPH ==============================================================================================
+
+		// these functions are actually not needed
+		//void AddChild(GameObject* child)
+		//{
+		//	// check new child (validity)
+		//	// remove from previous child
+		//	// set itself as parent
+		//	// add to list of children
+		//	// update position, rotation and scale
+		//}
+		//
+		//void RemoveChild(GameObject* child)
+		//{
+		//	// check if the child is valid
+		//	// remove child from list
+		//	// remove itself as parent of the child
+		//	// update position, rotation and scale
+		//}
+
+		//== DATA MEMBERS =============================================================================================
 		std::vector<std::unique_ptr<Component>> m_Components{};
 		bool m_ShouldCleanUpComponents = false;
 		bool m_IsAboutToBeDestroyed = false;
+
+		GameObject* m_pParent = nullptr;
+		std::vector<GameObject*> m_pComponent{};
 	};
 }

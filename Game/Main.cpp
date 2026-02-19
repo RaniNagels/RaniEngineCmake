@@ -34,22 +34,22 @@ static void load(REC::Minigin* engine)
 	engine->SetEngineData(engineData);
 
 	// === RESOURCES ===================================================================================
+	auto& RM = REC::ResourceManager::GetInstance();
+
 	REC::TextureResourceDesc background{};
 	background.name = "background";
 	background.filePath = "NES - Bomberman - Backgrounds - Playfield.png";
+	RM.AddResource(background);
 
 	REC::TextureResourceDesc logo{};
 	logo.name = "logo";
 	logo.filePath = "logo.png";
+	RM.AddResource(logo);
 
 	REC::FontResourceDesc font{};
 	font.name = "lingua36";
 	font.filePath = "Lingua.otf";
 	font.size = 36;
-
-	auto& RM = REC::ResourceManager::GetInstance();
-	RM.AddResource(background);
-	RM.AddResource(logo);
 	RM.AddResource(font);
 
 	// === SCENE =======================================================================================

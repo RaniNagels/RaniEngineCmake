@@ -23,6 +23,10 @@ void REC::GameObject::Update(float deltaT)
 void REC::GameObject::Destroy()
 {
 	m_IsAboutToBeDestroyed = true;
+	for (auto& component : m_Components)
+	{
+		component->Destroy();
+	}
 }
 
 void REC::GameObject::Render() const
@@ -35,6 +39,15 @@ void REC::GameObject::Render() const
 			dynamic_cast<RenderComponent*>(component.get())->Render();
 		}
 	}
+}
+
+void REC::GameObject::SetParent(GameObject*)
+{
+	// check new parent (validity)
+	// remove itself from previous parent
+	// set given parent on itself
+	// add itself as a child to the given parent
+	// update position, rotation and scale
 }
 
 void REC::GameObject::CleanUpComponents()

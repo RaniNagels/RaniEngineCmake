@@ -20,7 +20,7 @@ namespace REC
 		bool m_ShouldQuit{ false };
 
 		void DetectInput();
+		void DetectControllerInput(int index);
 		void ProcessKeyboardButtons();
 	};
-
 }
