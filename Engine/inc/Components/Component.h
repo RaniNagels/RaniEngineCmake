@@ -10,7 +10,7 @@ namespace REC
 	{
 	protected:
 		// enforce that only derived classes can create components!
-		explicit Component(GameObject* owner) : m_pOwner{ owner } {}
+		explicit Component(GameObject* owner);
 
 	public:
 		virtual ~Component() = default;
