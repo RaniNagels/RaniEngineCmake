@@ -2,32 +2,31 @@
 
 namespace REC
 {
-	enum class ResourceType
-	{
-		Unknown,
-		Texture,
-		Font,
-	};
-
 	struct ResourceDesc
 	{
 		const char* name = "";
 		const char* filePath = ""; // relative to the data folder
-		ResourceType GetType() const { return type; }
-
+		virtual ~ResourceDesc() = default;
 	protected:
 		ResourceDesc() = default;
-		ResourceType type = ResourceType::Unknown;
 	};
 
 	struct TextureResourceDesc : public ResourceDesc
 	{
-		TextureResourceDesc() { type = ResourceType::Texture; }
+		TextureResourceDesc() = default;
+		virtual ~TextureResourceDesc() = default;
 	};
 
 	struct FontResourceDesc : public ResourceDesc
 	{
-		FontResourceDesc() { type = ResourceType::Font; }
+		FontResourceDesc() = default;
+		virtual ~FontResourceDesc() = default;
 		uint8_t size = 0;
+	};
+
+	struct SoundResourceDesc : public ResourceDesc
+	{
+		SoundResourceDesc() = default;
+		virtual ~SoundResourceDesc() = default;
 	};
 }

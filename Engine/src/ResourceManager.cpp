@@ -11,9 +11,7 @@ void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 	m_DataPath = dataPath;
 
 	if (!TTF_Init())
-	{
 		throw std::runtime_error(std::string("Failed to load support for fonts: ") + SDL_GetError());
-	}
 }
 
 void REC::ResourceManager::Destroy()
@@ -25,10 +23,9 @@ void REC::ResourceManager::Destroy()
 
 bool REC::ResourceManager::AddResource(const ResourceDesc& resource)
 {
-	switch (resource.GetType())
+	if (typeid(resource) == typeid(TextureResourceDesc))
 	{
-	case ResourceType::Texture:
-	{
+
 		const auto& tdesc = static_cast<const TextureResourceDesc&>(resource);
 
 		if (m_TextureResources.find(tdesc.name) != m_TextureResources.end())
@@ -41,8 +38,7 @@ bool REC::ResourceManager::AddResource(const ResourceDesc& resource)
 		m_TextureResources.insert({ tdesc.name, std::make_unique<Texture2D>(fullPath) });
 		return true;
 	}
-
-	case ResourceType::Font:
+	else if (typeid(resource) == typeid(FontResourceDesc))
 	{
 		const auto& fdesc = static_cast<const FontResourceDesc&>(resource);
 
@@ -57,9 +53,8 @@ bool REC::ResourceManager::AddResource(const ResourceDesc& resource)
 		return true;
 	}
 
-	case ResourceType::Unknown:
+	else
 		assert("Resource could not be added to ResourceManager: No Type Defined");
-		break;
-	}
+
 	return false;
 }
