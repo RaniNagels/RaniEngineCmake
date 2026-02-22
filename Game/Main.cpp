@@ -22,6 +22,7 @@
 #include "../Engine/inc/EngineDescriptor.h"
 
 #include <filesystem>
+#include "../Engine/inc/SpriteDescriptors.h"
 namespace fs = std::filesystem;
 
 static void load(REC::Minigin* engine)
@@ -41,6 +42,11 @@ static void load(REC::Minigin* engine)
 	background.name = "background";
 	background.filePath = "NES - Bomberman - Backgrounds - Playfield.png";
 	RM.AddResource(background);
+
+	REC::TextureResourceDesc generalSprites{};
+	generalSprites.name = "generalSprites";
+	generalSprites.filePath = "NES - Bomberman - Miscellaneous - General Sprites.png";
+	RM.AddResource(generalSprites);
 
 	REC::TextureResourceDesc logo{};
 	logo.name = "logo";
@@ -74,19 +80,31 @@ static void load(REC::Minigin* engine)
 	scene->Add(std::move(go));
 
 	// if this is not set as the root of the parent and child, parent will rotate around 0,0 instead
-	go = std::make_unique<REC::GameObject>(230.f, 200.f);
+	auto root = std::make_unique<REC::GameObject>(230.f, 200.f);
+
+	REC::SpriteDescriptor character1{};
+	character1.pixelRegion.bottomRight.x = 16;
+	character1.pixelRegion.bottomRight.y = 16;
+	character1.height = 50;
 
 	auto parent = std::make_unique<REC::GameObject>(200.f, 200.f);
-	parent->AddComponent<REC::TextRenderComponent>("0", "lingua36", REC::Color{ 255, 0, 255 });
+	parent->AddComponent<REC::SpriteRenderComponent>("generalSprites", character1);
 	parent->AddComponent<REC::RotatorComponent>(-3.f);
-	parent->SetParent(go.get(), true);
+	parent->SetParent(root.get(), true);
+
+	REC::SpriteDescriptor character2{};
+	character2.pixelRegion.topLeft.x = 48;
+	character2.pixelRegion.topLeft.y = 240;
+	character2.pixelRegion.bottomRight.x = 64;
+	character2.pixelRegion.bottomRight.y = 256;
+	character2.height = 50;
 
 	auto child = std::make_unique<REC::GameObject>(50.f, 50.f);
-	child->AddComponent<REC::TextRenderComponent>("1", "lingua36", REC::Color(0, 255, 255));
+	child->AddComponent<REC::SpriteRenderComponent>("generalSprites", character2);
 	child->AddComponent<REC::RotatorComponent>(3.f);
 	child->SetParent(parent.get());
 
-	scene->Add(std::move(go));
+	scene->Add(std::move(root));
 	scene->Add(std::move(parent));
 	scene->Add(std::move(child));
 }

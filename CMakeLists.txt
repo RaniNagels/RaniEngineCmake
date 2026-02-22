@@ -17,7 +17,6 @@ endif()
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Game/Main.cpp"
 
-  "Engine/src/Font.cpp"
   "Engine/src/GameObject.cpp"
 
   "Engine/src/Input/InputSystem.cpp"
@@ -30,6 +29,9 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Engine/src/Scene.cpp"
   "Engine/src/SceneManager.cpp"
   "Engine/src/Texture2D.cpp"
+  "Engine/src/Font.cpp"
+  
+
 
   "Engine/src/Components/Component.cpp"
   "Engine/src/Components/TransformComponent.cpp"
@@ -135,6 +137,7 @@ target_link_libraries("${TARGET_NAME}" PUBLIC
   SDL3::SDL3
   SDL3_ttf::SDL3_ttf
   glm::glm
+  xinput
   ${VLD_LIBRARIES}
 )
 

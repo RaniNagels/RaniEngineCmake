@@ -7,17 +7,33 @@
 REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* texture, uint16_t width, uint16_t height)
 	: RenderComponent(owner)
 	, m_pTexture{texture}
-	, m_DrawWidth{width}
-	, m_DrawHeight{height}
+	, m_Descriptor{}
 {
+	m_Descriptor.width = width;
+	m_Descriptor.height = height;
 }
 
 REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const std::string& textureName, uint16_t width, uint16_t height)
 	: RenderComponent(owner)
-	, m_DrawWidth{width}
-	, m_DrawHeight{height}
+	, m_Descriptor{}
 {
 	SetTexture(textureName);
+	m_Descriptor.width = width;
+	m_Descriptor.height = height;
+}
+
+REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const std::string& textureName, const SpriteDescriptor& descriptor)
+	: RenderComponent(owner)
+	, m_Descriptor{descriptor}
+{
+	SetTexture(textureName);
+}
+
+REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* texture, const SpriteDescriptor& descriptor)
+	: RenderComponent(owner)
+	, m_pTexture{ texture }
+	, m_Descriptor{descriptor}
+{
 }
 
 void REC::SpriteRenderComponent::Update(float)
@@ -27,35 +43,53 @@ void REC::SpriteRenderComponent::Update(float)
 void REC::SpriteRenderComponent::Render()
 {
 	auto* transform = this->GetOwner()->GetTransform();
-	glm::vec2 pos{};
-	if (transform) pos = transform->GetWorldPosition();
 
-	glm::vec2 size{};
-	auto originalSize = m_pTexture->GetSize();
-	if (m_DrawHeight == 0 && m_DrawWidth == 0)
-		size = originalSize;
-	else if (m_DrawHeight == 0 || m_DrawWidth == 0)
+	Rect src{};
+	Rect dst{};
+
+	if (transform)
 	{
-		if (m_DrawHeight == 0)
+		glm::vec2 pos = transform->GetWorldPosition();
+		dst.x = pos.x;
+		dst.y = pos.y;
+	}
+
+	glm::vec2 textureSize{};
+	if (m_Descriptor.pixelRegion.IsValid())
+	{
+		src = m_Descriptor.pixelRegion;
+		textureSize = {m_Descriptor.pixelRegion.width(), m_Descriptor.pixelRegion.height()};
+	}
+	else
+		textureSize = m_pTexture->GetSize();
+
+	if (m_Descriptor.height == 0 && m_Descriptor.width == 0)
+	{
+		dst.width = textureSize.x;
+		dst.height = textureSize.y;
+	}
+	else if (m_Descriptor.height == 0 || m_Descriptor.width == 0)
+	{
+		if (m_Descriptor.height == 0)
 		{
-			size.x = m_DrawWidth;
-			auto factor = m_DrawWidth / originalSize.x;
-			size.y = originalSize.y * factor;
+			dst.width = m_Descriptor.width;
+			auto factor = m_Descriptor.width / textureSize.x;
+			dst.height = textureSize.y * factor;
 		}
-		else if (m_DrawWidth == 0)
+		else if (m_Descriptor.width == 0)
 		{
-			size.y = m_DrawHeight;
-			auto factor = m_DrawHeight / originalSize.y;
-			size.x = originalSize.x * factor;
+			dst.height = m_Descriptor.height;
+			auto factor = m_Descriptor.height / textureSize.y;
+			dst.width = textureSize.x * factor;
 		}
 	}
 	else
 	{
-		size.x = m_DrawWidth;
-		size.y = m_DrawHeight;
+		dst.width = m_Descriptor.width;
+		dst.height = m_Descriptor.height;
 	}
 
-	Renderer::GetInstance().RenderTexture(*m_pTexture, pos.x, pos.y, size.x, size.y);
+	Renderer::GetInstance().RenderTexture(*m_pTexture, src, dst);
 }
 
 void REC::SpriteRenderComponent::SetTexture(const std::string& textureName)
@@ -63,10 +97,4 @@ void REC::SpriteRenderComponent::SetTexture(const std::string& textureName)
 	// TODO: maybe use messenger system here. send request for resource and receive resource
 	// prevent using resourcemanager directly in this class
 	m_pTexture = ResourceManager::GetInstance().GetResource<Texture2D>(textureName);
-}
-
-void REC::SpriteRenderComponent::SetDrawSize(uint16_t width, uint16_t height)
-{
-	m_DrawWidth = width;
-	m_DrawHeight = height;
 }

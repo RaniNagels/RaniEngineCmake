@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 #include "../inc/RECColor.h"
 #include "../inc/Singleton.h"
+#include "../inc/SpriteDescriptors.h"
 
 namespace REC
 {
@@ -19,6 +20,7 @@ namespace REC
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
+		void RenderTexture(const Texture2D& texture, const Rect& textureRegion, const Rect& screenRegion) const;
 
 		SDL_Renderer* GetSDLRenderer() const;
 

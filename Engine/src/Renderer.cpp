@@ -5,6 +5,7 @@
 #include "../inc/SceneManager.h"
 #include "../inc/Scene.h"
 #include "Texture2D.h"
+#include "SDLHelpers.h"
 
 void REC::Renderer::Init(SDL_Window* window)
 {
@@ -62,6 +63,20 @@ void REC::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	dst.w = width;
 	dst.h = height;
 	SDL_RenderTexture(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+}
+
+void REC::Renderer::RenderTexture(const Texture2D& texture, const Rect& textureRegion, const Rect& screenRegion) const
+{
+	if (!(textureRegion.width == 0 && textureRegion.height == 0))
+	{
+		SDL_FRect src = ToRect(textureRegion);
+		SDL_FRect dst = ToRect(screenRegion);
+		SDL_RenderTexture(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
+	}
+	else
+	{
+		RenderTexture(texture, screenRegion.x, screenRegion.y, screenRegion.width, screenRegion.height);
+	}
 }
 
 SDL_Renderer* REC::Renderer::GetSDLRenderer() const { return m_renderer; }

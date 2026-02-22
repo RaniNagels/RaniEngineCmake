@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderComponent.h"
 #include <string>
+#include "../SpriteDescriptors.h"
 
 namespace REC
 {
@@ -11,6 +12,8 @@ namespace REC
 	public:
 		explicit SpriteRenderComponent(GameObject* owner, Texture2D* texture, uint16_t width = 0, uint16_t height = 0);
 		explicit SpriteRenderComponent(GameObject* owner, const std::string& textureName, uint16_t width = 0, uint16_t height = 0);
+		explicit SpriteRenderComponent(GameObject* owner, const std::string& textureName, const SpriteDescriptor& descriptor);
+		explicit SpriteRenderComponent(GameObject* owner, Texture2D* texture, const SpriteDescriptor& descriptor);
 		virtual ~SpriteRenderComponent() = default;
 
 		SpriteRenderComponent(const SpriteRenderComponent& other) = delete;
@@ -24,11 +27,8 @@ namespace REC
 		void SetTexture(Texture2D* texture) { m_pTexture = texture; }
 		void SetTexture(const std::string& textureName);
 
-		void SetDrawSize(uint16_t width = 0, uint16_t height = 0);
-
 	private:
 		Texture2D* m_pTexture;
-		uint16_t m_DrawWidth;
-		uint16_t m_DrawHeight;
+		SpriteDescriptor m_Descriptor;
 	};
 }
