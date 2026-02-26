@@ -23,15 +23,18 @@ namespace REC
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 		void RenderTexture(const Texture2D& texture, const Rect& textureRegion, const Rect& screenRegion) const;
 
+		void RenderLine(const Color& color, glm::vec2 start, glm::vec2 end);
+		void RenderRect(const Color& color, const Rect& rect, bool fill = false);
+
 		SDL_Renderer* GetSDLRenderer() const;
 
-		const Color& GetBackgroundColor() const { return m_clearColor; }
-		void SetBackgroundColor(const Color& color) { m_clearColor = color; }
+		const Color& GetBackgroundColor() const { return m_ClearColor; }
+		void SetBackgroundColor(const Color& color) { m_ClearColor = color; }
 
 	private:
-		SDL_Renderer* m_renderer{};
+		SDL_Renderer* m_Renderer{};
 		SDL_Window* m_window{};
-		Color m_clearColor{};	
+		Color m_ClearColor{};	
 	};
 }
 

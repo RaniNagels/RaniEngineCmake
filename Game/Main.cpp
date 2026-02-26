@@ -23,6 +23,9 @@
 
 #include <filesystem>
 #include "../Engine/inc/SpriteDescriptor.h"
+#include "../Engine/inc/Components/GridComponent.h"
+#include "../Engine/inc/Components/DebugGridRenderComponent.h"
+
 namespace fs = std::filesystem;
 
 static void load(REC::Minigin* engine)
@@ -69,13 +72,21 @@ static void load(REC::Minigin* engine)
 	auto* SM = engine->GetSceneManager();
 	auto* scene = SM->CreateScene();
 
-	//REC::SpriteDescriptor backdrop{};
-	//backdrop.drawHeight = 670;
-	//backdrop.dataResourceFile = "generalSpritesData";
-	//backdrop.spriteDataKey = "background";
+	REC::GridDescriptor grid{};
+	grid.cellHeight = 51;
+	grid.cellWidth = 51;
+	grid.rows = 13;
+	grid.cols = 31;
+
+	REC::SpriteDescriptor backdrop{};
+	backdrop.drawHeight = grid.cellHeight*grid.rows;
+	backdrop.dataResourceFile = "generalSpritesData";
+	backdrop.spriteDataKey = "background";
 
 	auto go = std::make_unique<REC::GameObject>(0.f, 80.f);
-	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 670);
+	go->AddComponent<REC::SpriteRenderComponent>("background", backdrop);
+	go->AddComponent<REC::GridComponent>(grid);
+	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{20,30,120});
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>(810.f, 10.f);
