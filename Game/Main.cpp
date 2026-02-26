@@ -1,6 +1,3 @@
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
-
 #if _DEBUG && __has_include(<vld.h>)
 #include <vld.h>
 #endif
@@ -32,10 +29,10 @@ static void load(REC::Minigin* engine)
 {
 	// === ENGINE SETTINGS =============================================================================
 	REC::EngineSettings engineData{};
-	engineData.frameRate = 60;
+	engineData.frameRate = uint8_t(60);
 	engineData.windowTitle = "Bomberman";
-	engineData.windowWidth = 1000;
-	engineData.windowHeight = 750;
+	engineData.windowWidth = uint16_t(1000);
+	engineData.windowHeight = uint16_t(750);
 	engine->SetEngineData(engineData);
 
 	// === RESOURCES ===================================================================================
@@ -59,7 +56,7 @@ static void load(REC::Minigin* engine)
 	REC::FontResourceCreateInfo font{};
 	font.name = "lingua36";
 	font.filePath = "Lingua.otf";
-	font.size = 36;
+	font.size = uint8_t(36);
 	RM.AddResource(font);
 
 	REC::SpriteDataResourceCreateInfo spriteDataFile{};
@@ -73,24 +70,24 @@ static void load(REC::Minigin* engine)
 	auto* scene = SM->CreateScene();
 
 	REC::GridDescriptor grid{};
-	grid.cellHeight = 51;
-	grid.cellWidth = 51;
-	grid.rows = 13;
-	grid.cols = 31;
+	grid.cellHeight = uint8_t(51);
+	grid.cellWidth = uint8_t(51);
+	grid.rows = uint8_t(13);
+	grid.cols = uint8_t(31);
 
 	REC::SpriteDescriptor backdrop{};
-	backdrop.drawHeight = grid.cellHeight*grid.rows;
+	backdrop.drawHeight = uint16_t(grid.cellHeight)*uint16_t(grid.rows);
 	backdrop.dataResourceFile = "generalSpritesData";
 	backdrop.spriteDataKey = "background";
 
 	auto go = std::make_unique<REC::GameObject>(0.f, 80.f);
 	go->AddComponent<REC::SpriteRenderComponent>("background", backdrop);
 	go->AddComponent<REC::GridComponent>(grid);
-	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{20,30,120});
+	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>(810.f, 10.f);
-	go->AddComponent<REC::SpriteRenderComponent>("logo", 0, 60);
+	go->AddComponent<REC::SpriteRenderComponent>("logo", uint16_t(0), uint16_t(60));
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>(280.f, 20.f);
