@@ -18,6 +18,9 @@ jobs:
   build-web:
     runs-on: ubuntu-latest
 
+    env:
+      EMCC_CFLAGS: "-s USE_SDL=3 -s USE_FREETYPE=1 -s USE_HARFBUZZ=1"
+
     steps:
       - uses: actions/checkout@v4
       - name: Install Dependencies
@@ -51,8 +54,7 @@ jobs:
           emcmake cmake \
             -DCMAKE_BUILD_TYPE=Release \
             -DSDL_TEST=OFF \
-            -DFREETYPE_FOUND=ON \
-            -DHARFBUZZ_FOUND=ON \
+            -DSDLTTF_VENDORED=ON \
             ..
 
       - name: Build
