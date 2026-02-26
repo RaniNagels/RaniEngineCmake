@@ -21,10 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install -y libfreetype6-dev libharfbuzz-dev libunwind-dev
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        run: sudo apt-get update && sudo apt-get install -y libfreetype6-dev libharfbuzz-dev libunwind-dev pkg-config 
 
       - uses: actions/cache@v4
         with:
@@ -54,6 +51,8 @@ jobs:
           emcmake cmake \
             -DCMAKE_BUILD_TYPE=Release \
             -DSDL_TEST=OFF \
+            -DFREETYPE_FOUND=ON \
+            -DHARFBUZZ_FOUND=ON \
             ..
 
       - name: Build
