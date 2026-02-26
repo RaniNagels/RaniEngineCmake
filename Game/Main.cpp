@@ -69,13 +69,13 @@ static void load(REC::Minigin* engine)
 	auto* SM = engine->GetSceneManager();
 	auto* scene = SM->CreateScene();
 
-	REC::SpriteDescriptor backdrop{};
-	backdrop.drawHeight = 670;
-	backdrop.dataResourceFile = "generalSpritesData";
-	backdrop.spriteDataKey = "background";
+	//REC::SpriteDescriptor backdrop{};
+	//backdrop.drawHeight = 670;
+	//backdrop.dataResourceFile = "generalSpritesData";
+	//backdrop.spriteDataKey = "background";
 
 	auto go = std::make_unique<REC::GameObject>(0.f, 80.f);
-	go->AddComponent<REC::SpriteRenderComponent>("background", backdrop);
+	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 670);
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>(810.f, 10.f);

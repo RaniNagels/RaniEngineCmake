@@ -27,12 +27,11 @@ namespace REC
 
 		void SetText(const std::string& text);
 		void SetColor(const Color& color);
-		void SetFont(const std::string& font);
+		void RequestFont(const std::string& font);
 		void SetFont(Font* font);
 
 	private:
 		bool m_NeedsUpdate{};
-		// TODO: move ownership to resourceManager. currently the component owns the texture, not ideal
 		std::unique_ptr<Texture2D> m_TextTexture{};
 		std::string m_Text{};
 		Color m_Color{ 255, 255, 255, 255 };

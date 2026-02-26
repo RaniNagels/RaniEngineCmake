@@ -36,6 +36,8 @@ namespace REC
 		void Update(float deltaT);
 		void Render() const;
 
+		//== SCENE GRAPH ==============================================================================================
+
 		void SetParent(GameObject* parent, bool keepWorldPosition = false);
 		void RemoveParent(bool keepWorldPosition = false) { SetParent(nullptr, keepWorldPosition); }
 		GameObject* GetParent() const { return m_pParent; }

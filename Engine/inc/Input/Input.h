@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-// an sdl and XInput independant set of Input Buttons/Ranges
+// an sdl and XInput independent set of Input Buttons/Ranges
 namespace REC
 {
 	namespace Input

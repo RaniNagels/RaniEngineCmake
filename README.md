@@ -49,3 +49,6 @@ I use a lot of Vulkan terminology:
 * CreateInfo -> when I am loading resources
 * Setting(s) -> mainly used to set engine settings
 * Descriptor -> used to feed into components
+
+* Manager -> Contains and owns a lot of data (like ResourceManager)
+* System -> Focus on implementation/functionality not data (like InputSystem), can still contain/own some data

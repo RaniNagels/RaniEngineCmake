@@ -25,7 +25,7 @@ REC::TextRenderComponent::TextRenderComponent(GameObject* owner, const std::stri
 	, m_Text{text}
 	, m_Color{color}
 {
-	SetFont(font);
+	RequestFont(font);
 }
 
 void REC::TextRenderComponent::Update(float)
@@ -67,7 +67,7 @@ void REC::TextRenderComponent::SetColor(const Color& color)
 	m_Color = color;
 }
 
-void REC::TextRenderComponent::SetFont(const std::string& font)
+void REC::TextRenderComponent::RequestFont(const std::string& font)
 {
 	// TODO: maybe use messenger system here. send request for resource and receive resource
 	// prevent using resourcemanager directly in this class

@@ -15,8 +15,7 @@ void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 
 void REC::ResourceManager::Destroy()
 {
-	m_FontResources.clear();
-	m_TextureResources.clear();
+	m_FontResources.clear(); // must be cleared before TTF_Quit();
 	TTF_Quit();
 }
 
@@ -83,7 +82,7 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 		return true;
 	}
 	else
-		assert("Resource could not be added to ResourceManager: No Type Defined");
+		assert("Resource could not be added to ResourceManager: No Valid Type");
 
 	return false;
 }

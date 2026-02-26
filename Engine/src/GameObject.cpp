@@ -71,7 +71,8 @@ void REC::GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 	{
 		if (keepWorldPosition)
 			GetTransform()->SetLocalPosition(GetTransform()->GetWorldPosition() - parent->GetTransform()->GetWorldPosition());
-		GetTransform()->RequiresUpdate();
+		else
+			GetTransform()->RequiresUpdate();
 	}
 
 	// remove itself from previous parent

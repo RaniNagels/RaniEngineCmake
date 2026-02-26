@@ -11,7 +11,7 @@ namespace REC
 	class SceneManager final
 	{
 	public:
-		SceneManager() = default;
+		explicit SceneManager() = default;
 		~SceneManager() = default;
 
 		SceneManager(const SceneManager&) = delete;

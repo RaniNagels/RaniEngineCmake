@@ -9,6 +9,9 @@
 REC::FPSComponent::FPSComponent(GameObject* owner, Font* font, const Color& color)
 	: Component(owner)
 {
+	if (font == nullptr)
+		assert(false && "font cannot be nullptr");
+
 	if (!GetOwner()->HasComponent<TextRenderComponent>())
 		m_pTextRenderComponent = GetOwner()->AddComponent<REC::TextRenderComponent>("00.0 FPS", font, color);
 	else

@@ -19,7 +19,7 @@ REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const std::
 	: RenderComponent(owner)
 	, m_Descriptor{}
 {
-	SetTexture(textureName);
+	RequestTexture(textureName);
 	m_Descriptor.drawWidth = width;
 	m_Descriptor.drawHeight = height;
 	m_pSpriteInfo = nullptr;
@@ -29,8 +29,8 @@ REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const std::
 	: RenderComponent(owner)
 	, m_Descriptor{descriptor}
 {
-	SetTexture(textureName);
-	SetSpriteInfo();
+	RequestTexture(textureName);
+	RequestSpriteInfo();
 }
 
 REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* texture, const SpriteDescriptor& descriptor)
@@ -38,7 +38,7 @@ REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* 
 	, m_pTexture{ texture }
 	, m_Descriptor{descriptor}
 {
-	SetSpriteInfo();
+	RequestSpriteInfo();
 }
 
 void REC::SpriteRenderComponent::Update(float)
@@ -49,7 +49,7 @@ void REC::SpriteRenderComponent::Render()
 {
 	auto* transform = this->GetOwner()->GetTransform();
 
-	Rect src{};
+	Rect src{ GetSrcRect() };
 	Rect dst{};
 
 	if (transform)
@@ -60,14 +60,8 @@ void REC::SpriteRenderComponent::Render()
 	}
 
 	glm::vec2 textureSize{};
-	if (m_pSpriteInfo != nullptr)
-	{
-		if (m_pSpriteInfo->pixelRegion.IsValid())
-		{
-			src = m_pSpriteInfo->pixelRegion;
-			textureSize = { m_pSpriteInfo->pixelRegion.width(), m_pSpriteInfo->pixelRegion.height()};
-		}
-	}
+	if (src.width > 0 && src.height > 0)
+		textureSize = { src.width, src.height};
 	else
 		textureSize = m_pTexture->GetSize();
 
@@ -100,14 +94,38 @@ void REC::SpriteRenderComponent::Render()
 	Renderer::GetInstance().RenderTexture(*m_pTexture, src, dst);
 }
 
-void REC::SpriteRenderComponent::SetTexture(const std::string& textureName)
+void REC::SpriteRenderComponent::SetTexture(Texture2D* texture)
+{
+	if (texture != nullptr)
+		m_pTexture = texture;
+	else
+		assert(false && "Given Texture is Invalid!");
+}
+
+void REC::SpriteRenderComponent::RequestTexture(const std::string& textureName)
 {
 	// TODO: maybe use messenger system here. send request for resource and receive resource
 	// prevent using resourcemanager directly in this class
 	m_pTexture = ResourceManager::GetInstance().GetResource<Texture2D>(textureName);
 }
 
-void REC::SpriteRenderComponent::SetSpriteInfo()
+void REC::SpriteRenderComponent::RequestSpriteInfo()
 {
 	m_pSpriteInfo = ResourceManager::GetInstance().GetResource<SpriteInfo>(m_Descriptor.dataResourceFile, m_Descriptor.spriteDataKey);
+}
+
+REC::Rect REC::SpriteRenderComponent::GetSrcRect() const
+{
+	Rect src{};
+
+	if (m_pSpriteInfo != nullptr)
+	{
+		if (m_pSpriteInfo->pixelRegion.IsValid())
+		{
+			src = m_pSpriteInfo->pixelRegion;
+		}
+	}
+
+	// if default initialized, the renderer will draw the entire image
+	return src;
 }

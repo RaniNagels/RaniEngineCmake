@@ -2,6 +2,7 @@
 #include "RenderComponent.h"
 #include <string>
 #include "../SpriteDescriptor.h"
+#include "../GeneralStructs.h"
 
 namespace REC
 {
@@ -25,14 +26,15 @@ namespace REC
 		virtual void Update(float deltaT) override;
 		virtual void Render() override;
 
-		void SetTexture(Texture2D* texture) { m_pTexture = texture; }
-		void SetTexture(const std::string& textureName);
+		void SetTexture(Texture2D* texture);
+		void RequestTexture(const std::string& textureName);
 
 	private:
 		Texture2D* m_pTexture;
 		SpriteDescriptor m_Descriptor;
 		const SpriteInfo* m_pSpriteInfo;
 
-		void SetSpriteInfo();
+		void RequestSpriteInfo();
+		Rect GetSrcRect() const;
 	};
 }
