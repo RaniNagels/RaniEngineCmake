@@ -32,8 +32,8 @@ namespace REC
 		void SetBackgroundColor(const Color& color) { m_ClearColor = color; }
 
 	private:
-		SDL_Renderer* m_Renderer{};
-		SDL_Window* m_window{};
+		SDL_Renderer* m_pRenderer{};
+		SDL_Window* m_pWindow{};
 		Color m_ClearColor{};	
 	};
 }

@@ -9,17 +9,17 @@
 
 void REC::Renderer::Init(SDL_Window* window)
 {
-	m_window = window;
+	m_pWindow = window;
 
 	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
 
 #if defined(__EMSCRIPTEN__)
-	m_renderer = SDL_CreateRenderer(window, nullptr);
+	m_pRenderer = SDL_CreateRenderer(window, nullptr);
 #else
-	m_Renderer = SDL_CreateRenderer(window, nullptr);
+	m_pRenderer = SDL_CreateRenderer(window, nullptr);
 #endif
 
-	if (m_Renderer == nullptr)
+	if (m_pRenderer == nullptr)
 	{
 		std::cout << "Failed to create the renderer: " << SDL_GetError() << "\n";
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
@@ -29,20 +29,20 @@ void REC::Renderer::Init(SDL_Window* window)
 void REC::Renderer::Render(Scene* scene) const
 {
 	const auto& color = GetBackgroundColor();
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderClear(m_Renderer);
+	SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
+	SDL_RenderClear(m_pRenderer);
 
 	scene->Render();
 
-	SDL_RenderPresent(m_Renderer);
+	SDL_RenderPresent(m_pRenderer);
 }
 
 void REC::Renderer::Destroy()
 {
-	if (m_Renderer != nullptr)
+	if (m_pRenderer != nullptr)
 	{
-		SDL_DestroyRenderer(m_Renderer);
-		m_Renderer = nullptr;
+		SDL_DestroyRenderer(m_pRenderer);
+		m_pRenderer = nullptr;
 	}
 }
 
@@ -81,18 +81,18 @@ void REC::Renderer::RenderTexture(const Texture2D& texture, const Rect& textureR
 
 void REC::Renderer::RenderLine(const Color& color, glm::vec2 start, glm::vec2 end)
 {
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderLine(m_Renderer, start.x, start.y, end.x, end.y);
+	SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
+	SDL_RenderLine(m_pRenderer, start.x, start.y, end.x, end.y);
 }
 
 void REC::Renderer::RenderRect(const Color& color, const Rect& rect, bool fill)
 {
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+	SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
 	SDL_FRect sdl_rect = ToRect(rect);
 	if (fill)
-		SDL_RenderFillRect(m_Renderer, &sdl_rect);
+		SDL_RenderFillRect(m_pRenderer, &sdl_rect);
 	else
-		SDL_RenderRect(m_Renderer, &sdl_rect);
+		SDL_RenderRect(m_pRenderer, &sdl_rect);
 }
 
-SDL_Renderer* REC::Renderer::GetSDLRenderer() const { return m_Renderer; }
+SDL_Renderer* REC::Renderer::GetSDLRenderer() const { return m_pRenderer; }
