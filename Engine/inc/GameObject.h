@@ -84,7 +84,6 @@ namespace REC
 		}
 
 		// returns a component pointer, nullptr if not found
-		// dynamic_cast is slower than typeid
 		template <Cpt C>
 		C* GetComponent() const
 		{
@@ -100,13 +99,12 @@ namespace REC
 		TransformComponent* GetTransform() const { return m_pTransform; }
 
 		// checks if a gameobject has a component of type C
-		// typeid is faster than dynamic_cast
 		template <Cpt C>
 		bool HasComponent() const
 		{
 			for (const auto& component : m_Components)
 			{
-				if (typeid(component.get()) == typeid(C))
+				if (dynamic_cast<C*>(component.get()) != nullptr)
 					return true;
 			}
 			return false;
