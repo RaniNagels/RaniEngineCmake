@@ -1,8 +1,8 @@
 ﻿# Bomberman 
 
-[![Build Status](https://github.com/avadae/minigin/actions/workflows/cmake.yml/badge.svg)](https://github.com/avadae/cmake/actions)
-[![Build Status](https://github.com/avadae/minigin/actions/workflows/emscripten.yml/badge.svg)](https://github.com/avadae/emscripten/actions)
-[![GitHub Release](https://img.shields.io/github/v/release/avadae/minigin?logo=github&sort=semver)](https://github.com/avadae/minigin/releases/latest)
+[![CMake](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/cmake.yml)
+[![Emscripten](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/emscripten.yml/badge.svg)](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/emscripten.yml)
+[![pages-build-deployment](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/pages/pages-build-deployment)
 
 ## Introduction
 
@@ -43,3 +43,9 @@ not required:
 The GameObject is heavily component based.
 Each type of component can only exist ones. so one sprite component and/or one text component even though the text component inherits from the spritecomponent.
 Upon Creating a new GameObject a TransformComponent is automatically created in the constructor of the GameObject. and the GameObject has a GetTransform() Method for easy and fast access.
+
+## NamingConventions
+I use a lot of Vulkan terminology:
+* CreateInfo -> when I am loading resources
+* Setting(s) -> mainly used to set engine settings
+* Descriptor -> used to feed into components
