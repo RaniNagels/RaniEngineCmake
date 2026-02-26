@@ -2,7 +2,7 @@
 #include <string>
 #include <functional>
 #include <filesystem>
-#include "EngineDescriptor.h"
+#include "EngineSettings.h"
 
 namespace REC
 {
@@ -25,7 +25,7 @@ namespace REC
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
 
-		void SetEngineData(const EngineDesc& data);
+		void SetEngineData(const EngineSettings& data);
 		SceneManager* GetSceneManager() const { return m_pSceneManager.get(); }
 		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
 

@@ -18,17 +18,17 @@
 #include "../Engine/inc/Components/FPSComponent.h"
 #include "../Engine/inc/Components/RotatorComponent.h"
 
-#include "../Engine/inc/ResourceDescriptors.h"
-#include "../Engine/inc/EngineDescriptor.h"
+#include "../Engine/inc/ResourceCreateInfos.h"
+#include "../Engine/inc/EngineSettings.h"
 
 #include <filesystem>
-#include "../Engine/inc/SpriteDescriptors.h"
+#include "../Engine/inc/SpriteDescriptor.h"
 namespace fs = std::filesystem;
 
 static void load(REC::Minigin* engine)
 {
 	// === ENGINE SETTINGS =============================================================================
-	REC::EngineDesc engineData{};
+	REC::EngineSettings engineData{};
 	engineData.frameRate = 60;
 	engineData.windowTitle = "Bomberman";
 	engineData.windowWidth = 1000;
@@ -38,33 +38,44 @@ static void load(REC::Minigin* engine)
 	// === RESOURCES ===================================================================================
 	auto& RM = REC::ResourceManager::GetInstance();
 
-	REC::TextureResourceDesc background{};
+	REC::TextureResourceCreateInfo background{};
 	background.name = "background";
 	background.filePath = "NES - Bomberman - Backgrounds - Playfield.png";
 	RM.AddResource(background);
 
-	REC::TextureResourceDesc generalSprites{};
+	REC::TextureResourceCreateInfo generalSprites{};
 	generalSprites.name = "generalSprites";
 	generalSprites.filePath = "NES - Bomberman - Miscellaneous - General Sprites.png";
 	RM.AddResource(generalSprites);
 
-	REC::TextureResourceDesc logo{};
+	REC::TextureResourceCreateInfo logo{};
 	logo.name = "logo";
 	logo.filePath = "logo.png";
 	RM.AddResource(logo);
 
-	REC::FontResourceDesc font{};
+	REC::FontResourceCreateInfo font{};
 	font.name = "lingua36";
 	font.filePath = "Lingua.otf";
 	font.size = 36;
 	RM.AddResource(font);
 
+	REC::SpriteDataResourceCreateInfo spriteDataFile{};
+	spriteDataFile.name = "generalSpritesData";
+	spriteDataFile.filePath = "characterSpritesData.csv";
+	spriteDataFile.separator = ';';
+	RM.AddResource(spriteDataFile);
+
 	// === SCENE =======================================================================================
 	auto* SM = engine->GetSceneManager();
 	auto* scene = SM->CreateScene();
 
+	REC::SpriteDescriptor backdrop{};
+	backdrop.drawHeight = 670;
+	backdrop.dataResourceFile = "generalSpritesData";
+	backdrop.spriteDataKey = "background";
+
 	auto go = std::make_unique<REC::GameObject>(0.f, 80.f);
-	go->AddComponent<REC::SpriteRenderComponent>("background", 0, 725);
+	go->AddComponent<REC::SpriteRenderComponent>("background", backdrop);
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>(810.f, 10.f);
@@ -83,9 +94,9 @@ static void load(REC::Minigin* engine)
 	auto root = std::make_unique<REC::GameObject>(230.f, 200.f);
 
 	REC::SpriteDescriptor character1{};
-	character1.pixelRegion.bottomRight.x = 16;
-	character1.pixelRegion.bottomRight.y = 16;
-	character1.height = 50;
+	character1.drawHeight = 50;
+	character1.dataResourceFile = "generalSpritesData";
+	character1.spriteDataKey = "bomberman";
 
 	auto parent = std::make_unique<REC::GameObject>(200.f, 200.f);
 	parent->AddComponent<REC::SpriteRenderComponent>("generalSprites", character1);
@@ -93,12 +104,10 @@ static void load(REC::Minigin* engine)
 	parent->SetParent(root.get(), true);
 
 	REC::SpriteDescriptor character2{};
-	character2.pixelRegion.topLeft.x = 48;
-	character2.pixelRegion.topLeft.y = 240;
-	character2.pixelRegion.bottomRight.x = 64;
-	character2.pixelRegion.bottomRight.y = 256;
-	character2.height = 50;
-
+	character2.drawHeight = 50;
+	character2.dataResourceFile = "generalSpritesData";
+	character2.spriteDataKey = "balloom";
+	
 	auto child = std::make_unique<REC::GameObject>(50.f, 50.f);
 	child->AddComponent<REC::SpriteRenderComponent>("generalSprites", character2);
 	child->AddComponent<REC::RotatorComponent>(3.f);

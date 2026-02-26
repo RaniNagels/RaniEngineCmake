@@ -3,7 +3,7 @@
 
 namespace REC
 {
-	struct EngineDesc
+	struct EngineSettings final
 	{
 		uint8_t frameRate = 60;
 		std::string windowTitle = "REC Engine";

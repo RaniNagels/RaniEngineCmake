@@ -37,9 +37,11 @@ void REC::GameObject::Destroy()
 {
 	m_IsAboutToBeDestroyed = true;
 	for (auto& component : m_Components)
-	{
 		component->Destroy();
-	}
+
+	// also destroy children upon destruction
+	for (auto* child : m_pChildren)
+		child->Destroy();
 }
 
 void REC::GameObject::Render() const
@@ -86,16 +88,15 @@ void REC::GameObject::CleanUpComponents()
 {
 	m_Components.erase(
 		std::remove_if(m_Components.begin(), m_Components.end(),
-		[](const std::unique_ptr<Component>& component)
-		{
-			return component->IsAboutToBeDestroyed();
-		}), 
+			[](const std::unique_ptr<Component>& component)
+			{
+				return component->IsAboutToBeDestroyed();
+			}),
 		m_Components.end()
 	);
 
 	m_ShouldCleanUpComponents = false;
 }
-
 
 bool REC::GameObject::IsChild(const GameObject* object) const
 {
@@ -108,25 +109,21 @@ bool REC::GameObject::IsChild(const GameObject* object) const
 
 void REC::GameObject::AddChild(GameObject* child)
 {
-	// only called from SetParent!
+	// may only be called from SetParent!
 
 	// check new child (validity)
 	if (child == this || child == nullptr || IsChild(child) || m_pParent == child) return;
 
-	// remove from previous child
-	// set itself as parent
 	// add to list of children
 	m_pChildren.emplace_back(child);
-
-	// update position, rotation and scale
 }
 
 void REC::GameObject::RemoveChild(GameObject* child)
 {
-	// only called from SetParent
+	// may only be called from SetParent
 
 	// check if the child is valid
-	if (child == nullptr || child == this || child == m_pParent) return;
+	if (child == nullptr || child == this || !IsChild(child) || child == m_pParent) return;
 
 	// remove child from list
 	for (auto* c : m_pChildren)
@@ -137,8 +134,4 @@ void REC::GameObject::RemoveChild(GameObject* child)
 			return;
 		}
 	}
-
-	// remove itself as parent of the child
-
-	// update position, rotation and scale
 }

@@ -1,11 +1,12 @@
 #pragma once
 #include "RenderComponent.h"
 #include <string>
-#include "../SpriteDescriptors.h"
+#include "../SpriteDescriptor.h"
 
 namespace REC
 {
 	class Texture2D;
+	struct SpriteInfo;
 
 	class SpriteRenderComponent : public RenderComponent
 	{
@@ -30,5 +31,8 @@ namespace REC
 	private:
 		Texture2D* m_pTexture;
 		SpriteDescriptor m_Descriptor;
+		const SpriteInfo* m_pSpriteInfo;
+
+		void SetSpriteInfo();
 	};
 }

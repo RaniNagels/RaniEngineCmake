@@ -22,5 +22,5 @@ void REC::RotatorComponent::Update(float deltaT)
 	float newX = std::cos(currentAngle) * radius;
 	float newY = std::sin(currentAngle) * radius;
 
-	m_pTransform->SetLocalPosition(newX, newY);
+	m_pTransform->SetLocalPosition(newX, newY, m_pTransform->GetLocalPosition().z);
 }

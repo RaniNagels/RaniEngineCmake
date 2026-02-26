@@ -7,6 +7,7 @@ namespace REC
 {
 	class Font;
 	class TextRenderComponent;
+
 	class FPSComponent final : public Component
 	{
 	public:

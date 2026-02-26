@@ -62,7 +62,7 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 {
 	PrintSDLVersion();
 	
-	if (!SDL_InitSubSystem(SDL_INIT_VIDEO))
+	if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) // the same as SDL_Init(/*..*/)
 	{
 		SDL_Log("Renderer error: %s", SDL_GetError());
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
@@ -114,7 +114,7 @@ void REC::Minigin::RunOneFrame()
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
 }
 
-void REC::Minigin::SetEngineData(const EngineDesc& data)
+void REC::Minigin::SetEngineData(const EngineSettings& data)
 {
 	m_pTimeSystem->SetFrameRate(data.frameRate);
 	m_pWindow->SetSize(data.windowWidth, data.windowHeight);

@@ -2,7 +2,8 @@
 #include <SDL3/SDL.h>
 #include "../inc/RECColor.h"
 #include "../inc/Singleton.h"
-#include "../inc/SpriteDescriptors.h"
+#include "../inc/SpriteDescriptor.h"
+#include "../inc/GeneralStructs.h"
 
 namespace REC
 {

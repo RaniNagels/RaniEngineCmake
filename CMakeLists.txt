@@ -31,7 +31,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   "Engine/src/Texture2D.cpp"
   "Engine/src/Font.cpp"
   
-
+  "Engine/src/FileReader.cpp"
 
   "Engine/src/Components/Component.cpp"
   "Engine/src/Components/TransformComponent.cpp"

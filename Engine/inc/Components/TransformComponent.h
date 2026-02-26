@@ -5,7 +5,7 @@
 namespace REC
 {
 	// this component stores the transform of a gameobject but does not modify it!
-	// acts as a glorified struct
+	// acts as a glorified struct, purely for organizing purposes.
 	class TransformComponent final : public Component
 	{
 	public:
