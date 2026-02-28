@@ -59,6 +59,12 @@ static void load(REC::Minigin* engine)
 	font.size = uint8_t(36);
 	RM.AddResource(font);
 
+	REC::FontResourceCreateInfo debugFont{};
+	debugFont.name = "dogicapixel20";
+	debugFont.filePath = "dogicapixel.otf";
+	debugFont.size = uint8_t(20);
+	RM.AddResource(debugFont);
+
 	REC::SpriteDataResourceCreateInfo spriteDataFile{};
 	spriteDataFile.name = "generalSpritesData";
 	spriteDataFile.filePath = "characterSpritesData.csv";
@@ -95,7 +101,7 @@ static void load(REC::Minigin* engine)
 	scene->Add(std::move(go));
 
 	go = std::make_unique<REC::GameObject>(20.f, 20.f);
-	go->AddComponent<REC::FPSComponent>("lingua36");
+	go->AddComponent<REC::FPSComponent>("dogicapixel20");
 	scene->Add(std::move(go));
 
 	// if this is not set as the root of the parent and child, parent will rotate around 0,0 instead

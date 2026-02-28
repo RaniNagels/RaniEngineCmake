@@ -19,7 +19,7 @@ void REC::DebugGridRenderComponent::Update(float) {}
 
 void REC::DebugGridRenderComponent::Render()
 {
-	auto data = m_pGridComponent->GetData();
+	auto data = m_pGridComponent->GetDescriptorData();
 	auto& R = Renderer::GetInstance();
 	auto worldPos = GetOwner()->GetTransform()->GetWorldPosition();
 

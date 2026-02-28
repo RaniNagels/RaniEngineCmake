@@ -1,4 +1,4 @@
-# --- Dynamic Engine Project (challenge) -------------
+# --- Engine Project -------------
 set(TARGET_NAME REC)
 
 # --- List Source Files -------------

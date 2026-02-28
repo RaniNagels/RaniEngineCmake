@@ -12,6 +12,7 @@ set(SOURCE_FILES
 	"Main.cpp"
 )
 
+
 # --- Game Executable -------------
 add_executable(${TARGET_NAME} ${TARGET_PARAM} ${SOURCE_FILES})
 message(STATUS "Game Executable Created")
@@ -21,6 +22,13 @@ target_link_libraries(${TARGET_NAME} PRIVATE
 	REC
 	engine_warnings # from engine
 )
+
+if (WIN32)
+    # Add VLD (Visual Leak Detector) for memory leak detection on Windows
+    find_package(VLD CONFIG)
+    target_include_directories(${TARGET_NAME} PUBLIC ${VLD_INCLUDE_DIR})
+    target_link_libraries(${TARGET_NAME} PUBLIC ${VLD_LIBRARIES})
+endif()
 
 if(EMSCRIPTEN)
   set(EMSCRIPTEN_COMPILE_FLAGS "${EMSCRIPTEN_LINK_FLAGS} -g -frtti")

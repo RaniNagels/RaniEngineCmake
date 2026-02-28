@@ -29,9 +29,22 @@ namespace REC
 
 		virtual void Update(float deltaT) override;
 
-		const GridDescriptor& GetData() const { return m_Descriptor; }
+		struct Cell
+		{
+			glm::vec2 origin{};
+			uint8_t row{};
+			uint8_t col{};
+		};
+
+		const GridDescriptor& GetDescriptorData() const { return m_Descriptor; }
+		const std::vector<Cell>& GetCells() const { return m_Cells; }
 
 	private:
+
 		GridDescriptor m_Descriptor;
+		std::vector<Cell> m_Cells;
+
+		uint32_t GetIndex(Cell* cell);
+		uint32_t GetIndex(uint8_t row, uint8_t col);
 	};
 }

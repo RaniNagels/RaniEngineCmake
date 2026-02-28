@@ -1,10 +1,12 @@
 #pragma once
 #include "RenderComponent.h"
 #include "../RECColor.h"
+#include <string>
 
 namespace REC
 {
 	class GridComponent;
+	class Font;
 
 	// depends on the GridComponent to work
 	// no grid component -> error
