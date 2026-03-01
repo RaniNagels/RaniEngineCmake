@@ -70,7 +70,7 @@ jobs:
         run: |
           mkdir -p dist
           cp build-web/Game/Game_web.* dist/
-          cp web/*.html dist/
+          cp build-web/Game/index.html dist/
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
