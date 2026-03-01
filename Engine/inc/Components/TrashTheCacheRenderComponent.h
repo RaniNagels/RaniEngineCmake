@@ -63,7 +63,7 @@ namespace REC
 		std::vector<float> m_AltObjPlotData{};
 		std::vector<gameObjectAlt> m_AltObjArr{};
 
-		void TrashTheCash(std::vector<float>& data, size_t arrSize, int samples, const std::function<int(TrashTheCacheRenderComponent*, size_t)>& getInt);
+		void TrashTheCache(std::vector<float>& data, size_t arrSize, int samples, const std::function<int(TrashTheCacheRenderComponent*, size_t)>& getInt);
 
 		static int GetInt(TrashTheCacheRenderComponent* me, size_t index)
 		{

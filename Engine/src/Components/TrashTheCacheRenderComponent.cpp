@@ -20,17 +20,17 @@ void REC::TrashTheCacheRenderComponent::Update(float)
 {
 	if (m_ShouldCalculateInt)
 	{
-		TrashTheCash(m_IntPlotData, m_AmountOfIntObjects, m_SampleCountInt, GetInt);
+		TrashTheCache(m_IntPlotData, m_AmountOfIntObjects, m_SampleCountInt, GetInt);
 		m_ShouldCalculateInt = false;
 	}
 	if (m_ShouldCalculateObj)
 	{
-		TrashTheCash(m_ObjPlotData, m_AmountOfObjects, m_SampleCountObj, GetIntObj);
+		TrashTheCache(m_ObjPlotData, m_AmountOfObjects, m_SampleCountObj, GetIntObj);
 		m_ShouldCalculateObj = false;
 	}
 	if (m_ShouldCalculateAltObj)
 	{
-		TrashTheCash(m_AltObjPlotData, m_AmountOfObjects, m_SampleCountObj, GetIntObjAlt);
+		TrashTheCache(m_AltObjPlotData, m_AmountOfObjects, m_SampleCountObj, GetIntObjAlt);
 		m_ShouldCalculateAltObj = false;
 	}
 }
@@ -46,7 +46,8 @@ void REC::TrashTheCacheRenderComponent::Render()
 }
 
 
-void REC::TrashTheCacheRenderComponent::TrashTheCash(std::vector<float>& data, size_t arrSize, int samples, const std::function<int(TrashTheCacheRenderComponent*, size_t)>& getInt)
+void REC::TrashTheCacheRenderComponent::TrashTheCache(std::vector<float>& data, size_t arrSize, 
+	int samples, const std::function<int(TrashTheCacheRenderComponent*, size_t)>& getInt)
 {
 	data.clear();
 	std::vector<int> copy(arrSize);
