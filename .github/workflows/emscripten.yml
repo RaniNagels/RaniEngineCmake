@@ -64,12 +64,12 @@ jobs:
 
       - name: Debug build output
         run: |
-          ls -la build-web
+          ls -la build-web/Game
 
       - name: Prepare Artifact
         run: |
           mkdir -p dist
-          cp build-web/Game_web.* dist/
+          cp build-web/Game/Game_web.* dist/
           cp web/*.html dist/
 
       - name: Upload Pages Artifact
