@@ -55,7 +55,7 @@ void REC::TrashTheCacheRenderComponent::TrashTheCache(std::vector<float>& data, 
 	{
 		std::vector<float> totalTimes{};
 		totalTimes.reserve(samples);
-		for (size_t s{}; s < samples; ++s)
+		for (size_t s{}; s < size_t(samples); ++s)
 		{
 			auto start = std::chrono::high_resolution_clock::now();
 			for (size_t i = 0; i < arrSize; i += stepSize)
