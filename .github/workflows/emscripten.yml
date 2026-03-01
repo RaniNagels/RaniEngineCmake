@@ -62,6 +62,10 @@ jobs:
           cd build-web
           cmake --build . --config Release
 
+      - name: Debug build output
+        run: |
+          ls -la build-web
+
       - name: Prepare Artifact
         run: |
           mkdir -p dist
