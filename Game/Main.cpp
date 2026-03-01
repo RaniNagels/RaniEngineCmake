@@ -22,6 +22,7 @@
 #include "../Engine/inc/SpriteDescriptor.h"
 #include "../Engine/inc/Components/GridComponent.h"
 #include "../Engine/inc/Components/DebugGridRenderComponent.h"
+#include <Components/TrashTheCacheRenderComponent.h>
 
 namespace fs = std::filesystem;
 
@@ -130,6 +131,10 @@ static void load(REC::Minigin* engine)
 	scene->Add(std::move(root));
 	scene->Add(std::move(parent));
 	scene->Add(std::move(child));
+
+	auto trashTheCash = std::make_unique<REC::GameObject>();
+	trashTheCash->AddComponent<REC::TrashTheCacheRenderComponent>();
+	scene->Add(std::move(trashTheCash));
 }
 
 int main(int, char*[]) 

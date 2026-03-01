@@ -23,8 +23,11 @@ namespace REC
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 		void RenderTexture(const Texture2D& texture, const Rect& textureRegion, const Rect& screenRegion) const;
 
-		void RenderLine(const Color& color, glm::vec2 start, glm::vec2 end);
-		void RenderRect(const Color& color, const Rect& rect, bool fill = false);
+		void RenderLine(const Color& color, glm::vec2 start, glm::vec2 end) const;
+		void RenderRect(const Color& color, const Rect& rect, bool fill = false) const;
+
+		bool RenderPlotWindow(const std::string& windowTitle, int& sampleCount, const std::vector<float>& plotData) const;
+		void RenderPlotsWindow(const std::string& windowTitle, int& sampleCount, bool& button1, bool& button2, const std::vector<float>& plotData1, const std::vector<float>& plotData2);
 
 		SDL_Renderer* GetSDLRenderer() const;
 
