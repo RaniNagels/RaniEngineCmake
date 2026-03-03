@@ -1,6 +1,4 @@
 #pragma once
-#include <vector>
-#include <typeindex>
 
 namespace REC
 {

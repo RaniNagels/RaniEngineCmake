@@ -5,7 +5,7 @@
 #include "../Texture2D.h"
 #include <memory>
 #include <stdexcept>
-#include "../../inc/ResourceManager.h"
+#include "../ResourceManager.h"
 #include "../SDLHelpers.h"
 
 REC::TextRenderComponent::TextRenderComponent(GameObject* owner, const std::string& text, Font* font, const Color& color)

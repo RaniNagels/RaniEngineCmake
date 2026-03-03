@@ -10,11 +10,11 @@
 #include <SDL3/SDL.h>
 //#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include "../inc/Minigin.h"
+#include <Engine.h>
 #include "../inc/Input/InputSystem.h"
 #include "../inc/SceneManager.h"
 #include "Renderer.h"
-#include "../inc/ResourceManager.h"
+#include "ResourceManager.h"
 #include "TimeSystem.h"
 #include "Window.h"
 
@@ -58,7 +58,7 @@ void PrintSDLVersion()
 	LogSDLVersion("Linked with SDL_ttf ", SDL_VERSIONNUM_MAJOR(version), SDL_VERSIONNUM_MINOR(version),	SDL_VERSIONNUM_MICRO(version));
 }
 
-REC::Minigin::Minigin(const std::filesystem::path& dataPath)
+REC::Engine::Engine(const std::filesystem::path& dataPath)
 {
 	PrintSDLVersion();
 	
@@ -79,7 +79,7 @@ REC::Minigin::Minigin(const std::filesystem::path& dataPath)
 	m_pInputSystem = std::make_unique<InputSystem>();
 }
 
-REC::Minigin::~Minigin()
+REC::Engine::~Engine()
 {
 	Renderer::GetInstance().Destroy();
 	ResourceManager::GetInstance().Destroy();
@@ -87,7 +87,7 @@ REC::Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void REC::Minigin::Run(const std::function<void(Minigin*)>& load)
+void REC::Engine::Run(const std::function<void(Engine*)>& load)
 {
 	load(this);
 	m_pWindow->DisplayWindow();
@@ -102,7 +102,7 @@ void REC::Minigin::Run(const std::function<void(Minigin*)>& load)
 #endif
 }
 
-void REC::Minigin::RunOneFrame()
+void REC::Engine::RunOneFrame()
 {
 	m_pTimeSystem->Update();
 
@@ -113,9 +113,18 @@ void REC::Minigin::RunOneFrame()
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
 }
 
-void REC::Minigin::SetEngineData(const EngineSettings& data)
+void REC::Engine::SetEngineData(const EngineSettings& data)
 {
 	m_pTimeSystem->SetFrameRate(data.frameRate);
 	m_pWindow->SetSize(data.windowWidth, data.windowHeight);
 	m_pWindow->SetTitle(data.windowTitle);
+}
+
+void REC::Engine::AddResources(const std::vector<ResourceCreateInfo*>& resources)
+{
+	auto& RM = ResourceManager::GetInstance();
+	for (auto* resource : resources)
+	{
+		RM.AddResource(*resource);
+	}
 }

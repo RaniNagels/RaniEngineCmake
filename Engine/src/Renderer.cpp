@@ -7,9 +7,12 @@
 #include "Texture2D.h"
 #include "SDLHelpers.h"
 
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
 #include <backends/imgui_impl_sdl3.h>
 #include <backends/imgui_impl_sdlrenderer3.h>
+
+#include "imgui_internal.h"
 
 void REC::Renderer::Init(SDL_Window* window)
 {

@@ -1,7 +1,7 @@
 #include "../../inc/Components/FPSComponent.h"
 #include "../../inc/Components/TextRenderComponent.h"
 #include "../../inc/GameObject.h"
-#include "../../inc/ResourceManager.h"
+#include "../ResourceManager.h"
 #include "../Font.h"
 #include <chrono>
 #include <iomanip>

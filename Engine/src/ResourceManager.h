@@ -4,7 +4,8 @@
 #include <memory>
 #include <map>
 #include "Singleton.h"
-#include "ResourceCreateInfos.h"
+#include <ResourceCreateInfos.h>
+
 #include <unordered_map>
 #include <stdexcept>
 #include <assert.h>

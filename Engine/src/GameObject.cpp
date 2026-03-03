@@ -1,6 +1,6 @@
 #include <string>
 #include "../inc/GameObject.h"
-#include "../inc/ResourceManager.h"
+#include "ResourceManager.h"
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"

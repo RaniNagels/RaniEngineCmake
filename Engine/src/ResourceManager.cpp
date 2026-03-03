@@ -1,5 +1,5 @@
 ﻿#include <SDL3_ttf/SDL_ttf.h>
-#include "../inc/ResourceManager.h"
+#include "ResourceManager.h"
 #include "Renderer.h"
 #include "FileReader.h"
 

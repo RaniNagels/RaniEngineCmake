@@ -20,7 +20,7 @@ set(SOURCE_FILES
 	"src/FileReader.cpp"
 	"src/Font.cpp"
 	"src/GameObject.cpp"
-	"src/Minigin.cpp"
+	"src/Engine.cpp"
 	"src/Renderer.cpp"
 	"src/ResourceManager.cpp"
 	"src/Scene.cpp"

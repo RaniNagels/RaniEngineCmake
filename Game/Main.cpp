@@ -2,12 +2,9 @@
 #include <vld.h>
 #endif
 
-#include "../Engine/inc/Minigin.h"
+#include <Engine.h>
 #include "../Engine/inc/SceneManager.h"
-#include "../Engine/inc/ResourceManager.h"
 #include "../Engine/inc/Scene.h"
-#include "../Engine/src/Font.h"
-#include "../Engine/src/Texture2D.h"
 
 #include "../Engine/inc/Components/TransformComponent.h"
 #include "../Engine/inc/Components/SpriteRenderComponent.h"
@@ -26,7 +23,7 @@
 
 namespace fs = std::filesystem;
 
-static void load(REC::Minigin* engine)
+static void load(REC::Engine* engine)
 {
 	// === ENGINE SETTINGS =============================================================================
 	REC::EngineSettings engineData{};
@@ -37,40 +34,42 @@ static void load(REC::Minigin* engine)
 	engine->SetEngineData(engineData);
 
 	// === RESOURCES ===================================================================================
-	auto& RM = REC::ResourceManager::GetInstance();
+	std::vector<REC::ResourceCreateInfo*> infos{};
 
 	REC::TextureResourceCreateInfo background{};
 	background.name = "background";
 	background.filePath = "NES - Bomberman - Backgrounds - Playfield.png";
-	RM.AddResource(background);
+	infos.emplace_back(&background);
 
 	REC::TextureResourceCreateInfo generalSprites{};
 	generalSprites.name = "generalSprites";
 	generalSprites.filePath = "NES - Bomberman - Miscellaneous - General Sprites.png";
-	RM.AddResource(generalSprites);
+	infos.emplace_back(&generalSprites);
 
 	REC::TextureResourceCreateInfo logo{};
 	logo.name = "logo";
 	logo.filePath = "logo.png";
-	RM.AddResource(logo);
+	infos.emplace_back(&logo);
 
 	REC::FontResourceCreateInfo font{};
 	font.name = "lingua36";
 	font.filePath = "Lingua.otf";
 	font.size = uint8_t(36);
-	RM.AddResource(font);
+	infos.emplace_back(&font);
 
 	REC::FontResourceCreateInfo debugFont{};
 	debugFont.name = "dogicapixel20";
 	debugFont.filePath = "dogicapixel.otf";
 	debugFont.size = uint8_t(20);
-	RM.AddResource(debugFont);
+	infos.emplace_back(&debugFont);
 
 	REC::SpriteDataResourceCreateInfo spriteDataFile{};
 	spriteDataFile.name = "generalSpritesData";
 	spriteDataFile.filePath = "characterSpritesData.csv";
 	spriteDataFile.separator = ';';
-	RM.AddResource(spriteDataFile);
+	infos.emplace_back(&spriteDataFile);
+
+	engine->AddResources(infos);
 
 	// === SCENE =======================================================================================
 	auto* SM = engine->GetSceneManager();
@@ -111,7 +110,7 @@ static void load(REC::Minigin* engine)
 	REC::SpriteDescriptor character1{};
 	character1.drawHeight = 50;
 	character1.dataResourceFile = "generalSpritesData";
-	character1.spriteDataKey = "bomberman";
+	character1.spriteDataKey = "bomberman_walk_right_2";
 
 	auto parent = std::make_unique<REC::GameObject>(200.f, 200.f);
 	parent->AddComponent<REC::SpriteRenderComponent>("generalSprites", character1);
@@ -146,7 +145,7 @@ int main(int, char*[])
 	if(!fs::exists(data_location))
 		data_location = "../Data/";
 #endif
-	REC::Minigin engine(data_location);
+	REC::Engine engine(data_location);
 	engine.Run(load);
     return 0;
 }

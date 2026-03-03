@@ -3,6 +3,7 @@
 #include <functional>
 #include <filesystem>
 #include "EngineSettings.h"
+#include "ResourceCreateInfos.h"
 
 namespace REC
 {
@@ -10,24 +11,27 @@ namespace REC
 	class Window;
 	class SceneManager;
 	class InputSystem;
+	class IResourceManager;
 
-	class Minigin final
+	class Engine final
 	{
 	public:
-		explicit Minigin(const std::filesystem::path& dataPath);
-		~Minigin();
+		explicit Engine(const std::filesystem::path& dataPath);
+		~Engine();
 
-		void Run(const std::function<void(Minigin*)>& load);
+		void Run(const std::function<void(Engine*)>& load);
 		void RunOneFrame();
 
-		Minigin(const Minigin& other) = delete;
-		Minigin(Minigin&& other) = delete;
-		Minigin& operator=(const Minigin& other) = delete;
-		Minigin& operator=(Minigin&& other) = delete;
+		Engine(const Engine& other) = delete;
+		Engine(Engine&& other) = delete;
+		Engine& operator=(const Engine& other) = delete;
+		Engine& operator=(Engine&& other) = delete;
 
 		void SetEngineData(const EngineSettings& data);
 		SceneManager* GetSceneManager() const { return m_pSceneManager.get(); }
 		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
+
+		void AddResources(const std::vector<ResourceCreateInfo*>& resources);
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;

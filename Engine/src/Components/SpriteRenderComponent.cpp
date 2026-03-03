@@ -1,7 +1,7 @@
 #include "../../inc/Components/SpriteRenderComponent.h"
 #include "../../inc/Components/TransformComponent.h"
 #include "../../inc/GameObject.h"
-#include "../../inc/ResourceManager.h"
+#include "../ResourceManager.h"
 #include "../Renderer.h"
 #include "../SpriteInfo.h"
 
@@ -106,6 +106,7 @@ void REC::SpriteRenderComponent::RequestTexture(const std::string& textureName)
 {
 	// TODO: maybe use messenger system here. send request for resource and receive resource
 	// prevent using resourcemanager directly in this class
+	// TODO -> Service Locator
 	m_pTexture = ResourceManager::GetInstance().GetResource<Texture2D>(textureName);
 }
 

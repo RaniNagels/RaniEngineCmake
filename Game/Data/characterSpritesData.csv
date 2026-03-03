@@ -1,4 +1,34 @@
-key;x1;y1;x2;y2
-bomberman;0;0;16;16
-balloom;48;240;64;256
-background;0;0;496;208
+key;x1;y1;x2;y2;spriteSheet
+bomberman_walk_left_0;0;0;16;16;General Sprites
+bomberman_walk_left_1;16;0;32;16;General Sprites
+bomberman_walk_left_2;32;0;48;16;General Sprites
+bomberman_walk_front_0;48;0;64;16;General Sprites
+bomberman_walk_front_1;64;0;80;16;General Sprites
+bomberman_walk_front_2;80;0;96;16;General Sprites
+bomberman_walk_right_0;0;16;16;32;General Sprites
+bomberman_walk_right_1;16;16;32;32;General Sprites
+bomberman_walk_right_2;32;16;48;32;General Sprites
+bomberman_walk_back_0;48;16;64;32;General Sprites
+bomberman_walk_back_1;64;16;80;32;General Sprites
+bomberman_walk_back_2;80;16;96;32;General Sprites
+bomberman_death_0;0;32;16;48;General Sprites
+bomberman_death_1;16;32;32;48;General Sprites
+bomberman_death_2;32;32;48;48;General Sprites
+bomberman_death_3;48;32;64;48;General Sprites
+bomberman_death_4;64;32;80;48;General Sprites
+bomberman_death_5;80;32;96;48;General Sprites
+bomberman_death_6;96;32;112;48;General Sprites
+bom_0;0;48;16;64;General Sprites
+bom_1;16;48;32;64;General Sprites
+bom_2;32;48;48;64;General Sprites
+wall;48;48;64;64;General Sprites
+soft_block;64;48;80;64;General Sprites
+soft_block_destruction_0;80;48;96;64;General Sprites
+soft_block_destruction_1;96;48;112;64;General Sprites
+soft_block_destruction_2;112;48;128;64;General Sprites
+soft_block_destruction_3;128;48;144;64;General Sprites
+soft_block_destruction_4;144;48;160;64;General Sprites
+soft_block_destruction_5;160;48;176;64;General Sprites
+door;176;48;192;64;General Sprites
+balloom;48;240;64;256;General Sprites
+background;0;0;496;208;Playfield
