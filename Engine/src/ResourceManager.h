@@ -9,9 +9,9 @@
 #include <unordered_map>
 #include <stdexcept>
 #include <assert.h>
-#include "../src/Font.h"		  // TODO: should not be here
-#include "../src/Texture2D.h"	  // TODO: should not be here
-#include "../src/SpriteInfo.h"	  // TODO: should not be here
+#include "Font.h"	
+#include "Texture2D.h"
+#include "SpriteInfo.h"
 
 namespace REC
 {

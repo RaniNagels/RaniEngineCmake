@@ -17,7 +17,7 @@ namespace REC
 		Scene& operator= (const Scene&) = delete;
 		Scene& operator= (const Scene&&) = delete;
 
-		void Add(std::unique_ptr<GameObject> object);
+		GameObject* CreateGameObject(float x = 0.f, float y = 0.f, float z = 0.f);
 		void RemoveAll();
 
 		void Update(float deltaT);

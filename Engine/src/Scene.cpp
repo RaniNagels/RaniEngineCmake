@@ -1,11 +1,10 @@
 #include <algorithm>
 #include "../inc/Scene.h"
-#include <assert.h>
 
-void REC::Scene::Add(std::unique_ptr<GameObject> object)
+REC::GameObject* REC::Scene::CreateGameObject(float x, float y, float z)
 {
-	assert(object != nullptr && "Cannot add a null GameObject to the scene.");
-	m_objects.emplace_back(std::move(object));
+	m_objects.emplace_back(std::make_unique<GameObject>(x, y, z));
+	return m_objects.back().get();
 }
 
 void REC::Scene::RemoveMarkedObjects()

@@ -86,54 +86,45 @@ static void load(REC::Engine* engine)
 	backdrop.dataResourceFile = "generalSpritesData";
 	backdrop.spriteDataKey = "background";
 
-	auto go = std::make_unique<REC::GameObject>(0.f, 80.f);
+	auto go = scene->CreateGameObject(0.f, 80.f);
 	go->AddComponent<REC::SpriteRenderComponent>("background", backdrop);
 	go->AddComponent<REC::GridComponent>(grid);
 	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
-	scene->Add(std::move(go));
 
-	go = std::make_unique<REC::GameObject>(810.f, 10.f);
+	go = scene->CreateGameObject(810.f, 10.f); 
 	go->AddComponent<REC::SpriteRenderComponent>("logo", uint16_t(0), uint16_t(60));
-	scene->Add(std::move(go));
 
-	go = std::make_unique<REC::GameObject>(280.f, 20.f);
+	go = scene->CreateGameObject(280.f, 20.f);
 	go->AddComponent<REC::TextRenderComponent>("Programming 4 Assignment", "lingua36", REC::Color{ 255, 255, 0 });
-	scene->Add(std::move(go));
 
-	go = std::make_unique<REC::GameObject>(20.f, 20.f);
+	go = scene->CreateGameObject(20.f, 20.f); 
 	go->AddComponent<REC::FPSComponent>("dogicapixel20");
-	scene->Add(std::move(go));
 
 	// if this is not set as the root of the parent and child, parent will rotate around 0,0 instead
-	auto root = std::make_unique<REC::GameObject>(230.f, 200.f);
+	auto root = scene->CreateGameObject(230.f, 200.f);
 
 	REC::SpriteDescriptor character1{};
 	character1.drawHeight = 50;
 	character1.dataResourceFile = "generalSpritesData";
 	character1.spriteDataKey = "bomberman_walk_right_2";
 
-	auto parent = std::make_unique<REC::GameObject>(200.f, 200.f);
+	auto parent = scene->CreateGameObject(200.f, 200.f); 
 	parent->AddComponent<REC::SpriteRenderComponent>("generalSprites", character1);
 	parent->AddComponent<REC::RotatorComponent>(-3.f);
-	parent->SetParent(root.get(), true);
+	parent->SetParent(root, true);
 
 	REC::SpriteDescriptor character2{};
 	character2.drawHeight = 50;
 	character2.dataResourceFile = "generalSpritesData";
 	character2.spriteDataKey = "balloom";
 	
-	auto child = std::make_unique<REC::GameObject>(50.f, 50.f);
+	auto child = scene->CreateGameObject(50.f, 50.f); 
 	child->AddComponent<REC::SpriteRenderComponent>("generalSprites", character2);
 	child->AddComponent<REC::RotatorComponent>(3.f);
-	child->SetParent(parent.get());
+	child->SetParent(parent);
 
-	scene->Add(std::move(root));
-	scene->Add(std::move(parent));
-	scene->Add(std::move(child));
-
-	auto trashTheCash = std::make_unique<REC::GameObject>();
+	auto trashTheCash = scene->CreateGameObject(); 
 	trashTheCash->AddComponent<REC::TrashTheCacheRenderComponent>();
-	scene->Add(std::move(trashTheCash));
 }
 
 int main(int, char*[]) 
