@@ -10,7 +10,7 @@ namespace REC
 	{
 	public:
 		explicit ParserFactory() = default;
-		~ParserFactory() = default;
+		~ParserFactory();
 
 		ParserFactory(const ParserFactory&) = delete;
 		ParserFactory(ParserFactory&&) = delete;

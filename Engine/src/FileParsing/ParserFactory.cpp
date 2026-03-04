@@ -3,6 +3,8 @@
 #include "JSON_Parser.h"
 #include <stdexcept>
 
+REC::ParserFactory::~ParserFactory() = default;
+
 REC::IParser* REC::ParserFactory::RequestParser(FileResourceCreateInfo::FileType type)
 {
 	// check if parsers already exist in map
