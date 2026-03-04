@@ -66,9 +66,10 @@ static void load(REC::Engine* engine)
 	REC::SpriteDataResourceCreateInfo spriteDataFile{};
 	spriteDataFile.name = "generalSpritesData";
 	spriteDataFile.filePath = "characterSpritesData.csv";
+	spriteDataFile.type = REC::FileResourceCreateInfo::FileType::CSV;
 	spriteDataFile.separator = ';';
 	infos.emplace_back(&spriteDataFile);
-
+	
 	engine->AddResources(infos);
 
 	// === SCENE =======================================================================================

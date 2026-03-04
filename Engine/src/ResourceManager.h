@@ -11,7 +11,7 @@
 #include <assert.h>
 #include "Font.h"	
 #include "Texture2D.h"
-#include "SpriteInfo.h"
+#include "FrameInfo.h"
 
 namespace REC
 {
@@ -46,7 +46,7 @@ namespace REC
 		template <typename T>
 		T* GetResource(const std::string& filename, const std::string& key)
 		{
-			if constexpr (std::is_same_v<T, SpriteInfo>)
+			if constexpr (std::is_same_v<T, FrameInfo>)
 			{
 				auto fileIt = m_SpriteResources.find(filename);
 				if (fileIt != m_SpriteResources.end())
@@ -73,7 +73,7 @@ namespace REC
 			std::string, // filekey
 			std::unordered_map<
 				std::string, // spritekey
-				SpriteInfo>
+				FrameInfo>
 		> m_SpriteResources{};
 	};
 }

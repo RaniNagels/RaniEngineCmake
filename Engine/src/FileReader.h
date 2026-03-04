@@ -3,9 +3,13 @@
 #include <vector>
 #include <unordered_map>
 #include "../inc/Singleton.h"
+#include <ResourceCreateInfos.h>
 
+// TODO: clean up, refactor
 namespace REC
 {
+	// basically a csv reader
+	// TODO: add json support
 	class FileReader final : public Singleton<FileReader>
 	{
 	public:
@@ -17,7 +21,7 @@ namespace REC
 		//FileReader& operator=(FileReader&& other) = delete;
 
 		// needs the full filePath! not a relative one
-		bool LoadFromFile(const std::string& filePath, char separator = ',');
+		bool LoadFromFile(const std::string& filePath, REC::FileResourceCreateInfo::FileType type, char separator = ',');
 
 		size_t RowCount() const { return m_Rows.size(); }
 		const std::string& Get(size_t row, const std::string& columnName) const;

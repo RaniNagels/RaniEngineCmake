@@ -17,6 +17,8 @@ set(SOURCE_FILES
 	"src/Input/InputDevices/Controller.cpp"
 	"src/Input/InputDevices/Keyboard.cpp"
 
+    "src/FileHandling/JSON_Parser.cpp"
+
 	"src/FileReader.cpp"
 	"src/Font.cpp"
 	"src/GameObject.cpp"
@@ -128,6 +130,13 @@ target_link_libraries(imgui PUBLIC SDL3::SDL3)
 # enable c++20 features
 target_compile_features(imgui PUBLIC cxx_std_20)
 
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.12.0
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(json)
 
 # --- Create Dynamic/Static Library -------------
 if(EMSCRIPTEN)
@@ -148,7 +157,7 @@ target_include_directories(${TARGET_NAME}
 # --- Link Libraries -------------
 target_link_libraries(${TARGET_NAME} 
     PUBLIC glm::glm
-    PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf imgui
+    PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf imgui nlohmann_json::nlohmann_json
 )
 if (NOT EMSCRIPTEN)
 	target_link_libraries(${TARGET_NAME} PRIVATE xinput)

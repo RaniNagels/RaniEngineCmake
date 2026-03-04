@@ -3,7 +3,7 @@
 #include "../../inc/GameObject.h"
 #include "../ResourceManager.h"
 #include "../Renderer.h"
-#include "../SpriteInfo.h"
+#include "../FrameInfo.h"
 
 REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* texture, uint16_t width, uint16_t height)
 	: RenderComponent(owner)
@@ -112,7 +112,7 @@ void REC::SpriteRenderComponent::RequestTexture(const std::string& textureName)
 
 void REC::SpriteRenderComponent::RequestSpriteInfo()
 {
-	m_pSpriteInfo = ResourceManager::GetInstance().GetResource<SpriteInfo>(m_Descriptor.dataResourceFile, m_Descriptor.spriteDataKey);
+	m_pSpriteInfo = ResourceManager::GetInstance().GetResource<FrameInfo>(m_Descriptor.dataResourceFile, m_Descriptor.spriteDataKey);
 }
 
 REC::Rect REC::SpriteRenderComponent::GetSrcRect() const

@@ -7,7 +7,7 @@
 namespace REC
 {
 	class Texture2D;
-	struct SpriteInfo;
+	struct FrameInfo;
 
 	class SpriteRenderComponent : public RenderComponent
 	{
@@ -32,7 +32,7 @@ namespace REC
 	private:
 		Texture2D* m_pTexture;
 		SpriteDescriptor m_Descriptor;
-		const SpriteInfo* m_pSpriteInfo;
+		const FrameInfo* m_pSpriteInfo;
 
 		void RequestSpriteInfo();
 		Rect GetSrcRect() const;

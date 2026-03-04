@@ -150,16 +150,76 @@ void REC::Renderer::RenderPlotsWindow(const std::string& windowTitle, int& sampl
 {
 	ImGui::Begin(windowTitle.c_str());
 
+	ImVec2 plotSize = { 250, 100 };
+
 	ImGui::InputInt("# Samples", &sampleCount);
 	button1 = ImGui::Button("Trash The Cache with gameObject");
 	if (plotData1.size() > 0)
-		ImGui::PlotLines("##PlotObj", plotData1.data(), int(plotData1.size()), 0, nullptr, 3.4028235E38F, 3.4028235E38F, { 250, 100 }, 4);
+		ImGui::PlotLines("##PlotObj", plotData1.data(), int(plotData1.size()), 0, nullptr, FLT_MAX, FLT_MAX, plotSize);
 
 	ImGui::Separator();
 	button2 = ImGui::Button("Trash The Cache with gameObjectAlt");
 	if (plotData2.size() > 0)
-		ImGui::PlotLines("##PlotObjAlt", plotData2.data(), int(plotData2.size()), 0, nullptr, 3.4028235E38F, 3.4028235E38F, { 250, 100 }, 4);
+		ImGui::PlotLines("##PlotObjAlt", plotData2.data(), int(plotData2.size()), 0, nullptr, FLT_MAX, FLT_MAX, plotSize);
 	
+	// Combined Plot
+	if (!plotData1.empty() && !plotData2.empty())
+	{
+		ImGui::Separator();
+		ImGui::Text("Combined Plot:");
+
+		ImVec2 canvasPos = ImGui::GetCursorScreenPos();
+		ImGui::InvisibleButton("CombinedCanvas", plotSize);
+		ImDrawList* drawList = ImGui::GetWindowDrawList();
+
+		// calculate the min and max value of the plot
+		float minValue = FLT_MAX;
+		float maxValue = -FLT_MAX;
+
+		for (float v : plotData1)
+		{
+			minValue = std::min(minValue, v);
+			maxValue = std::max(maxValue, v);
+		}
+
+		for (float v : plotData2)
+		{
+			minValue = std::min(minValue, v);
+			maxValue = std::max(maxValue, v);
+		}
+
+		float range = (maxValue - minValue);
+		if (range == 0.0f)
+			range = 1.0f;
+
+		auto drawPlot = [&](const std::vector<float>& data, ImU32 color)
+			{
+				if (data.size() < 2)
+					return;
+
+				for (size_t i = 1; i < data.size(); ++i)
+				{
+					float x0 = canvasPos.x + (float)(i - 1) / (data.size() - 1) * plotSize.x;
+					float y0 = canvasPos.y + (1.0f - (data[i - 1] - minValue) / range) * plotSize.y;
+
+					float x1 = canvasPos.x + (float)i / (data.size() - 1) * plotSize.x;
+					float y1 = canvasPos.y + (1.0f - (data[i] - minValue) / range) * plotSize.y;
+
+					drawList->AddLine(ImVec2(x0, y0), ImVec2(x1, y1), color, 2.0f);
+				}
+			};
+
+		// background
+		drawList->AddRectFilled(canvasPos, ImVec2(canvasPos.x + plotSize.x, canvasPos.y + plotSize.y), IM_COL32(40, 40, 40, 255));
+
+		// Draw plots
+		drawPlot(plotData1, IM_COL32(255, 0, 0, 255));
+		drawPlot(plotData2, IM_COL32(0, 255, 0, 255));
+
+		// border
+		drawList->AddRect(canvasPos, ImVec2(canvasPos.x + plotSize.x, canvasPos.y + plotSize.y), IM_COL32(255, 255, 255, 100));
+	}
+
 	ImGui::End();
 }
 

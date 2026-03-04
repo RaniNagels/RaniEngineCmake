@@ -57,13 +57,13 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 		}
 		auto& FR = FileReader::GetInstance();
 		const auto fullPath = (m_DataPath / tfdesc.filePath).string();
-		if (!FR.LoadFromFile(fullPath, tfdesc.separator))
+		if (!FR.LoadFromFile(fullPath, tfdesc.type, tfdesc.separator))
 			throw std::runtime_error("failed to load file");
 
-		std::unordered_map<std::string, SpriteInfo> sprites{};
+		std::unordered_map<std::string, FrameInfo> sprites{};
 		for (size_t r{}; r < FR.RowCount(); ++r)
 		{
-			SpriteInfo info{};
+			FrameInfo info{};
 			info.key = FR.Get(r, "key");
 			if (sprites.find(info.key) != sprites.end())
 			{

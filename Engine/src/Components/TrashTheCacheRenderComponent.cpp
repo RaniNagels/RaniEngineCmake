@@ -70,8 +70,13 @@ void REC::TrashTheCacheRenderComponent::TrashTheCache(std::vector<float>& data, 
 		std::cout << std::accumulate(copy.begin(), copy.end(), 0) << " ";
 
 		std::sort(totalTimes.begin(), totalTimes.end());
-		float average = std::accumulate(totalTimes.begin() + 1, totalTimes.end() - 1, 0.f) / (totalTimes.size() - 2);
-		//float average = std::accumulate(totalTimes.begin(), totalTimes.end(), 0.0f) / totalTimes.size();
+
+		float average{};
+		if (totalTimes.size() > 2)
+			average = std::accumulate(totalTimes.begin() + 1, totalTimes.end() - 1, 0.f) / (totalTimes.size() - 2);
+		else
+			average = std::accumulate(totalTimes.begin(), totalTimes.end(), 0.0f) / totalTimes.size();
+
 		data.push_back(average);
 	}
 }
