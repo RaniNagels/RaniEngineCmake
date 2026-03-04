@@ -8,7 +8,7 @@ namespace REC
 	{
 	public:
 		explicit IParser() = default;
-		~IParser() = default;
+		virtual ~IParser() = default;
 
 		IParser(const IParser&) = delete;
 		IParser(IParser&&) = delete;
