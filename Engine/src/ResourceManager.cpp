@@ -1,12 +1,12 @@
 ﻿#include <SDL3_ttf/SDL_ttf.h>
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "FileReader.h"
 
 namespace fs = std::filesystem;
 
 void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 {
+	m_ParserFactory = std::make_unique<ParserFactory>();
 	m_DataPath = dataPath;
 
 	if (!TTF_Init())
@@ -30,8 +30,7 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 			return false;
 		}
 
-		const auto fullPath = (m_DataPath / tdesc.filePath).string();
-		m_TextureResources.insert({ tdesc.name, std::make_unique<Texture2D>(fullPath) });
+		m_TextureResources.insert({ tdesc.name, std::make_unique<Texture2D>(GetFullPath(tdesc.filePath)) });
 		return true;
 	}
 	else if (typeid(resource) == typeid(FontResourceCreateInfo))
@@ -43,8 +42,7 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 			return false;
 		}
 
-		const auto fullPath = (m_DataPath / fdesc.filePath).string();
-		m_FontResources.insert({ fdesc.name, std::make_unique<Font>(fullPath, fdesc.size) });
+		m_FontResources.insert({ fdesc.name, std::make_unique<Font>(GetFullPath(fdesc.filePath), fdesc.size) });
 		return true;
 	}
 	else if (typeid(resource) == typeid(SpriteDataResourceCreateInfo))
@@ -55,25 +53,27 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 			assert(false && "Name already exists in Sprite Resources");
 			return false;
 		}
-		auto& FR = FileReader::GetInstance();
-		const auto fullPath = (m_DataPath / tfdesc.filePath).string();
-		if (!FR.LoadFromFile(fullPath, tfdesc.type, tfdesc.separator))
+
+		auto parser = m_ParserFactory->RequestParser(tfdesc.type);
+		if (tfdesc.type == FileResourceCreateInfo::FileType::CSV)
+			m_ParserFactory->SetCSVSeparator(tfdesc.separator);
+		if (!parser->LoadFromFile(GetFullPath(tfdesc.filePath)))
 			throw std::runtime_error("failed to load file");
 
 		std::unordered_map<std::string, FrameInfo> sprites{};
-		for (size_t r{}; r < FR.RowCount(); ++r)
+		for (auto key : parser->GetKeys())
 		{
 			FrameInfo info{};
-			info.key = FR.Get(r, "key");
+			info.key = key;
 			if (sprites.find(info.key) != sprites.end())
 			{
 				assert(false && "key already exists in Sprite Resources");
 				return false;
 			}
-			float x1 = float(stoi(FR.Get(r, "x1")));
-			float y1 = float(stoi(FR.Get(r, "y1")));
-			float x2 = float(stoi(FR.Get(r, "x2")));
-			float y2 = float(stoi(FR.Get(r, "y2")));
+			float x1 = parser->GetFloat(key, "x1");
+			float y1 = parser->GetFloat(key, "y1");
+			float x2 = parser->GetFloat(key, "x2");
+			float y2 = parser->GetFloat(key, "y2");
 			info.pixelRegion = TextureRegion(x1, y1, x2, y2);
 
 			sprites.insert({ info.key, info });
@@ -85,4 +85,9 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 		assert("Resource could not be added to ResourceManager: No Valid Type");
 
 	return false;
+}
+
+std::string REC::ResourceManager::GetFullPath(const std::string& relativePath)
+{
+	return (m_DataPath / relativePath).string();
 }

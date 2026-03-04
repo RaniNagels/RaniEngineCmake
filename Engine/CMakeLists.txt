@@ -17,9 +17,10 @@ set(SOURCE_FILES
 	"src/Input/InputDevices/Controller.cpp"
 	"src/Input/InputDevices/Keyboard.cpp"
 
-    "src/FileHandling/JSON_Parser.cpp"
+    "src/FileParsing/JSON_Parser.cpp"
+    "src/FileParsing/CSV_Parser.cpp"
+    "src/FileParsing/ParserFactory.cpp"
 
-	"src/FileReader.cpp"
 	"src/Font.cpp"
 	"src/GameObject.cpp"
 	"src/Engine.cpp"

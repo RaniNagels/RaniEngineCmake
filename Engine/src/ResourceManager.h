@@ -13,6 +13,8 @@
 #include "Texture2D.h"
 #include "FrameInfo.h"
 
+#include "FileParsing/ParserFactory.h"
+
 namespace REC
 {
 	class ResourceManager final : public Singleton<ResourceManager>
@@ -75,5 +77,9 @@ namespace REC
 				std::string, // spritekey
 				FrameInfo>
 		> m_SpriteResources{};
+
+		std::unique_ptr<ParserFactory> m_ParserFactory{};
+
+		std::string GetFullPath(const std::string& relativePath);
 	};
 }
