@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 namespace REC
 {
@@ -6,6 +7,6 @@ namespace REC
 	{
 	public:
 		virtual ~ICommand() = default;
-		virtual void Execute() = 0;
+		virtual void Execute(uint8_t playerIndex = -1) = 0;
 	};
 }

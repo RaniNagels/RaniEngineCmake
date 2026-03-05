@@ -12,8 +12,9 @@
 #include "Font.h"	
 #include "Texture2D.h"
 #include "FrameInfo.h"
+#include "AnimationInfo.h"
 
-#include "FileParsing/ParserFactory.h"
+#include <FileParsing/JSON_Parser.h>
 
 namespace REC
 {
@@ -56,6 +57,20 @@ namespace REC
 					auto spriteIt = fileIt->second.find(key);
 					if (spriteIt != fileIt->second.end())
 						return &spriteIt->second;
+					else
+						assert(false && "Requested Key is not found");
+				}
+			}
+			else if constexpr (std::is_same_v<T, AnimationInfo>)
+			{
+				auto fileIt = m_AnimationResources.find(filename);
+				if (fileIt != m_AnimationResources.end())
+				{
+					auto aniIt = fileIt->second.find(key);
+					if (aniIt != fileIt->second.end())
+						return &aniIt->second;
+					else
+						assert(false && "Requested Key is not found");
 				}
 			}
 			assert(false && "Requested resource type is not supported!");
@@ -71,14 +86,11 @@ namespace REC
 		std::unordered_map<std::string, std::unique_ptr<Texture2D>> m_TextureResources{};
 		std::unordered_map<std::string, std::unique_ptr<Font>> m_FontResources{};
 
-		std::unordered_map<
-			std::string, // filekey
-			std::unordered_map<
-				std::string, // spritekey
-				FrameInfo>
-		> m_SpriteResources{};
+		//                  filekey                           key
+		std::unordered_map<std::string, std::unordered_map<std::string, FrameInfo>> m_SpriteResources{};
+		std::unordered_map<std::string, std::unordered_map<std::string, AnimationInfo>> m_AnimationResources{};
 
-		std::unique_ptr<ParserFactory> m_ParserFactory{};
+		std::unique_ptr<JSONParser> m_Parser{};
 
 		std::string GetFullPath(const std::string& relativePath);
 	};

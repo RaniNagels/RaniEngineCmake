@@ -32,7 +32,7 @@ namespace REC
 		GameObject& operator=(GameObject&& other) = delete;
 
 		void Destroy();
-		bool IsAboutToBeDestroyed() { return m_IsAboutToBeDestroyed; }
+		bool IsAboutToBeDestroyed() const { return m_IsAboutToBeDestroyed; }
 		void Update(float deltaT);
 		void Render() const;
 

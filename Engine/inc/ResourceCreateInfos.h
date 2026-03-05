@@ -34,28 +34,5 @@ namespace REC
 	{
 		FileResourceCreateInfo() = default;
 		virtual ~FileResourceCreateInfo() = default;
-
-		// define all suported fileTypes => not in the list = not supported
-		enum class FileType
-		{
-			NONE,
-			CSV,
-			JSON
-		};
-
-		FileType type{};
-		char separator = ',';
-	};
-
-	struct SpriteDataResourceCreateInfo : public FileResourceCreateInfo
-	{
-		SpriteDataResourceCreateInfo() = default;
-		virtual ~SpriteDataResourceCreateInfo() = default;
-	};
-
-	struct AnimationDataResourceCreateInfo : public FileResourceCreateInfo
-	{
-		AnimationDataResourceCreateInfo() = default;
-		virtual ~AnimationDataResourceCreateInfo() = default;
 	};
 }

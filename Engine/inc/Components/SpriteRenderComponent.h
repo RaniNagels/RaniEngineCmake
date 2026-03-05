@@ -14,8 +14,7 @@ namespace REC
 	public:
 		explicit SpriteRenderComponent(GameObject* owner, Texture2D* texture, uint16_t width = 0, uint16_t height = 0);
 		explicit SpriteRenderComponent(GameObject* owner, const std::string& textureName, uint16_t width = 0, uint16_t height = 0);
-		explicit SpriteRenderComponent(GameObject* owner, const std::string& textureName, const SpriteDescriptor& descriptor);
-		explicit SpriteRenderComponent(GameObject* owner, Texture2D* texture, const SpriteDescriptor& descriptor);
+		explicit SpriteRenderComponent(GameObject* owner, const SpriteDescriptor& descriptor);
 		virtual ~SpriteRenderComponent() = default;
 
 		SpriteRenderComponent(const SpriteRenderComponent& other) = delete;
@@ -27,14 +26,15 @@ namespace REC
 		virtual void Render() override;
 
 		void SetTexture(Texture2D* texture);
-		void RequestTexture(const std::string& textureName);
+		Texture2D* RequestTexture(const std::string& textureName);
 
+		void SetFrame(const FrameInfo* info);
+		FrameInfo* RequestFrameInfo(const std::string& file, const std::string& key);
 	private:
 		Texture2D* m_pTexture;
 		SpriteDescriptor m_Descriptor;
-		const FrameInfo* m_pSpriteInfo;
+		const FrameInfo* m_pFrameInfo;
 
-		void RequestSpriteInfo();
 		Rect GetSrcRect() const;
 	};
 }

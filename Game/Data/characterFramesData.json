@@ -1,0 +1,361 @@
+{
+  "frames": {
+    "bomberman_walk_left_0": {
+      "x": 0,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_walk_left_1": {
+      "x": 16,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_walk_left_2": {
+      "x": 32,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+
+    "bomberman_walk_front_0": {
+      "x": 48,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_walk_front_1": {
+      "x": 64,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_walk_front_2": {
+      "x": 80,
+      "y": 0,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+
+    "bomberman_walk_right_0": {
+      "x": 0,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_walk_right_1": {
+      "x": 16,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_walk_right_2": {
+      "x": 32,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+
+    "bomberman_walk_back_0": {
+      "x": 48,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_walk_back_1": {
+      "x": 64,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_walk_back_2": {
+      "x": 80,
+      "y": 16,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+
+    "bomberman_death_0": {
+      "x": 0,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_death_1": {
+      "x": 16,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_death_2": {
+      "x": 32,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_death_3": {
+      "x": 48,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_death_4": {
+      "x": 64,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_death_5": {
+      "x": 80,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bomberman_death_6": {
+      "x": 96,
+      "y": 32,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+
+    "bom_0": {
+      "x": 0,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bom_1": {
+      "x": 16,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "bom_2": {
+      "x": 32,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+
+    "wall": {
+      "x": 48,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "soft_block": {
+      "x": 64,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+
+    "soft_block_destruction_0": {
+      "x": 80,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "soft_block_destruction_1": {
+      "x": 96,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "soft_block_destruction_2": {
+      "x": 112,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "soft_block_destruction_3": {
+      "x": 128,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "soft_block_destruction_4": {
+      "x": 144,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "soft_block_destruction_5": {
+      "x": 160,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+
+    "door": {
+      "x": 176,
+      "y": 48,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_look_right_0": {
+      "x": 0,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_look_right_1": {
+      "x": 16,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_look_right_2": {
+      "x": 32,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_look_left_0": {
+      "x": 48,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_look_left_1": {
+      "x": 64,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_look_left_2": {
+      "x": 80,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "background": {
+      "x": 0,
+      "y": 0,
+      "w": 496,
+      "h": 208,
+      "sheet": "Playfield"
+    }
+  },
+  "animations": {
+    "bomberman_walk_left": {
+      "frames": [
+        "bomberman_walk_left_1",
+        "bomberman_walk_left_2",
+        "bomberman_walk_left_0",
+        "bomberman_walk_left_2"
+      ],
+      "duration": 1.0,
+      "loop": true
+    },
+    "bomberman_walk_front": {
+      "frames": [
+        "bomberman_walk_front_0",
+        "bomberman_walk_front_1",
+        "bomberman_walk_front_2"
+      ],
+      "duration": 1.0,
+      "loop": true
+    },
+    "bomberman_walk_right": {
+      "frames": [
+        "bomberman_walk_right_0",
+        "bomberman_walk_right_1",
+        "bomberman_walk_right_2"
+      ],
+      "duration": 1.0,
+      "loop": true
+    },
+    "bomberman_walk_back": {
+      "frames": [
+        "bomberman_walk_back_0",
+        "bomberman_walk_back_1",
+        "bomberman_walk_back_2"
+      ],
+      "duration": 1.0,
+      "loop": true
+    },
+    "bomberman_death": {
+      "frames": [
+        "bomberman_death_0",
+        "bomberman_death_1",
+        "bomberman_death_2",
+        "bomberman_death_3",
+        "bomberman_death_4",
+        "bomberman_death_5",
+        "bomberman_death_6"
+      ],
+      "duration": 1.5,
+      "loop": false
+    },
+    "bom": {
+      "frames": [
+        "bom_0",
+        "bom_1",
+        "bom_2"
+      ],
+      "duration": 1.0,
+      "loop": false
+    },
+    "soft_block_destruction": {
+      "frames": [
+        "soft_block_destruction_0",
+        "soft_block_destruction_1",
+        "soft_block_destruction_2",
+        "soft_block_destruction_3",
+        "soft_block_destruction_4",
+        "soft_block_destruction_5"
+      ],
+      "duration": 1.5,
+      "loop": false
+    },
+    "balloom_look_left": {
+      "frames": [
+        "balloom_look_right_0",
+        "balloom_look_right_1",
+        "balloom_look_right_2",
+        "balloom_look_right_1"
+      ],
+      "duration": 1.0,
+      "loop": true
+    }
+  }
+}

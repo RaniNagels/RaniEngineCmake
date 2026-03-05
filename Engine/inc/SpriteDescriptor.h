@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <string>
 
 namespace REC
 {
@@ -11,10 +12,19 @@ namespace REC
 
 		std::string dataResourceFile{}; // the file that stores the SpriteInfos
 		std::string spriteDataKey{}; // the key used to store the specific SpriteInfo
+		std::string textureKey{};
 
 		explicit SpriteDescriptor() = default;
 		explicit SpriteDescriptor(int height, int width)
 			: drawHeight{uint16_t(height)}, drawWidth{uint16_t(width)}
 		{}
+	};
+
+	struct AnimationDescriptor final
+	{
+		// this class will overwrite the spriteddata key of the SpriteDescriptor
+		std::string dataResourceFile{};
+		std::string animationKey{};
+		bool startOnStartup{ true };
 	};
 }

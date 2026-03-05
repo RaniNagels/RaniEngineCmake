@@ -6,7 +6,7 @@ namespace fs = std::filesystem;
 
 void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 {
-	m_ParserFactory = std::make_unique<ParserFactory>();
+	m_Parser = std::make_unique<JSONParser>();
 	m_DataPath = dataPath;
 
 	if (!TTF_Init())
@@ -45,40 +45,26 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 		m_FontResources.insert({ fdesc.name, std::make_unique<Font>(GetFullPath(fdesc.filePath), fdesc.size) });
 		return true;
 	}
-	else if (typeid(resource) == typeid(SpriteDataResourceCreateInfo))
+	else if (typeid(resource) == typeid(FileResourceCreateInfo))
 	{
-		const auto tfdesc = static_cast<const SpriteDataResourceCreateInfo&>(resource);
-		if (m_SpriteResources.find(tfdesc.name) != m_SpriteResources.end())
+		const auto fdesc = static_cast<const FileResourceCreateInfo&>(resource);
+		if (m_SpriteResources.find(fdesc.name) != m_SpriteResources.end())
 		{
 			assert(false && "Name already exists in Sprite Resources");
 			return false;
 		}
 
-		auto parser = m_ParserFactory->RequestParser(tfdesc.type);
-		if (tfdesc.type == FileResourceCreateInfo::FileType::CSV)
-			m_ParserFactory->SetCSVSeparator(tfdesc.separator);
-		if (!parser->LoadFromFile(GetFullPath(tfdesc.filePath)))
+		if (!m_Parser->LoadFromFile(GetFullPath(fdesc.filePath)))
 			throw std::runtime_error("failed to load file");
 
 		std::unordered_map<std::string, FrameInfo> sprites{};
-		for (auto key : parser->GetKeys())
-		{
-			FrameInfo info{};
-			info.key = key;
-			if (sprites.find(info.key) != sprites.end())
-			{
-				assert(false && "key already exists in Sprite Resources");
-				return false;
-			}
-			float x1 = parser->GetFloat(key, "x1");
-			float y1 = parser->GetFloat(key, "y1");
-			float x2 = parser->GetFloat(key, "x2");
-			float y2 = parser->GetFloat(key, "y2");
-			info.pixelRegion = TextureRegion(x1, y1, x2, y2);
+		if (m_Parser->GetFrames(sprites))
+			m_SpriteResources.insert({ fdesc.name, sprites });
 
-			sprites.insert({ info.key, info });
-		}
-		m_SpriteResources.insert({ tfdesc.name, sprites });
+		std::unordered_map<std::string, AnimationInfo> animationData{};
+		if (m_Parser->GetAnimations(animationData))
+			m_AnimationResources.insert({ fdesc.name, animationData });
+
 		return true;
 	}
 	else

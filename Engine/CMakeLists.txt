@@ -3,6 +3,7 @@ set(TARGET_NAME REC)
 
 # --- List Source Files -------------
 set(SOURCE_FILES
+    "src/Components/AnimatedSpriteComponent.cpp"
 	"src/Components/Component.cpp"
 	"src/Components/DebugGridRenderComponent.cpp"
 	"src/Components/FPSComponent.cpp"
@@ -11,16 +12,14 @@ set(SOURCE_FILES
 	"src/Components/SpriteRenderComponent.cpp"
 	"src/Components/TextRenderComponent.cpp"
 	"src/Components/TransformComponent.cpp"
-    "src/Components/TrashTheCacheRenderComponent.cpp"
-
+    
+    "src/Input/InputBinding.cpp"
 	"src/Input/InputSystem.cpp"
 	"src/Input/InputDevices/Controller.cpp"
 	"src/Input/InputDevices/Keyboard.cpp"
 
     "src/FileParsing/JSON_Parser.cpp"
-    "src/FileParsing/CSV_Parser.cpp"
-    "src/FileParsing/ParserFactory.cpp"
-
+    
 	"src/Font.cpp"
 	"src/GameObject.cpp"
 	"src/Engine.cpp"
@@ -107,29 +106,6 @@ if(NOT SDL3_ttf_FOUND)
   endif()
 endif()
 
-# Dear ImGui
-FetchContent_Declare(
-  imgui
-  GIT_REPOSITORY https://github.com/ocornut/imgui
-  GIT_TAG v1.92.5-docking
-  GIT_SHALLOW TRUE
-)
-FetchContent_MakeAvailable(imgui)
-
-add_library(imgui STATIC
-  ${imgui_SOURCE_DIR}/imgui.cpp
-  ${imgui_SOURCE_DIR}/imgui_draw.cpp
-  ${imgui_SOURCE_DIR}/imgui_tables.cpp
-  ${imgui_SOURCE_DIR}/imgui_widgets.cpp
-  ${imgui_SOURCE_DIR}/imgui_demo.cpp
-  ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
-  ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp
-)
-
-target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${sdl3_SOURCE_DIR}/include)
-target_link_libraries(imgui PUBLIC SDL3::SDL3)
-# enable c++20 features
-target_compile_features(imgui PUBLIC cxx_std_20)
 
 FetchContent_Declare(
     json
@@ -151,14 +127,13 @@ message(STATUS "GameEngine Library Created")
 # --- Include Directories -------------
 target_include_directories(${TARGET_NAME}
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
-    PUBLIC ${imgui_SOURCE_DIR}
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 # --- Link Libraries -------------
 target_link_libraries(${TARGET_NAME} 
     PUBLIC glm::glm
-    PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf imgui nlohmann_json::nlohmann_json
+    PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf nlohmann_json::nlohmann_json
 )
 if (NOT EMSCRIPTEN)
 	target_link_libraries(${TARGET_NAME} PRIVATE xinput)

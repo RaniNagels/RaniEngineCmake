@@ -4,7 +4,7 @@
 
 namespace REC
 {
-	// TODO: create a static that keeps track of all the Id's that are still available and automatically asing an Id at construction
+	// TODO: create a static that keeps track of all the Id's that are still available and automatically asings an Id at construction
 	class Controller final
 	{
 	public:

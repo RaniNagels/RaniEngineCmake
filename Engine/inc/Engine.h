@@ -4,6 +4,7 @@
 #include <filesystem>
 #include "EngineSettings.h"
 #include "ResourceCreateInfos.h"
+#include <Input/InputBinding.h>
 
 namespace REC
 {
@@ -32,6 +33,7 @@ namespace REC
 		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
 
 		void AddResources(const std::vector<ResourceCreateInfo*>& resources);
+		InputBinding* CreateInputAction();
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;

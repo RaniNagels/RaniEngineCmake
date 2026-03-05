@@ -12,33 +12,27 @@ REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* 
 {
 	m_Descriptor.drawWidth = width;
 	m_Descriptor.drawHeight = height;
-	m_pSpriteInfo = nullptr;
+	m_pFrameInfo = nullptr;
 }
 
 REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const std::string& textureName, uint16_t width, uint16_t height)
 	: RenderComponent(owner)
 	, m_Descriptor{}
 {
-	RequestTexture(textureName);
+	m_pTexture = RequestTexture(textureName);
 	m_Descriptor.drawWidth = width;
 	m_Descriptor.drawHeight = height;
-	m_pSpriteInfo = nullptr;
+	m_pFrameInfo = nullptr;
 }
 
-REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const std::string& textureName, const SpriteDescriptor& descriptor)
+REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const SpriteDescriptor& descriptor)
 	: RenderComponent(owner)
 	, m_Descriptor{descriptor}
 {
-	RequestTexture(textureName);
-	RequestSpriteInfo();
-}
-
-REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* texture, const SpriteDescriptor& descriptor)
-	: RenderComponent(owner)
-	, m_pTexture{ texture }
-	, m_Descriptor{descriptor}
-{
-	RequestSpriteInfo();
+	m_pTexture = RequestTexture(descriptor.textureKey);
+	if (!m_Descriptor.spriteDataKey.empty())
+		m_pFrameInfo = RequestFrameInfo(m_Descriptor.dataResourceFile, m_Descriptor.spriteDataKey);
+	else m_pFrameInfo = nullptr;
 }
 
 void REC::SpriteRenderComponent::Update(float)
@@ -102,28 +96,34 @@ void REC::SpriteRenderComponent::SetTexture(Texture2D* texture)
 		assert(false && "Given Texture is Invalid!");
 }
 
-void REC::SpriteRenderComponent::RequestTexture(const std::string& textureName)
+REC::Texture2D* REC::SpriteRenderComponent::RequestTexture(const std::string& textureName)
 {
 	// TODO: maybe use messenger system here. send request for resource and receive resource
 	// prevent using resourcemanager directly in this class
 	// TODO -> Service Locator
-	m_pTexture = ResourceManager::GetInstance().GetResource<Texture2D>(textureName);
+	return ResourceManager::GetInstance().GetResource<Texture2D>(textureName);
 }
 
-void REC::SpriteRenderComponent::RequestSpriteInfo()
+void REC::SpriteRenderComponent::SetFrame(const FrameInfo* info)
 {
-	m_pSpriteInfo = ResourceManager::GetInstance().GetResource<FrameInfo>(m_Descriptor.dataResourceFile, m_Descriptor.spriteDataKey);
+	if (info != nullptr)
+		m_pFrameInfo = info;
+}
+
+REC::FrameInfo* REC::SpriteRenderComponent::RequestFrameInfo(const std::string& file, const std::string& key)
+{
+	return ResourceManager::GetInstance().GetResource<FrameInfo>(file, key);
 }
 
 REC::Rect REC::SpriteRenderComponent::GetSrcRect() const
 {
 	Rect src{};
 
-	if (m_pSpriteInfo != nullptr)
+	if (m_pFrameInfo != nullptr)
 	{
-		if (m_pSpriteInfo->pixelRegion.IsValid())
+		if (m_pFrameInfo->pixelRegion.IsValid())
 		{
-			src = m_pSpriteInfo->pixelRegion;
+			src = m_pFrameInfo->pixelRegion;
 		}
 	}
 

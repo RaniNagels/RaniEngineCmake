@@ -6,6 +6,7 @@
 #include "../../src/Input/ControllerState.h" // including a private file!!
 #include "../../src/Input/InputDevices/Keyboard.h"
 #include "../../src/Input/InputDevices/Controller.h"
+#include "InputBinding.h"
 
 namespace REC
 {
@@ -23,10 +24,13 @@ namespace REC
 		void ProcessInput();
 		bool ShouldQuit() const { return m_ShouldQuit; }
 
+		InputBinding* CreateInputBinding();
+
 	private:
 		//class Impl;
 		//std::unique_ptr<Impl> impl;
 
+		std::vector<std::unique_ptr<InputBinding>> m_Bindings{};
 		std::vector<std::unique_ptr<Controller>> m_Controllers{};
 		std::unique_ptr<Keyboard> m_Keyboard;
 		bool m_ShouldQuit{ false };

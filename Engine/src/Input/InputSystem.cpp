@@ -1,5 +1,4 @@
 #include <SDL3/SDL.h>
-#include <backends/imgui_impl_sdl3.h>
 
 #include "../../inc/Input/InputSystem.h"
 #include <SDL3/SDL.h>
@@ -22,6 +21,11 @@ void REC::InputSystem::ProcessInput()
 	ResetStates();
 	DetectInput();
 	ProcessKeyboardButtons();
+}
+
+REC::InputBinding* REC::InputSystem::CreateInputBinding()
+{
+	return m_Bindings.emplace_back(std::make_unique<InputBinding>()).get();
 }
 
 void REC::InputSystem::ResetStates()
@@ -49,8 +53,6 @@ void REC::InputSystem::DetectInput()
 			break;
 		}
 
-		//process event for IMGUI
-		ImGui_ImplSDL3_ProcessEvent(&e);
 	}
 
 	// Controller

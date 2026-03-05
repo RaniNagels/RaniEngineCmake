@@ -7,7 +7,8 @@ namespace REC
 	// this struct contains all the data loaded in from a csv file
 	struct FrameInfo final
 	{
-		TextureRegion pixelRegion{};
+		Rect pixelRegion{};
 		std::string key{};
+		std::string textureFileKey{};
 	};
 }

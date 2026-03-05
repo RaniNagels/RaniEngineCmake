@@ -53,5 +53,11 @@ namespace REC
 			height = region.height();
 			return *this;
 		}
+
+		bool IsValid() const
+		{
+			if (width > 0 && height > 0) return true;
+			else return false;
+		}
 	};
 }

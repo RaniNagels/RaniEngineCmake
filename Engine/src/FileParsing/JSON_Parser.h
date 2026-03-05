@@ -1,11 +1,14 @@
 #pragma once
-#include "IParser.h"
 #include <memory>
+#include <unordered_map>
+#include <string>
+
+#include "../FrameInfo.h"
+#include "../AnimationInfo.h"
 
 namespace REC
 {
-	// TODO: complete implementation
-	class JSONParser final : public IParser
+	class JSONParser final
 	{
 	public:
 		explicit JSONParser();
@@ -16,13 +19,10 @@ namespace REC
 		JSONParser& operator= (const JSONParser&) = delete;
 		JSONParser& operator= (const JSONParser&&) = delete;
 
-		virtual bool LoadFromFile(const std::string& path) override;
+		bool LoadFromFile(const std::string& path);
 
-		virtual std::string GetRaw(const std::string& key, const std::string& data) const override;
-		virtual int GetInt(const std::string& key, const std::string& data) const override;
-		virtual float GetFloat(const std::string& key, const std::string& data) const override;
-
-		virtual std::vector<std::string> GetKeys() const override;
+		bool GetFrames(std::unordered_map<std::string, FrameInfo>& out);
+		bool GetAnimations(std::unordered_map<std::string, AnimationInfo>& out);
 
 	private:
 		class Impl;

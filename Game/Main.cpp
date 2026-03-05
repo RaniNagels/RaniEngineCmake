@@ -19,7 +19,7 @@
 #include "../Engine/inc/SpriteDescriptor.h"
 #include "../Engine/inc/Components/GridComponent.h"
 #include "../Engine/inc/Components/DebugGridRenderComponent.h"
-#include <Components/TrashTheCacheRenderComponent.h>
+#include <Components/AnimatedSpriteComponent.h>
 
 namespace fs = std::filesystem;
 
@@ -63,12 +63,10 @@ static void load(REC::Engine* engine)
 	debugFont.size = uint8_t(20);
 	infos.emplace_back(&debugFont);
 
-	REC::SpriteDataResourceCreateInfo spriteDataFile{};
-	spriteDataFile.name = "generalSpritesData";
-	spriteDataFile.filePath = "characterSpritesData.csv";
-	spriteDataFile.type = REC::FileResourceCreateInfo::FileType::CSV;
-	spriteDataFile.separator = ';';
-	infos.emplace_back(&spriteDataFile);
+	REC::FileResourceCreateInfo dataFile{};
+	dataFile.name = "dataFile";
+	dataFile.filePath = "characterFramesData.Json";
+	infos.emplace_back(&dataFile);
 	
 	engine->AddResources(infos);
 
@@ -84,11 +82,12 @@ static void load(REC::Engine* engine)
 
 	REC::SpriteDescriptor backdrop{};
 	backdrop.drawHeight = uint16_t(grid.cellHeight)*uint16_t(grid.rows);
-	backdrop.dataResourceFile = "generalSpritesData";
+	backdrop.dataResourceFile = "dataFile";
 	backdrop.spriteDataKey = "background";
+	backdrop.textureKey = "background";
 
 	auto go = scene->CreateGameObject(0.f, 80.f);
-	go->AddComponent<REC::SpriteRenderComponent>("background", backdrop);
+	go->AddComponent<REC::SpriteRenderComponent>(backdrop);
 	go->AddComponent<REC::GridComponent>(grid);
 	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
 
@@ -106,26 +105,39 @@ static void load(REC::Engine* engine)
 
 	REC::SpriteDescriptor character1{};
 	character1.drawHeight = 50;
-	character1.dataResourceFile = "generalSpritesData";
-	character1.spriteDataKey = "bomberman_walk_right_2";
+	character1.textureKey = "generalSprites";
+
+	REC::AnimationDescriptor animation1{};
+	animation1.dataResourceFile = "dataFile";
+	animation1.animationKey = "bomberman_walk_left";
+	animation1.startOnStartup = true;
 
 	auto parent = scene->CreateGameObject(200.f, 200.f); 
-	parent->AddComponent<REC::SpriteRenderComponent>("generalSprites", character1);
-	parent->AddComponent<REC::RotatorComponent>(-3.f);
+	parent->AddComponent<REC::SpriteRenderComponent>(character1);
+	parent->AddComponent<REC::AnimatedSpriteComponent>(animation1);
 	parent->SetParent(root, true);
 
 	REC::SpriteDescriptor character2{};
 	character2.drawHeight = 50;
-	character2.dataResourceFile = "generalSpritesData";
-	character2.spriteDataKey = "balloom";
+	//character2.dataResourceFile = "dataFile";
+	//character2.spriteDataKey = "balloom";
+	character2.textureKey = "generalSprites";
+
+	REC::AnimationDescriptor animation2{};
+	animation2.dataResourceFile = "dataFile";
+	animation2.animationKey = "balloom_look_left";
+	animation2.startOnStartup = true;
 	
 	auto child = scene->CreateGameObject(50.f, 50.f); 
-	child->AddComponent<REC::SpriteRenderComponent>("generalSprites", character2);
-	child->AddComponent<REC::RotatorComponent>(3.f);
+	child->AddComponent<REC::SpriteRenderComponent>(character2);
+	child->AddComponent<REC::AnimatedSpriteComponent>(animation2);
 	child->SetParent(parent);
 
-	auto trashTheCash = scene->CreateGameObject(); 
-	trashTheCash->AddComponent<REC::TrashTheCacheRenderComponent>();
+	// === INPUT =======================================================================================
+	//auto* ia = engine->CreateInputAction();
+	//ia->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_0, REC::ButtonState::Down);
+	//ia->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_U, REC::ButtonState::Up);
+	//ia->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keypad_5, REC::ButtonState::Pressed);
 }
 
 int main(int, char*[]) 
