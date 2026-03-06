@@ -10,7 +10,6 @@ namespace REC
 		uint16_t drawHeight = 0; // the desired height of the drawn sprite, not the actual height of the texture
 		uint16_t drawWidth = 0; // the desired widht of the drawn sprite, not the actual width of the texture
 
-		std::string frameFileKey{}; // the file that stores the FrameInfo
 		std::string frameKey{}; // the key used to store the specific FrameInfo
 		std::string textureKey{};
 
@@ -23,7 +22,6 @@ namespace REC
 	struct AnimationDescriptor final
 	{
 		// this class will overwrite the spriteddata key of the SpriteDescriptor
-		std::string animationFileKey{};
 		std::string animationKey{};
 		bool startOnStartup{ true };
 	};

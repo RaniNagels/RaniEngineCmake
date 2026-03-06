@@ -29,7 +29,8 @@ namespace REC
 		Texture2D* RequestTexture(const std::string& textureName);
 
 		void SetFrame(const FrameInfo* info);
-		FrameInfo* RequestFrameInfo(const std::string& file, const std::string& key);
+		FrameInfo* RequestFrameInfo(const std::string& key);
+
 	private:
 		Texture2D* m_pTexture;
 		SpriteDescriptor m_Descriptor;

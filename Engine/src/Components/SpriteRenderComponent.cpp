@@ -31,7 +31,7 @@ REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const Sprit
 {
 	m_pTexture = RequestTexture(descriptor.textureKey);
 	if (!m_Descriptor.frameKey.empty())
-		m_pFrameInfo = RequestFrameInfo(m_Descriptor.frameFileKey, m_Descriptor.frameKey);
+		m_pFrameInfo = RequestFrameInfo(m_Descriptor.frameKey);
 	else m_pFrameInfo = nullptr;
 }
 
@@ -110,9 +110,9 @@ void REC::SpriteRenderComponent::SetFrame(const FrameInfo* info)
 		m_pFrameInfo = info;
 }
 
-REC::FrameInfo* REC::SpriteRenderComponent::RequestFrameInfo(const std::string& file, const std::string& key)
+REC::FrameInfo* REC::SpriteRenderComponent::RequestFrameInfo(const std::string& key)
 {
-	return ResourceManager::GetInstance().GetResource<FrameInfo>(file, key);
+	return ResourceManager::GetInstance().GetResource<FrameInfo>(key);
 }
 
 REC::Rect REC::SpriteRenderComponent::GetSrcRect() const

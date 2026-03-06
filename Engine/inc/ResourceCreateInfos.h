@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <cstdint>
 
 namespace REC
 {
@@ -31,9 +32,29 @@ namespace REC
 		virtual ~SoundResourceCreateInfo() = default;
 	};
 
+	// name not required
 	struct FileResourceCreateInfo : public ResourceCreateInfo
 	{
 		FileResourceCreateInfo() = default;
 		virtual ~FileResourceCreateInfo() = default;
+
+		enum class LoadTypes : uint8_t
+		{
+			Frames = 0x01,
+			Animations = 0x02
+		};
+
+		// the datatypes in the file that need to be extracted!
+		LoadTypes dataTypes{};
 	};
+
+	inline FileResourceCreateInfo::LoadTypes operator|(FileResourceCreateInfo::LoadTypes a, FileResourceCreateInfo::LoadTypes b)
+	{
+		return static_cast<FileResourceCreateInfo::LoadTypes>(static_cast<uint8_t>(a) | static_cast<uint8_t>(b));
+	}
+	
+	inline FileResourceCreateInfo::LoadTypes operator&(FileResourceCreateInfo::LoadTypes a, FileResourceCreateInfo::LoadTypes b)
+	{
+		return static_cast<FileResourceCreateInfo::LoadTypes>(static_cast<uint8_t>(a) & static_cast<uint8_t>(b));
+	}
 }

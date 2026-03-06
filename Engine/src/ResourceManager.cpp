@@ -48,22 +48,21 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 	else if (typeid(resource) == typeid(FileResourceCreateInfo))
 	{
 		const auto fdesc = static_cast<const FileResourceCreateInfo&>(resource);
-		if (m_SpriteResources.find(fdesc.name) != m_SpriteResources.end())
-		{
-			assert(false && "Name already exists in Sprite Resources");
-			return false;
-		}
 
 		if (!m_Parser->LoadFromFile(GetFullPath(fdesc.filePath)))
 			throw std::runtime_error("failed to load file");
 
-		std::unordered_map<std::string, FrameInfo> sprites{};
-		if (m_Parser->GetFrames(sprites))
-			m_SpriteResources.insert({ fdesc.name, sprites });
+		if (uint8_t(fdesc.dataTypes & FileResourceCreateInfo::LoadTypes::Frames))
+		{
+			if (!m_Parser->GetFrames(m_FrameResources))
+				throw std::runtime_error("failed to load frames");
+		}
 
-		std::unordered_map<std::string, AnimationInfo> animationData{};
-		if (m_Parser->GetAnimations(animationData))
-			m_AnimationResources.insert({ fdesc.name, animationData });
+		if (uint8_t(fdesc.dataTypes & FileResourceCreateInfo::LoadTypes::Animations))
+		{
+			if (!m_Parser->GetAnimations(m_AnimationResources))
+				throw std::runtime_error("failed to load animations");
+		}
 
 		return true;
 	}

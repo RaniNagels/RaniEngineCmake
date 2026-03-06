@@ -28,50 +28,39 @@ namespace REC
 
 		// TODO: re add const to the GetResource methods
 		template <typename T>
-		T* GetResource(const std::string& name)
+		T* GetResource(const std::string& key)
 		{
 			if constexpr (std::is_same_v<T, Texture2D>)
 			{
-				auto it = m_TextureResources.find(name);
+				auto it = m_TextureResources.find(key);
 				if (it != m_TextureResources.end())
 					return it->second.get();
+				else
+					assert(false && "Requested resource type is not supported!");
 			}
 			else if constexpr (std::is_same_v<T, Font>)
 			{
-				auto it = m_FontResources.find(name);
+				auto it = m_FontResources.find(key);
 				if (it != m_FontResources.end())
 					return it->second.get();
+				else 
+					assert(false && "Requested resource type is not supported!");
 			}
-			assert(false && "Requested resource type is not supported!");
-			return nullptr;
-		}
-
-		template <typename T>
-		T* GetResource(const std::string& filename, const std::string& key)
-		{
-			if constexpr (std::is_same_v<T, FrameInfo>)
+			else if constexpr (std::is_same_v<T, FrameInfo>)
 			{
-				auto fileIt = m_SpriteResources.find(filename);
-				if (fileIt != m_SpriteResources.end())
-				{
-					auto spriteIt = fileIt->second.find(key);
-					if (spriteIt != fileIt->second.end())
-						return &spriteIt->second;
-					else
-						assert(false && "Requested Key is not found");
-				}
+				auto it = m_FrameResources.find(key);
+				if (it != m_FrameResources.end())
+					return &it->second;
+				else
+					assert(false && "Requested resource type is not supported!");
 			}
 			else if constexpr (std::is_same_v<T, AnimationInfo>)
 			{
-				auto fileIt = m_AnimationResources.find(filename);
-				if (fileIt != m_AnimationResources.end())
-				{
-					auto aniIt = fileIt->second.find(key);
-					if (aniIt != fileIt->second.end())
-						return &aniIt->second;
-					else
-						assert(false && "Requested Key is not found");
-				}
+				auto it = m_AnimationResources.find(key);
+				if (it != m_AnimationResources.end())
+					return &it->second;
+				else
+					assert(false && "Requested resource type is not supported!");
 			}
 			assert(false && "Requested resource type is not supported!");
 			return nullptr;
@@ -86,9 +75,8 @@ namespace REC
 		std::unordered_map<std::string, std::unique_ptr<Texture2D>> m_TextureResources{};
 		std::unordered_map<std::string, std::unique_ptr<Font>> m_FontResources{};
 
-		//                  filekey                           key
-		std::unordered_map<std::string, std::unordered_map<std::string, FrameInfo>> m_SpriteResources{};
-		std::unordered_map<std::string, std::unordered_map<std::string, AnimationInfo>> m_AnimationResources{};
+		std::unordered_map<std::string, FrameInfo> m_FrameResources{};
+		std::unordered_map<std::string, AnimationInfo> m_AnimationResources{};
 
 		std::unique_ptr<JSONParser> m_Parser{};
 

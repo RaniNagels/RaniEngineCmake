@@ -64,13 +64,13 @@ static void load(REC::Engine* engine)
 	infos.emplace_back(&debugFont);
 
 	REC::FileResourceCreateInfo dataFile{};
-	dataFile.name = "dataFile";
 	dataFile.filePath = "characterFramesData.Json";
+	dataFile.dataTypes = REC::FileResourceCreateInfo::LoadTypes::Frames | REC::FileResourceCreateInfo::LoadTypes::Animations;
 	infos.emplace_back(&dataFile);
 
 	REC::FileResourceCreateInfo titleScreenDataFile{};
-	titleScreenDataFile.name = "titleScreenDataFile";
 	titleScreenDataFile.filePath = "TitleScreenFramesData.json";
+	titleScreenDataFile.dataTypes = REC::FileResourceCreateInfo::LoadTypes::Frames;
 	infos.emplace_back(&titleScreenDataFile);
 
 	REC::TextureResourceCreateInfo titleScreen{};
@@ -103,7 +103,6 @@ static void load(REC::Engine* engine)
 
 	REC::SpriteDescriptor backdrop{};
 	backdrop.drawHeight = uint16_t(grid.cellHeight)*uint16_t(grid.rows);
-	backdrop.frameFileKey = "dataFile";
 	backdrop.frameKey = "background";
 	backdrop.textureKey = "background";
 
@@ -129,7 +128,6 @@ static void load(REC::Engine* engine)
 	character1.textureKey = "generalSprites";
 
 	REC::AnimationDescriptor animation1{};
-	animation1.animationFileKey = "dataFile";
 	animation1.animationKey = "bomberman_walk_left";
 	animation1.startOnStartup = true;
 
@@ -143,7 +141,6 @@ static void load(REC::Engine* engine)
 	character2.textureKey = "generalSprites";
 
 	REC::AnimationDescriptor animation2{};
-	animation2.animationFileKey = "dataFile";
 	animation2.animationKey = "balloom_look_left";
 	animation2.startOnStartup = true;
 	

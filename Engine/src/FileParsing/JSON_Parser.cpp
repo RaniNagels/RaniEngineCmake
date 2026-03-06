@@ -27,6 +27,11 @@ public:
 		if (frames.empty()) return false;
 		for (auto& [key, value] : frames.items())
 		{
+			if (out.find(key) != out.end())
+			{
+				assert(false && "Name already exists in frame resources");
+				continue;
+			}
 			FrameInfo info{};
 			info.textureFileKey = value["sheet"];
 			info.pixelRegion.x = value["x"];
@@ -45,6 +50,11 @@ public:
 		if (animationData.empty()) return false;
 		for (auto& [key, value] : animationData.items())
 		{
+			if (out.find(key) != out.end())
+			{
+				assert(false && "Name already exists in animation resources");
+				continue;
+			}
 			AnimationInfo info{};
 			info.animationKey = key;
 			info.duration = value["duration"];
