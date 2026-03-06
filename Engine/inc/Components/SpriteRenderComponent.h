@@ -1,7 +1,7 @@
 #pragma once
 #include "RenderComponent.h"
 #include <string>
-#include "../SpriteDescriptor.h"
+#include <ComponentDescriptors.h>
 #include "../GeneralStructs.h"
 
 namespace REC

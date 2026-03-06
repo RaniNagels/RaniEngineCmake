@@ -1,0 +1,18 @@
+{
+  "frames": {
+    "start_up_screen_1987": {
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 240,
+      "sheet": "Title Screen & Text"
+    },
+    "0": {
+      "x": 0,
+      "y": 248,
+      "w": 8,
+      "h": 8,
+      "sheet": "Title Screen & Text"
+    }
+  }
+}

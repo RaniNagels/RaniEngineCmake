@@ -1,11 +1,12 @@
 #pragma once
+#include <string>
 
 namespace REC
 {
 	struct ResourceCreateInfo
 	{
-		const char* name = ""; // the internal name for this resource. how will you refer to this resource in Game
-		const char* filePath = ""; // relative to the data folder
+		std::string name = ""; // the internal name for this resource. how will you refer to this resource in Game
+		std::string filePath = ""; // relative to the data folder
 		virtual ~ResourceCreateInfo() = default;
 	protected:
 		ResourceCreateInfo() = default;

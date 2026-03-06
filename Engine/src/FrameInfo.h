@@ -4,11 +4,10 @@
 
 namespace REC
 {
-	// this struct contains all the data loaded in from a csv file
+	// this struct contains all the data loaded in from a json file
 	struct FrameInfo final
 	{
 		Rect pixelRegion{};
-		std::string key{};
 		std::string textureFileKey{};
 	};
 }

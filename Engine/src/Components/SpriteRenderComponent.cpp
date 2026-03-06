@@ -30,8 +30,8 @@ REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const Sprit
 	, m_Descriptor{descriptor}
 {
 	m_pTexture = RequestTexture(descriptor.textureKey);
-	if (!m_Descriptor.spriteDataKey.empty())
-		m_pFrameInfo = RequestFrameInfo(m_Descriptor.dataResourceFile, m_Descriptor.spriteDataKey);
+	if (!m_Descriptor.frameKey.empty())
+		m_pFrameInfo = RequestFrameInfo(m_Descriptor.frameFileKey, m_Descriptor.frameKey);
 	else m_pFrameInfo = nullptr;
 }
 

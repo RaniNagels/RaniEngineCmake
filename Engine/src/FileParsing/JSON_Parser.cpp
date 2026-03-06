@@ -28,7 +28,6 @@ public:
 		for (auto& [key, value] : frames.items())
 		{
 			FrameInfo info{};
-			info.key = key;
 			info.textureFileKey = value["sheet"];
 			info.pixelRegion.x = value["x"];
 			info.pixelRegion.y = value["y"];

@@ -2,7 +2,6 @@
 #include <SDL3/SDL.h>
 #include "../inc/RECColor.h"
 #include "../inc/Singleton.h"
-#include "../inc/SpriteDescriptor.h"
 #include "../inc/GeneralStructs.h"
 
 namespace REC
@@ -25,9 +24,6 @@ namespace REC
 
 		void RenderLine(const Color& color, glm::vec2 start, glm::vec2 end) const;
 		void RenderRect(const Color& color, const Rect& rect, bool fill = false) const;
-
-		bool RenderPlotWindow(const std::string& windowTitle, int& sampleCount, const std::vector<float>& plotData) const;
-		void RenderPlotsWindow(const std::string& windowTitle, int& sampleCount, bool& button1, bool& button2, const std::vector<float>& plotData1, const std::vector<float>& plotData2);
 
 		SDL_Renderer* GetSDLRenderer() const;
 

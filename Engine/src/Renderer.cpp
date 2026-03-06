@@ -55,6 +55,7 @@ void REC::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	dst.y = y;
 	dst.w = width;
 	dst.h = height;
+	SDL_SetTextureScaleMode(texture.GetSDLTexture(), SDL_SCALEMODE_NEAREST);
 	SDL_RenderTexture(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
@@ -64,6 +65,7 @@ void REC::Renderer::RenderTexture(const Texture2D& texture, const Rect& textureR
 	{
 		SDL_FRect src = ToRect(textureRegion);
 		SDL_FRect dst = ToRect(screenRegion);
+		SDL_SetTextureScaleMode(texture.GetSDLTexture(), SDL_SCALEMODE_NEAREST);
 		SDL_RenderTexture(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
 	}
 	else

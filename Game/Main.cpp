@@ -16,7 +16,7 @@
 #include "../Engine/inc/EngineSettings.h"
 
 #include <filesystem>
-#include "../Engine/inc/SpriteDescriptor.h"
+#include <ComponentDescriptors.h>
 #include "../Engine/inc/Components/GridComponent.h"
 #include "../Engine/inc/Components/DebugGridRenderComponent.h"
 #include <Components/AnimatedSpriteComponent.h>
@@ -67,11 +67,32 @@ static void load(REC::Engine* engine)
 	dataFile.name = "dataFile";
 	dataFile.filePath = "characterFramesData.Json";
 	infos.emplace_back(&dataFile);
+
+	REC::FileResourceCreateInfo titleScreenDataFile{};
+	titleScreenDataFile.name = "titleScreenDataFile";
+	titleScreenDataFile.filePath = "TitleScreenFramesData.json";
+	infos.emplace_back(&titleScreenDataFile);
+
+	REC::TextureResourceCreateInfo titleScreen{};
+	titleScreen.name = "titleScreen";
+	titleScreen.filePath = "NES - Bomberman - Miscellaneous - Title Screen & Text.png";
+	infos.emplace_back(&titleScreen);
 	
 	engine->AddResources(infos);
 
 	// === SCENE =======================================================================================
 	auto* SM = engine->GetSceneManager();
+	//auto* startScreen = SM->CreateScene();
+	//
+	//REC::SpriteDescriptor startScreenBackdrop{};
+	//startScreenBackdrop.drawHeight = 750;
+	//startScreenBackdrop.dataResourceFile = "titleScreenDataFile";
+	//startScreenBackdrop.textureKey = "titleScreen";
+	//startScreenBackdrop.spriteDataKey = "start_up_screen_1987";
+	//
+	//auto* stsc = startScreen->CreateGameObject(125,0);
+	//stsc->AddComponent<REC::SpriteRenderComponent>(startScreenBackdrop);
+
 	auto* scene = SM->CreateScene();
 
 	REC::GridDescriptor grid{};
@@ -82,8 +103,8 @@ static void load(REC::Engine* engine)
 
 	REC::SpriteDescriptor backdrop{};
 	backdrop.drawHeight = uint16_t(grid.cellHeight)*uint16_t(grid.rows);
-	backdrop.dataResourceFile = "dataFile";
-	backdrop.spriteDataKey = "background";
+	backdrop.frameFileKey = "dataFile";
+	backdrop.frameKey = "background";
 	backdrop.textureKey = "background";
 
 	auto go = scene->CreateGameObject(0.f, 80.f);
@@ -108,7 +129,7 @@ static void load(REC::Engine* engine)
 	character1.textureKey = "generalSprites";
 
 	REC::AnimationDescriptor animation1{};
-	animation1.dataResourceFile = "dataFile";
+	animation1.animationFileKey = "dataFile";
 	animation1.animationKey = "bomberman_walk_left";
 	animation1.startOnStartup = true;
 
@@ -119,12 +140,10 @@ static void load(REC::Engine* engine)
 
 	REC::SpriteDescriptor character2{};
 	character2.drawHeight = 50;
-	//character2.dataResourceFile = "dataFile";
-	//character2.spriteDataKey = "balloom";
 	character2.textureKey = "generalSprites";
 
 	REC::AnimationDescriptor animation2{};
-	animation2.dataResourceFile = "dataFile";
+	animation2.animationFileKey = "dataFile";
 	animation2.animationKey = "balloom_look_left";
 	animation2.startOnStartup = true;
 	

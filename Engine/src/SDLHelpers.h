@@ -1,7 +1,6 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include "../inc/RECColor.h"
-#include "../inc/SpriteDescriptor.h"
 
 namespace REC
 {

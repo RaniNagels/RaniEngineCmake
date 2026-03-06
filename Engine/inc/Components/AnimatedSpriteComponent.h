@@ -1,7 +1,7 @@
 #pragma once
 #include <Components/Component.h>
 #include <vector>
-#include "../SpriteDescriptor.h"
+#include <ComponentDescriptors.h>
 
 namespace REC
 {
