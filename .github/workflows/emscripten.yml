@@ -68,9 +68,8 @@ jobs:
 
       - name: Prepare Artifact
         run: |
-          mkdir dist
-          cp build-web/Game/Game_web.* dist/
-          mv dist/Game_web.html dist/index.html
+          mkdir -p dist
+          cp -r build-web/Game/* dist/
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
