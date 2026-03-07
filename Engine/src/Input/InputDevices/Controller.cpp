@@ -36,6 +36,7 @@ private:
 	XINPUT_STATE m_CurrentState;
 };
 #else
+// TODO: SDL implementation
 class REC::Controller::Impl
 {
 public:
@@ -55,23 +56,29 @@ REC::Controller::~Controller() = default;
 
 void REC::Controller::ResetState()
 {
+#if defined(_WIN32)
 	m_Impl->ResetState();
+#endif
 }
 
 void REC::Controller::UpdateState(void* state)
 {
 #if defined(_WIN32)
 	m_Impl->SetCurrentState(static_cast<XINPUT_STATE*>(state));
-#endif
 
 	int buttonChanges = m_Impl->GetButtonChanges();
 	m_ButtonsPressedThisFrame = buttonChanges & m_Impl->GetCurrentButtons();
 	m_ButtonsReleasedThisFrame = buttonChanges & (~m_Impl->GetCurrentButtons());
+#endif
 }
 
 bool REC::Controller::IsPressed(Input::Controller::Button button) const
 {
+#if defined(_WIN32)
 	return  m_Impl->GetCurrentButtons() & button;
+#else
+	return false;
+#endif
 }
 
 bool REC::Controller::IsDownThisFrame(Input::Controller::Button button) const
@@ -86,9 +93,9 @@ bool REC::Controller::IsUpThisFrame(Input::Controller::Button button) const
 
 bool REC::Controller::IsRangeActive(Input::Controller::Range range) const
 {
+#if defined(_WIN32)
 	auto gamepad = m_Impl->GetCurrentGampad();
 
-	// TODO: return values of active range instead
 	switch (range)
 	{
 	case Input::Controller::Range::Gamepad_LeftStick_X:
@@ -118,6 +125,7 @@ bool REC::Controller::IsRangeActive(Input::Controller::Range range) const
 	default:
 		return false;
 	}
+#endif
 
 	return false;
 }
@@ -125,6 +133,7 @@ bool REC::Controller::IsRangeActive(Input::Controller::Range range) const
 // will return a value between -1 and 1
 float REC::Controller::GetRange(Input::Controller::Range range) const
 {
+#if defined(_WIN32)
 	auto gamepad = m_Impl->GetCurrentGampad();
 
 	constexpr float STICK_MAX{ MAXSHORT };
@@ -153,4 +162,6 @@ float REC::Controller::GetRange(Input::Controller::Range range) const
 	default:
 		throw std::runtime_error("unknown range!");
 	}
+#endif
+	return 1.f;
 }
