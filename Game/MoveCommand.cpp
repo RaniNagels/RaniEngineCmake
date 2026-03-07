@@ -22,7 +22,7 @@ void Game::MoveCommand::Execute(uint8_t controllerIndex, float inputStrength)
     glm::vec3 movement{ m_Direction, 0.f };
     movement *= m_Speed;
 
-    if (controllerIndex != -1)
+    if (controllerIndex != static_cast<uint8_t>(-1))
         movement *= inputStrength;
 
     GetGameObject()->GetTransform()->AddToLocalPosition(movement);
