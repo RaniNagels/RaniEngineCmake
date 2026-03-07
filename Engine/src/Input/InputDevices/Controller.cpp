@@ -61,7 +61,7 @@ void REC::Controller::ResetState()
 #endif
 }
 
-void REC::Controller::UpdateState(void* state)
+void REC::Controller::UpdateState([[maybe_unused]] void* state)
 {
 #if defined(_WIN32)
 	m_Impl->SetCurrentState(static_cast<XINPUT_STATE*>(state));
@@ -72,7 +72,7 @@ void REC::Controller::UpdateState(void* state)
 #endif
 }
 
-bool REC::Controller::IsPressed(Input::Controller::Button button) const
+bool REC::Controller::IsPressed([[maybe_unused]] Input::Controller::Button button) const
 {
 #if defined(_WIN32)
 	return  m_Impl->GetCurrentButtons() & button;
@@ -91,7 +91,7 @@ bool REC::Controller::IsUpThisFrame(Input::Controller::Button button) const
 	return m_ButtonsReleasedThisFrame & button;
 }
 
-bool REC::Controller::IsRangeActive(Input::Controller::Range range) const
+bool REC::Controller::IsRangeActive([[maybe_unused]] Input::Controller::Range range) const
 {
 #if defined(_WIN32)
 	auto gamepad = m_Impl->GetCurrentGampad();
@@ -131,7 +131,7 @@ bool REC::Controller::IsRangeActive(Input::Controller::Range range) const
 }
 
 // will return a value between -1 and 1
-float REC::Controller::GetRange(Input::Controller::Range range) const
+float REC::Controller::GetRange([[maybe_unused]] Input::Controller::Range range) const
 {
 #if defined(_WIN32)
 	auto gamepad = m_Impl->GetCurrentGampad();
