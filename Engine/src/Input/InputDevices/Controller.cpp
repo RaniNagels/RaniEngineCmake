@@ -162,6 +162,7 @@ float REC::Controller::GetRange(Input::Controller::Range range) const
 	default:
 		throw std::runtime_error("unknown range!");
 	}
-#endif
+#else
 	return 1.f;
+#endif
 }
