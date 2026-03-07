@@ -17,6 +17,7 @@ set(SOURCE_FILES
 	"src/Input/InputSystem.cpp"
 	"src/Input/InputDevices/Controller.cpp"
 	"src/Input/InputDevices/Keyboard.cpp"
+    #"src/Input/Backends/SDLControllerBackend.cpp"
 
     "src/FileParsing/JSON_Parser.cpp"
     
@@ -31,6 +32,12 @@ set(SOURCE_FILES
 	"src/TimeSystem.cpp"
 	"src/Window.cpp"
 )
+
+#if (NOT EMSCRIPTEN)
+#list(APPEND SOURCE_FILES
+#    "src/Input/Backends/XInputControllerBackend.cpp"
+#)
+#endif()
 
 # --- Include Libraries -------------
 include(FetchContent)

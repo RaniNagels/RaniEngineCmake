@@ -10,6 +10,7 @@ endif()
 # --- List Source Files -------------
 set(SOURCE_FILES
 	"Main.cpp"
+    "MoveCommand.cpp"
 )
 
 

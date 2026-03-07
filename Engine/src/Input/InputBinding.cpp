@@ -11,8 +11,8 @@ std::vector<REC::IInputAction*> REC::InputBinding::GetInputActions(InputActionTy
 	return outActions;
 }
 
-void REC::InputBinding::Execute(uint8_t playerIndex) const
+void REC::InputBinding::Execute(uint8_t controllerIndex, float inputStrenght) const
 {
 	for (auto& command : m_Commands)
-		command->Execute(playerIndex);
+		command->Execute(controllerIndex, inputStrenght);
 }

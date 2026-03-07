@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <RECColor.h>
 
 namespace REC
 {
@@ -24,5 +25,15 @@ namespace REC
 		// this class will overwrite the spriteddata key of the SpriteDescriptor
 		std::string animationKey{};
 		bool startOnStartup{ true };
+	};
+
+	// TODO: not yet in use
+	// describes how text shall be printed on screen
+	struct TextDescriptor final
+	{
+		bool isTextureFont{ false };
+		std::string fontKey{}; // either Font or TextureFont key
+		std::string text{}; // the text that needs to be printed
+		Color color{0,0,0}; // will be ignored if key belongs to TextureFont
 	};
 }

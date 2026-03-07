@@ -12,6 +12,8 @@ namespace REC
 		KeyboardButton
 	};
 
+	// TODO: remove or start using PlayerIndex
+	// Currently -> ControllerComponent.id, command.execute gets passed an ID of triggered controller, execute checks id with gameObject.controllerComponent.id
 	struct IInputAction
 	{
 		virtual ~IInputAction() = default;

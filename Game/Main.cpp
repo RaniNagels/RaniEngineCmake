@@ -20,6 +20,8 @@
 #include "../Engine/inc/Components/GridComponent.h"
 #include "../Engine/inc/Components/DebugGridRenderComponent.h"
 #include <Components/AnimatedSpriteComponent.h>
+#include "MoveCommand.h"
+#include <Components/ControllerComponent.h>
 
 namespace fs = std::filesystem;
 
@@ -70,7 +72,7 @@ static void load(REC::Engine* engine)
 
 	REC::FileResourceCreateInfo titleScreenDataFile{};
 	titleScreenDataFile.filePath = "TitleScreenFramesData.json";
-	titleScreenDataFile.dataTypes = REC::FileResourceCreateInfo::LoadTypes::Frames;
+	titleScreenDataFile.dataTypes = REC::FileResourceCreateInfo::LoadTypes::Frames | REC::FileResourceCreateInfo::LoadTypes::TextureFont;
 	infos.emplace_back(&titleScreenDataFile);
 
 	REC::TextureResourceCreateInfo titleScreen{};
@@ -111,17 +113,21 @@ static void load(REC::Engine* engine)
 	go->AddComponent<REC::GridComponent>(grid);
 	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
 
-	go = scene->CreateGameObject(810.f, 10.f); 
-	go->AddComponent<REC::SpriteRenderComponent>("logo", uint16_t(0), uint16_t(60));
+	//go = scene->CreateGameObject(810.f, 10.f); 
+	//go->AddComponent<REC::SpriteRenderComponent>("logo", uint16_t(0), uint16_t(60));
 
-	go = scene->CreateGameObject(280.f, 20.f);
-	go->AddComponent<REC::TextRenderComponent>("Programming 4 Assignment", "lingua36", REC::Color{ 255, 255, 0 });
+	auto instructions = scene->CreateGameObject(200.f, 20.f);
+
+	auto instructionsBalloom = scene->CreateGameObject();
+	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel20");
+	instructionsBalloom->SetParent(instructions);
+
+	auto instructionsBomberman = scene->CreateGameObject(0.f, 28.f);
+	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman", "dogicapixel20");
+	instructionsBomberman->SetParent(instructions);
 
 	go = scene->CreateGameObject(20.f, 20.f); 
 	go->AddComponent<REC::FPSComponent>("dogicapixel20");
-
-	// if this is not set as the root of the parent and child, parent will rotate around 0,0 instead
-	auto root = scene->CreateGameObject(230.f, 200.f);
 
 	REC::SpriteDescriptor character1{};
 	character1.drawHeight = 50;
@@ -134,7 +140,6 @@ static void load(REC::Engine* engine)
 	auto parent = scene->CreateGameObject(200.f, 200.f); 
 	parent->AddComponent<REC::SpriteRenderComponent>(character1);
 	parent->AddComponent<REC::AnimatedSpriteComponent>(animation1);
-	parent->SetParent(root, true);
 
 	REC::SpriteDescriptor character2{};
 	character2.drawHeight = 50;
@@ -147,13 +152,46 @@ static void load(REC::Engine* engine)
 	auto child = scene->CreateGameObject(50.f, 50.f); 
 	child->AddComponent<REC::SpriteRenderComponent>(character2);
 	child->AddComponent<REC::AnimatedSpriteComponent>(animation2);
-	child->SetParent(parent);
+	child->AddComponent<REC::ControllerComponent>(uint8_t(0));
 
 	// === INPUT =======================================================================================
-	//auto* ia = engine->CreateInputAction();
-	//ia->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_0, REC::ButtonState::Down);
-	//ia->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_U, REC::ButtonState::Up);
-	//ia->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keypad_5, REC::ButtonState::Pressed);
+	float char1_speed{ 3.f };
+
+	auto* char1_right = engine->CreateInputAction();
+	char1_right->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_D, REC::ButtonState::Pressed);
+	char1_right->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 1, 0 }, char1_speed);
+
+	auto* char1_left = engine->CreateInputAction();
+	char1_left->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_A, REC::ButtonState::Pressed);
+	char1_left->AddCommand<Game::MoveCommand>(parent, glm::vec2{ -1, 0 }, char1_speed);
+
+	auto* char1_up = engine->CreateInputAction();
+	char1_up->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_W, REC::ButtonState::Pressed);
+	char1_up->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 0, -1 }, char1_speed);
+
+	auto* char1_down = engine->CreateInputAction();
+	char1_down->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_S, REC::ButtonState::Pressed);
+	char1_down->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 0, 1 }, char1_speed);
+
+	float char2_speed{ 6.f };
+
+	auto* char2_right = engine->CreateInputAction();
+	char2_right->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Right, REC::ButtonState::Pressed);
+	char2_right->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_X);
+	char2_right->AddCommand<Game::MoveCommand>(child, glm::vec2{ 1, 0 }, char2_speed);
+
+	auto* char2_left = engine->CreateInputAction();
+	char2_left->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Left, REC::ButtonState::Pressed);
+	char2_left->AddCommand<Game::MoveCommand>(child, glm::vec2{ -1, 0 }, char2_speed);
+
+	auto* char2_up = engine->CreateInputAction();
+	char2_up->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Up, REC::ButtonState::Pressed);
+	char2_up->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_Y);
+	char2_up->AddCommand<Game::MoveCommand>(child, glm::vec2{ 0, -1 }, char2_speed);
+
+	auto* char2_down = engine->CreateInputAction();
+	char2_down->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Down, REC::ButtonState::Pressed);
+	char2_down->AddCommand<Game::MoveCommand>(child, glm::vec2{ 0, 1 }, char2_speed);
 }
 
 int main(int, char*[]) 

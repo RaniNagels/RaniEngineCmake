@@ -41,7 +41,8 @@ namespace REC
 		enum class LoadTypes : uint8_t
 		{
 			Frames = 0x01,
-			Animations = 0x02
+			Animations = 0x02,
+			TextureFont = 0x04,
 		};
 
 		// the datatypes in the file that need to be extracted!

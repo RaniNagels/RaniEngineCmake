@@ -44,7 +44,7 @@ public:
 		return true;
 	}
 
-	bool ParseAnimation(std::unordered_map<std::string, AnimationInfo>& out)
+	bool ParseAnimations(std::unordered_map<std::string, AnimationInfo>& out)
 	{
 		auto animationData = m_Json["animations"];
 		if (animationData.empty()) return false;
@@ -60,6 +60,29 @@ public:
 			info.duration = value["duration"];
 			info.frameKeys = value["frames"];
 			info.loop = value["loop"];
+
+			out.insert({ key, info });
+		}
+		return true;
+	}
+
+	bool ParseTextureFonts(std::unordered_map<std::string, TextureFontInfo>& out)
+	{
+		auto textureFontData = m_Json["texture_font"];
+		if (textureFontData.empty()) return false;
+		for (auto& [key, value] : textureFontData.items())
+		{
+			if (out.find(key) != out.end())
+			{
+				assert(false && "Name already exists in textureFont resources");
+				continue;
+			}
+			TextureFontInfo info{};
+			
+			for (auto& [character, frameKey] : value.items())
+			{
+				info.glyphs[character[0]] = frameKey;
+			}
 
 			out.insert({ key, info });
 		}
@@ -89,5 +112,10 @@ bool REC::JSONParser::GetFrames(std::unordered_map<std::string, FrameInfo>& out)
 
 bool REC::JSONParser::GetAnimations(std::unordered_map<std::string, AnimationInfo>& out)
 {
-	return m_impl->ParseAnimation(out);
+	return m_impl->ParseAnimations(out);
+}
+
+bool REC::JSONParser::GetTextureFonts(std::unordered_map<std::string, TextureFontInfo>& out)
+{
+	return m_impl->ParseTextureFonts(out);
 }

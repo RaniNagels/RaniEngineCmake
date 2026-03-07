@@ -64,6 +64,12 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 				throw std::runtime_error("failed to load animations");
 		}
 
+		if (uint8_t(fdesc.dataTypes & FileResourceCreateInfo::LoadTypes::TextureFont))
+		{
+			if (!m_Parser->GetTextureFonts(m_TextureFontResources))
+				throw std::runtime_error("failed to load texture fonts");
+		}
+
 		return true;
 	}
 	else

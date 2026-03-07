@@ -129,10 +129,12 @@ namespace REC
 		{
 			enum class Range
 			{
-				Gamepad_LeftStick, // 2 axis
-				Gamepad_RightStick, // 2 axis
-				Gamepad_LeftTrigger, // 1 axis
-				Gamepad_RightTrigger // 1 axis
+				Gamepad_LeftStick_X,
+				Gamepad_LeftStick_Y,
+				Gamepad_RightStick_X,
+				Gamepad_RightStick_Y,
+				Gamepad_LeftTrigger, 
+				Gamepad_RightTrigger 
 			};
 
 			enum class Button : uint16_t

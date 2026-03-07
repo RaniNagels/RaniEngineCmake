@@ -15,6 +15,7 @@
 #include "AnimationInfo.h"
 
 #include <FileParsing/JSON_Parser.h>
+#include "TextureFontInfo.h"
 
 namespace REC
 {
@@ -62,6 +63,14 @@ namespace REC
 				else
 					assert(false && "Requested resource type is not supported!");
 			}
+			else if constexpr (std::is_same_v<T, TextureFontInfo>)
+			{
+				auto it = m_AnimationResources.find(key);
+				if (it != m_AnimationResources.end())
+					return &it->second;
+				else
+					assert(false && "Requested resource type is not supported!");
+			}
 			assert(false && "Requested resource type is not supported!");
 			return nullptr;
 		}
@@ -77,6 +86,7 @@ namespace REC
 
 		std::unordered_map<std::string, FrameInfo> m_FrameResources{};
 		std::unordered_map<std::string, AnimationInfo> m_AnimationResources{};
+		std::unordered_map<std::string, TextureFontInfo> m_TextureFontResources{}; 
 
 		std::unique_ptr<JSONParser> m_Parser{};
 

@@ -37,7 +37,9 @@ namespace REC
 		}
 
 		std::vector<IInputAction*> GetInputActions(InputActionType type) const;
-		void Execute(uint8_t playerIndex = -1) const;
+
+		// will execute all commands
+		void Execute(uint8_t controllerIndex = -1, float inputStrength = 1.f) const;
 
 	private:
 		std::vector<std::unique_ptr<IInputAction>> m_Actions{};
