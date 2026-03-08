@@ -6,6 +6,7 @@
 
 namespace REC
 {
+	struct EngineContext;
 	class InputSystem final
 	{
 	public:
@@ -20,7 +21,7 @@ namespace REC
 		void ProcessInput();
 		bool ShouldQuit() const { return m_ShouldQuit; }
 
-		InputBinding* CreateInputBinding();
+		InputBinding* CreateInputBinding(const EngineContext& context);
 		void RemoveInputBinding(InputBinding* inputBinding);
 		void SetNumberOfActiveControllers(uint8_t num);
 

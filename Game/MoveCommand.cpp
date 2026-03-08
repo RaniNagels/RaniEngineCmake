@@ -2,8 +2,8 @@
 #include <Components/TransformComponent.h>
 #include <Components/ControllerComponent.h>
 
-Game::MoveCommand::MoveCommand(REC::GameObject* actor, glm::vec2 direction, float speed)
-	: GameObjectCommand(actor)
+Game::MoveCommand::MoveCommand(const REC::EngineContext& context, REC::GameObject* actor, glm::vec2 direction, float speed)
+	: GameObjectCommand(context, actor)
 	, m_Direction{direction}
 	, m_Speed{speed}
 {

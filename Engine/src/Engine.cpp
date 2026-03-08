@@ -34,7 +34,6 @@ void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
-#include <thread>
 
 void LoopCallback(void* arg)
 {
@@ -77,6 +76,8 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	m_pTimeSystem->SetFrameRate(60);
 	m_pSceneManager = std::make_unique<SceneManager>();
 	m_pInputSystem = std::make_unique<InputSystem>();
+
+	m_EngineContext.sceneManager = m_pSceneManager.get();
 }
 
 REC::Engine::~Engine()
@@ -129,7 +130,7 @@ void REC::Engine::AddResources(const std::vector<ResourceCreateInfo*>& resources
 	}
 }
 
-REC::InputBinding* REC::Engine::CreateInputAction()
+REC::InputBinding* REC::Engine::CreateInputBinding()
 {
-	return m_pInputSystem->CreateInputBinding();
+	return m_pInputSystem->CreateInputBinding(m_EngineContext);
 }

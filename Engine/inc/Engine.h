@@ -5,6 +5,7 @@
 #include "EngineSettings.h"
 #include "ResourceCreateInfos.h"
 #include <Input/InputBinding.h>
+#include <EngineContext.h>
 
 namespace REC
 {
@@ -33,12 +34,14 @@ namespace REC
 		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
 
 		void AddResources(const std::vector<ResourceCreateInfo*>& resources);
-		InputBinding* CreateInputAction();
+		InputBinding* CreateInputBinding();
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;
 		std::unique_ptr<Window> m_pWindow;
 		std::unique_ptr<SceneManager> m_pSceneManager;
 		std::unique_ptr<InputSystem> m_pInputSystem;
+
+		EngineContext m_EngineContext{};
 	};
 }

@@ -21,3 +21,9 @@ REC::Scene* REC::SceneManager::CreateScene()
 
 	return m_scenes.back().get();
 }
+
+void REC::SceneManager::SetActiveScene(Scene* scene)
+{
+	if (scene != nullptr)
+		m_pActiveScene = scene;
+}

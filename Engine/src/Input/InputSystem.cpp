@@ -11,6 +11,7 @@
 #endif
 
 #include <cmath>
+#include <EngineContext.h>
 
 class REC::InputSystem::Impl
 {
@@ -137,9 +138,9 @@ void REC::InputSystem::ProcessInput()
 	HandleInput();
 }
 
-REC::InputBinding* REC::InputSystem::CreateInputBinding()
+REC::InputBinding* REC::InputSystem::CreateInputBinding(const EngineContext& context)
 {
-	return m_Bindings.emplace_back(std::make_unique<InputBinding>()).get();
+	return m_Bindings.emplace_back(std::make_unique<InputBinding>(context)).get();
 }
 
 void REC::InputSystem::RemoveInputBinding(InputBinding* inputBinding)
@@ -148,6 +149,11 @@ void REC::InputSystem::RemoveInputBinding(InputBinding* inputBinding)
 		{
 			return binding.get() == inputBinding;
 		});
+}
+
+void REC::InputSystem::SetNumberOfActiveControllers(uint8_t)
+{
+	// TODO implement
 }
 
 void REC::InputSystem::HandleInput()
@@ -205,7 +211,6 @@ void REC::InputSystem::HandleInput()
 			}
 
 			// --- Controller - Ranges -------------------------------------------------------------------
-			// TODO: currently only check if range is active, does not pass the value (yet)
 			actions = binding->GetInputActions(InputActionType::ControllerRange);
 			for (auto* action : actions)
 			{

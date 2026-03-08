@@ -16,7 +16,7 @@ namespace REC
 	class InputBinding final
 	{
 	public:
-		explicit InputBinding() = default;
+		explicit InputBinding(const EngineContext& context): m_Context{context}{}
 		~InputBinding() = default;
 
 		InputBinding(const InputBinding& other) = delete;
@@ -27,7 +27,7 @@ namespace REC
 		template <Command C, typename... Args>
 		void AddCommand(Args&&... args)
 		{
-			m_Commands.emplace_back(std::make_unique<C>(std::forward<Args>(args)...));
+			m_Commands.emplace_back(std::make_unique<C>(m_Context, std::forward<Args>(args)...));
 		}
 
 		template <Action A, typename... Args>
@@ -44,5 +44,7 @@ namespace REC
 	private:
 		std::vector<std::unique_ptr<IInputAction>> m_Actions{};
 		std::vector<std::unique_ptr<ICommand>> m_Commands{};
+
+		EngineContext m_Context;
 	};
 }

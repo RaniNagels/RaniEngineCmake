@@ -23,7 +23,8 @@ namespace REC
 		void Render();
 
 		Scene* CreateScene();
-		void SetActiveScene(Scene* scene) { m_pActiveScene = scene; }
+		Scene* GetActiveScene() const { return m_pActiveScene; }
+		void SetActiveScene(Scene* scene);
 
 	private:
 		std::vector<std::unique_ptr<Scene>> m_scenes{};
