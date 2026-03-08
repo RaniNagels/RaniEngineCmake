@@ -20,7 +20,7 @@ namespace REC
 
 		virtual void Execute(uint8_t controllerIndex = -1, float inputStrength = 1.f) override;
 	private:
-		Scene* m_FromScene;
 		Scene* m_ToScene;
+		Scene* m_FromScene;
 	};
 }
