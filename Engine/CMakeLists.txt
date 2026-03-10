@@ -20,7 +20,7 @@ set(SOURCE_FILES
 
     "src/FileParsing/JSON_Parser.cpp"
     
-    "src/ChangeSceneCommand.cpp"
+    "src/Commands/ChangeSceneCommand.cpp"
 	"src/Font.cpp"
 	"src/GameObject.cpp"
 	"src/Engine.cpp"

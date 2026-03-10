@@ -22,7 +22,8 @@
 #include <Components/AnimatedSpriteComponent.h>
 #include "MoveCommand.h"
 #include <Components/ControllerComponent.h>
-#include <ChangeSceneCommand.h>
+#include <Commands/ChangeSceneCommand.h>
+#include <Input/InputSystem.h>
 
 namespace fs = std::filesystem;
 
@@ -158,48 +159,51 @@ static void load(REC::Engine* engine)
 	child->AddComponent<REC::ControllerComponent>(uint8_t(0));
 
 	// === INPUT =======================================================================================
+	auto* input = engine->GetInputSystem();
+	input->SetNumberOfActiveControllers(1);
+
 	float char1_speed{ 3.f };
 
-	auto* char1_right = engine->CreateInputBinding();
+	auto* char1_right = input->CreateInputBinding();
 	char1_right->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_D, REC::ButtonState::Pressed);
 	char1_right->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 1, 0 }, char1_speed);
 
-	auto* char1_left = engine->CreateInputBinding();
+	auto* char1_left = input->CreateInputBinding();
 	char1_left->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_A, REC::ButtonState::Pressed);
 	char1_left->AddCommand<Game::MoveCommand>(parent, glm::vec2{ -1, 0 }, char1_speed);
 
-	auto* char1_up = engine->CreateInputBinding();
+	auto* char1_up = input->CreateInputBinding();
 	char1_up->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_W, REC::ButtonState::Pressed);
 	char1_up->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 0, -1 }, char1_speed);
 
-	auto* char1_down = engine->CreateInputBinding();
+	auto* char1_down = input->CreateInputBinding();
 	char1_down->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_S, REC::ButtonState::Pressed);
 	char1_down->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 0, 1 }, char1_speed);
 
 	float char2_speed{ char1_speed*2 };
 
-	auto* char2_right = engine->CreateInputBinding();
+	auto* char2_right = input->CreateInputBinding();
 	char2_right->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Right, REC::ButtonState::Pressed);
 	char2_right->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_X);
 	char2_right->AddCommand<Game::MoveCommand>(child, glm::vec2{ 1, 0 }, char2_speed);
 
-	auto* char2_left = engine->CreateInputBinding();
+	auto* char2_left = input->CreateInputBinding();
 	char2_left->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Left, REC::ButtonState::Pressed);
 	char2_left->AddCommand<Game::MoveCommand>(child, glm::vec2{ -1, 0 }, char2_speed);
 
-	auto* char2_up = engine->CreateInputBinding();
+	auto* char2_up = input->CreateInputBinding();
 	char2_up->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Up, REC::ButtonState::Pressed);
 	char2_up->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_Y);
 	char2_up->AddCommand<Game::MoveCommand>(child, glm::vec2{ 0, -1 }, char2_speed);
 
-	auto* char2_down = engine->CreateInputBinding();
+	auto* char2_down = input->CreateInputBinding();
 	char2_down->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Down, REC::ButtonState::Pressed);
 	char2_down->AddCommand<Game::MoveCommand>(child, glm::vec2{ 0, 1 }, char2_speed);
 
-	auto* changeScene = engine->CreateInputBinding();
+	auto* changeScene = input->CreateInputBinding();
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_5, REC::ButtonState::Up);
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keypad_5, REC::ButtonState::Up);
-	changeScene->AddCommand<REC::ChangeSceneCommand>(scene, startScreen);
+	changeScene->AddCommand<REC::ChangeSceneCommand>(engine->GetEngineContext(), scene, startScreen);
 }
 
 int main(int, char*[]) 

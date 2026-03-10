@@ -6,7 +6,8 @@
 
 namespace REC
 {
-	struct EngineContext;
+	class Controller;
+
 	class InputSystem final
 	{
 	public:
@@ -21,12 +22,15 @@ namespace REC
 		void ProcessInput();
 		bool ShouldQuit() const { return m_ShouldQuit; }
 
-		InputBinding* CreateInputBinding(const EngineContext& context);
+		InputBinding* CreateInputBinding();
 		void RemoveInputBinding(InputBinding* inputBinding);
 		void SetNumberOfActiveControllers(uint8_t num);
 
 	private:
 		void HandleInput();
+		void HandleKeyboard(InputBinding* binding);
+		void HandleControllerButtons(InputBinding* binding, Controller* controller);
+		void HandleControllerRanges(InputBinding* binding, Controller* controller);
 
 		class Impl;
 		std::unique_ptr<Impl> m_Impl;

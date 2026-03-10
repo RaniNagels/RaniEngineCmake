@@ -45,6 +45,7 @@ not required:
 The GameObject is heavily component based.
 Each type of component can only exist ones. so one sprite component and/or one text component even though the text component inherits from the spritecomponent.
 Upon Creating a new GameObject a TransformComponent is automatically created in the constructor of the GameObject. and the GameObject has a GetTransform() Method for easy and fast access.
+To Create Controller Input Bindings, the referenced gameobject must have a ControllerComponent specifing the controller index it will listen to.
 
 ## NamingConventions
 I use a lot of Vulkan terminology:

@@ -33,8 +33,9 @@ namespace REC
 		SceneManager* GetSceneManager() const { return m_pSceneManager.get(); }
 		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
 
+		const EngineContext& GetEngineContext() const { return m_EngineContext; }
+
 		void AddResources(const std::vector<ResourceCreateInfo*>& resources);
-		InputBinding* CreateInputBinding();
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;

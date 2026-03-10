@@ -1,13 +1,13 @@
-#include <ChangeSceneCommand.h>
+#include <Commands/ChangeSceneCommand.h>
 
 REC::ChangeSceneCommand::ChangeSceneCommand(const EngineContext& context, Scene* toScene, Scene* fromScene)
-	: ICommand(context)
+	: EngineCommand(context)
 	, m_ToScene{toScene}
 	, m_FromScene{fromScene}
 {
 }
 
-void REC::ChangeSceneCommand::Execute(uint8_t, float)
+void REC::ChangeSceneCommand::Execute()
 {
 	auto* SM = GetContext()->sceneManager;
 	if (m_FromScene == nullptr || SM->GetActiveScene() == m_FromScene)

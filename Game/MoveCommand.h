@@ -1,16 +1,16 @@
 #pragma once
-#include <ICommand.h>
+#include <Commands/ICommand.h>
 
 // TODO: change game namespace
 namespace Game
 {
-	class MoveCommand final : public REC::GameObjectCommand
+	class MoveCommand final : public REC::GameObjectInputCommand
 	{
 	public:
-		explicit MoveCommand(const REC::EngineContext& context, REC::GameObject* actor, glm::vec2 direction, float speed);
+		explicit MoveCommand(REC::GameObject* actor, glm::vec2 direction, float speed);
 		~MoveCommand() = default;
 
-		virtual void Execute(uint8_t controllerIndex = -1, float inputStrength = 1.f) override;
+		virtual void Execute() override;
 
 	private:
 		glm::vec2 m_Direction;

@@ -1,5 +1,5 @@
 #pragma once
-#include <ICommand.h>
+#include <Commands/ICommand.h>
 #include <Input/InputAction.h>
 #include <vector>
 #include <memory>
@@ -16,7 +16,7 @@ namespace REC
 	class InputBinding final
 	{
 	public:
-		explicit InputBinding(const EngineContext& context): m_Context{context}{}
+		explicit InputBinding() = default;
 		~InputBinding() = default;
 
 		InputBinding(const InputBinding& other) = delete;
@@ -27,7 +27,7 @@ namespace REC
 		template <Command C, typename... Args>
 		void AddCommand(Args&&... args)
 		{
-			m_Commands.emplace_back(std::make_unique<C>(m_Context, std::forward<Args>(args)...));
+			m_Commands.emplace_back(std::make_unique<C>(std::forward<Args>(args)...));
 		}
 
 		template <Action A, typename... Args>
@@ -44,7 +44,5 @@ namespace REC
 	private:
 		std::vector<std::unique_ptr<IInputAction>> m_Actions{};
 		std::vector<std::unique_ptr<ICommand>> m_Commands{};
-
-		EngineContext m_Context;
 	};
 }

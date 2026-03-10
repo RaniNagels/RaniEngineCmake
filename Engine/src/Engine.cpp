@@ -129,8 +129,3 @@ void REC::Engine::AddResources(const std::vector<ResourceCreateInfo*>& resources
 		RM.AddResource(*resource);
 	}
 }
-
-REC::InputBinding* REC::Engine::CreateInputBinding()
-{
-	return m_pInputSystem->CreateInputBinding(m_EngineContext);
-}

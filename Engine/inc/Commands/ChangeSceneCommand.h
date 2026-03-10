@@ -1,11 +1,11 @@
 #pragma once
-#include <ICommand.h>
+#include <Commands/ICommand.h>
 #include <Scene.h>
 #include <SceneManager.h>
 
 namespace REC
 {
-	class ChangeSceneCommand : public ICommand
+	class ChangeSceneCommand : public EngineCommand
 	{
 	public:
 		// if fromScene is nullptr => from any scene to new one
@@ -18,7 +18,7 @@ namespace REC
 		ChangeSceneCommand& operator= (const ChangeSceneCommand&) = delete;
 		ChangeSceneCommand& operator= (const ChangeSceneCommand&&) = delete;
 
-		virtual void Execute(uint8_t controllerIndex = -1, float inputStrength = 1.f) override;
+		virtual void Execute() override;
 	private:
 		Scene* m_ToScene;
 		Scene* m_FromScene;
