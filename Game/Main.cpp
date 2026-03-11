@@ -1,3 +1,5 @@
+#pragma once
+
 #if _DEBUG && __has_include(<vld.h>)
 #include <vld.h>
 #endif
@@ -68,7 +70,7 @@ static void load(REC::Engine* engine)
 	infos.emplace_back(&debugFont);
 
 	REC::FileResourceCreateInfo dataFile{};
-	dataFile.filePath = "characterFramesData.Json";
+	dataFile.filePath = "characterFramesData.json";
 	dataFile.dataTypes = REC::FileResourceCreateInfo::LoadTypes::Frames | REC::FileResourceCreateInfo::LoadTypes::Animations;
 	infos.emplace_back(&dataFile);
 
