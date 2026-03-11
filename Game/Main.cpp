@@ -1,5 +1,3 @@
-#pragma once
-
 #if _DEBUG && __has_include(<vld.h>)
 #include <vld.h>
 #endif
