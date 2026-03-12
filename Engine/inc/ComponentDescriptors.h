@@ -36,4 +36,12 @@ namespace REC
 		std::string text{}; // the text that needs to be printed
 		Color color{0,0,0}; // will be ignored if key belongs to TextureFont
 	};
+
+	struct LabeledStatDescriptor final
+	{
+		std::string fontkey{};
+		std::string label{};
+		int initialValue{};
+		Color color{ 0,0,0 };
+	};
 }

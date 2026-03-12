@@ -56,6 +56,8 @@ elseif(WIN32)
   # Set working directory to output folder
   set_target_properties(${TARGET_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:${TARGET_NAME}>")
 
+  set(FIND_STEAMWORKS_SDK_FILE ${CMAKE_SOURCE_DIR}/cmake/steam/FindSteamworks.cmake)
+
   if(Steamworks_FOUND)
     target_link_libraries("${TARGET_NAME}" PUBLIC Steamworks::Steamworks)
     target_compile_definitions(${TARGET_NAME} PRIVATE USE_STEAMWORKS)

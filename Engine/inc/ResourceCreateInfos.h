@@ -9,6 +9,9 @@ namespace REC
 		std::string name = ""; // the internal name for this resource. how will you refer to this resource in Game
 		std::string filePath = ""; // relative to the data folder
 		virtual ~ResourceCreateInfo() = default;
+
+		// TODO: implement create virtual function to avoid creating everything in the resourceManager
+		//virtual void Create() = 0;
 	protected:
 		ResourceCreateInfo() = default;
 	};

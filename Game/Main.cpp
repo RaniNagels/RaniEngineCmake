@@ -26,8 +26,11 @@
 #include <Components/ControllerComponent.h>
 #include <Commands/ChangeSceneCommand.h>
 #include <Input/InputSystem.h>
+#include <Components/LabeledStatComponent.h>
 
 namespace fs = std::filesystem;
+
+void CreateUI(REC::Scene* scene);
 
 static void load(REC::Engine* engine)
 {
@@ -42,6 +45,7 @@ static void load(REC::Engine* engine)
 	// === RESOURCES ===================================================================================
 	std::vector<REC::ResourceCreateInfo*> infos{};
 	// !! double check all filepaths !! Json != json (will not give an error in MSCV or clang, but will cause vague JavaScript error)
+	// TODO: pass ownership instead
 
 	REC::TextureResourceCreateInfo background{};
 	background.name = "background";
@@ -53,11 +57,6 @@ static void load(REC::Engine* engine)
 	generalSprites.filePath = "NES - Bomberman - Miscellaneous - General Sprites.png";
 	infos.emplace_back(&generalSprites);
 
-	REC::TextureResourceCreateInfo logo{};
-	logo.name = "logo";
-	logo.filePath = "logo.png";
-	infos.emplace_back(&logo);
-
 	REC::FontResourceCreateInfo font{};
 	font.name = "lingua36";
 	font.filePath = "Lingua.otf";
@@ -65,10 +64,16 @@ static void load(REC::Engine* engine)
 	infos.emplace_back(&font);
 
 	REC::FontResourceCreateInfo debugFont{};
-	debugFont.name = "dogicapixel20";
+	debugFont.name = "dogicapixel16";
 	debugFont.filePath = "dogicapixel.otf";
-	debugFont.size = uint8_t(20);
+	debugFont.size = uint8_t(16);
 	infos.emplace_back(&debugFont);
+
+	REC::FontResourceCreateInfo debugFont20{};
+	debugFont20.name = "dogicapixel20";
+	debugFont20.filePath = "dogicapixel.otf";
+	debugFont20.size = uint8_t(20);
+	infos.emplace_back(&debugFont20);
 
 	REC::FileResourceCreateInfo dataFile{};
 	dataFile.filePath = "characterFramesData.json";
@@ -105,8 +110,8 @@ static void load(REC::Engine* engine)
 	auto* scene = SM->CreateScene();
 
 	REC::GridDescriptor grid{};
-	grid.cellHeight = uint8_t(51);
-	grid.cellWidth = uint8_t(51);
+	grid.cellHeight = uint8_t(45); //51
+	grid.cellWidth = uint8_t(45);  //51
 	grid.rows = uint8_t(13);
 	grid.cols = uint8_t(31);
 
@@ -120,21 +125,20 @@ static void load(REC::Engine* engine)
 	go->AddComponent<REC::GridComponent>(grid);
 	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
 
-	//go = scene->CreateGameObject(810.f, 10.f); 
-	//go->AddComponent<REC::SpriteRenderComponent>("logo", uint16_t(0), uint16_t(60));
-
-	auto instructions = scene->CreateGameObject(200.f, 20.f);
-
+	auto instructions = scene->CreateGameObject(20.f, 20.f);
+	
 	auto instructionsBalloom = scene->CreateGameObject();
-	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel20");
+	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel16");
 	instructionsBalloom->SetParent(instructions);
-
+	
 	auto instructionsBomberman = scene->CreateGameObject(0.f, 28.f);
-	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman", "dogicapixel20");
+	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman", "dogicapixel16");
 	instructionsBomberman->SetParent(instructions);
 
-	go = scene->CreateGameObject(20.f, 20.f); 
-	go->AddComponent<REC::FPSComponent>("dogicapixel20");
+	CreateUI(scene);
+
+	auto fps = scene->CreateGameObject(880.f, 20.f); 
+	fps->AddComponent<REC::FPSComponent>("dogicapixel20");
 
 	REC::SpriteDescriptor character1{};
 	character1.drawHeight = 50;
@@ -156,7 +160,7 @@ static void load(REC::Engine* engine)
 	animation2.animationKey = "balloom_look_left";
 	animation2.startOnStartup = true;
 	
-	auto child = scene->CreateGameObject(50.f, 50.f); 
+	auto child = scene->CreateGameObject(350.f, 250.f); 
 	child->AddComponent<REC::SpriteRenderComponent>(character2);
 	child->AddComponent<REC::AnimatedSpriteComponent>(animation2);
 	child->AddComponent<REC::ControllerComponent>(uint8_t(0));
@@ -207,6 +211,51 @@ static void load(REC::Engine* engine)
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_5, REC::ButtonState::Up);
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keypad_5, REC::ButtonState::Up);
 	changeScene->AddCommand<REC::ChangeSceneCommand>(engine->GetEngineContext(), scene, startScreen);
+}
+
+void CreateUI(REC::Scene* scene)
+{
+	auto UI = scene->CreateGameObject(20.f, 680.f);
+
+	REC::LabeledStatDescriptor livesStatDesciptor{};
+	livesStatDesciptor.fontkey = "dogicapixel16";
+	livesStatDesciptor.label = "   Remaining Lives";
+	livesStatDesciptor.initialValue = 3;
+	livesStatDesciptor.color = REC::Color{ 255,255,255 };
+
+	REC::SpriteDescriptor bombermanIcon{};
+	bombermanIcon.drawHeight = 20;
+	bombermanIcon.textureKey = "generalSprites";
+	bombermanIcon.frameKey = "bomberman_walk_front_0";
+
+	auto bombermanUILives = scene->CreateGameObject();
+	bombermanUILives->AddComponent<REC::LabeledStatComponent>(livesStatDesciptor);
+	bombermanUILives->AddComponent<REC::SpriteRenderComponent>(bombermanIcon);
+	bombermanUILives->SetParent(UI);
+
+	REC::SpriteDescriptor balloomIcon{};
+	balloomIcon.drawHeight = 20;
+	balloomIcon.textureKey = "generalSprites";
+	balloomIcon.frameKey = "balloom_look_right_0";
+
+	auto balloomUILives = scene->CreateGameObject(0.f, 30.f);
+	balloomUILives->AddComponent<REC::LabeledStatComponent>(livesStatDesciptor);
+	balloomUILives->AddComponent<REC::SpriteRenderComponent>(balloomIcon);
+	balloomUILives->SetParent(UI);
+
+	REC::LabeledStatDescriptor scoreStatDesciptor{};
+	scoreStatDesciptor.fontkey = "dogicapixel16";
+	scoreStatDesciptor.label = "Score";
+	scoreStatDesciptor.initialValue = 0;
+	scoreStatDesciptor.color = REC::Color{ 255,255,255 };
+
+	auto bombermanUIScore = scene->CreateGameObject(350.f, 0);
+	bombermanUIScore->AddComponent<REC::LabeledStatComponent>(scoreStatDesciptor);
+	bombermanUIScore->SetParent(UI);
+
+	auto balloomUIScore = scene->CreateGameObject(350.f, 30.f);
+	balloomUIScore->AddComponent<REC::LabeledStatComponent>(scoreStatDesciptor);
+	balloomUIScore->SetParent(UI);
 }
 
 int main(int, char*[]) 

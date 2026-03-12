@@ -6,6 +6,8 @@
 
 namespace REC
 {
+	// only active sccene gets rendered AND updated!
+	// TODO: create a reset function to handle switching between scenes more fluently.
 	class Scene final
 	{
 	public:

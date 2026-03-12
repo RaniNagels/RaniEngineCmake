@@ -8,6 +8,7 @@ set(SOURCE_FILES
 	"src/Components/DebugGridRenderComponent.cpp"
 	"src/Components/FPSComponent.cpp"
 	"src/Components/GridComponent.cpp"
+    "src/Components/LabeledStatComponent.cpp"
 	"src/Components/RotatorComponent.cpp"
 	"src/Components/SpriteRenderComponent.cpp"
 	"src/Components/TextRenderComponent.cpp"
