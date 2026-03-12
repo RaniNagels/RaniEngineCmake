@@ -138,10 +138,10 @@ REC::InputSystem::InputSystem() : m_Impl{std::make_unique<Impl>()} { }
 
 REC::InputSystem::~InputSystem() = default;
 
-void REC::InputSystem::ProcessInput()
+void REC::InputSystem::ProcessInput(float deltaTime)
 {
 	m_ShouldQuit = m_Impl->ProcessInput();
-	HandleInput();
+	HandleInput(deltaTime);
 }
 
 REC::InputBinding* REC::InputSystem::CreateInputBinding()
@@ -162,22 +162,22 @@ void REC::InputSystem::SetNumberOfActiveControllers(uint8_t num)
 	m_Impl->SetActiveControllers(num);
 }
 
-void REC::InputSystem::HandleInput()
+void REC::InputSystem::HandleInput(float deltaTime)
 {
 	for (auto& binding : m_Bindings)
 	{
-		HandleKeyboard(binding.get());
+		HandleKeyboard(deltaTime, binding.get());
 
 		// --- Controllers -------------------------------------------------------------------------------
 		for (auto* controller : m_Impl->GetControllers())
 		{
-			HandleControllerButtons(binding.get(), controller);
-			HandleControllerRanges(binding.get(), controller);
+			HandleControllerButtons(deltaTime, binding.get(), controller);
+			HandleControllerRanges(deltaTime, binding.get(), controller);
 		}
 	}
 }
 
-void REC::InputSystem::HandleKeyboard(InputBinding* binding)
+void REC::InputSystem::HandleKeyboard(float deltaTime, InputBinding* binding)
 {
 	auto actions = binding->GetInputActions(InputActionType::KeyboardButton);
 	for (auto* action : actions)
@@ -188,21 +188,21 @@ void REC::InputSystem::HandleKeyboard(InputBinding* binding)
 		case ButtonState::Pressed:
 			if (m_Impl->GetKeyboard()->IsPressed(keyboardAction->button) ||
 				m_Impl->GetKeyboard()->IsDownThisFrame(keyboardAction->button)) // ensure the first time it is pressed is also accounted for
-				binding->Execute();
+				binding->Execute(deltaTime);
 			break;
 		case ButtonState::Down:
 			if (m_Impl->GetKeyboard()->IsDownThisFrame(keyboardAction->button))
-				binding->Execute();
+				binding->Execute(deltaTime);
 			break;
 		case ButtonState::Up:
 			if (m_Impl->GetKeyboard()->IsUpThisFrame(keyboardAction->button))
-				binding->Execute();
+				binding->Execute(deltaTime);
 			break;
 		}
 	}
 }
 
-void REC::InputSystem::HandleControllerButtons(InputBinding* binding, Controller* controller)
+void REC::InputSystem::HandleControllerButtons(float deltaTime, InputBinding* binding, Controller* controller)
 {
 	auto actions = binding->GetInputActions(InputActionType::ControllerButton);
 	for (auto* action : actions)
@@ -213,21 +213,21 @@ void REC::InputSystem::HandleControllerButtons(InputBinding* binding, Controller
 		case ButtonState::Pressed:
 			if (controller->IsPressed(controllerButtonAction->button) || \
 				controller->IsDownThisFrame(controllerButtonAction->button)) // ensure the first time it is pressed is also accounted for
-				binding->Execute(controller->GetID());
+				binding->Execute(deltaTime, controller->GetID());
 			break;
 		case ButtonState::Down:
 			if (controller->IsDownThisFrame(controllerButtonAction->button))
-				binding->Execute(controller->GetID());
+				binding->Execute(deltaTime, controller->GetID());
 			break;
 		case ButtonState::Up:
 			if (controller->IsUpThisFrame(controllerButtonAction->button))
-				binding->Execute(controller->GetID());
+				binding->Execute(deltaTime, controller->GetID());
 			break;
 		}
 	}
 }
 
-void REC::InputSystem::HandleControllerRanges(InputBinding* binding, Controller* controller)
+void REC::InputSystem::HandleControllerRanges(float deltaTime, InputBinding* binding, Controller* controller)
 {
 	auto actions = binding->GetInputActions(InputActionType::ControllerRange);
 	for (auto* action : actions)
@@ -235,7 +235,7 @@ void REC::InputSystem::HandleControllerRanges(InputBinding* binding, Controller*
 		auto* controllerRangeAction = static_cast<ControllerRangeAction*>(action);
 		if (controller->IsRangeActive(controllerRangeAction->range))
 		{
-			binding->Execute(controller->GetID(), controller->GetRange(controllerRangeAction->range));
+			binding->Execute(deltaTime, controller->GetID(), controller->GetRange(controllerRangeAction->range));
 		}
 	}
 }

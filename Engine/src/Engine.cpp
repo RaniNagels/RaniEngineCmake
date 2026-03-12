@@ -107,7 +107,7 @@ void REC::Engine::RunOneFrame()
 {
 	m_pTimeSystem->Update();
 
-	m_pInputSystem->ProcessInput();
+	m_pInputSystem->ProcessInput(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Render();
 

@@ -15,7 +15,7 @@ namespace REC
 		ICommand() = default;
 		virtual ~ICommand() = default;
 
-		virtual void Execute() = 0;
+		virtual void Execute(float deltaTime) = 0;
 	};
 
 	class EngineCommand : public ICommand

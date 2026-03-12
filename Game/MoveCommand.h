@@ -1,6 +1,11 @@
 #pragma once
 #include <Commands/ICommand.h>
 
+namespace REC
+{
+	class ControllerComponent;
+}
+
 // TODO: change game namespace
 namespace Game
 {
@@ -10,10 +15,11 @@ namespace Game
 		explicit MoveCommand(REC::GameObject* actor, glm::vec2 direction, float speed);
 		~MoveCommand() = default;
 
-		virtual void Execute() override;
+		virtual void Execute(float deltaTime) override;
 
 	private:
 		glm::vec2 m_Direction;
 		float m_Speed;
+		REC::ControllerComponent* m_pControllerComponent;
 	};
 }

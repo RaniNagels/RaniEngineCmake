@@ -18,7 +18,7 @@ namespace REC
 		ChangeSceneCommand& operator= (const ChangeSceneCommand&) = delete;
 		ChangeSceneCommand& operator= (const ChangeSceneCommand&&) = delete;
 
-		virtual void Execute() override;
+		virtual void Execute(float deltaTime) override;
 	private:
 		Scene* m_ToScene;
 		Scene* m_FromScene;

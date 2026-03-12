@@ -19,7 +19,7 @@ namespace REC
 		InputSystem& operator=(const InputSystem& other) = delete;
 		InputSystem& operator=(InputSystem&& other) = delete;
 
-		void ProcessInput();
+		void ProcessInput(float deltaTime);
 		bool ShouldQuit() const { return m_ShouldQuit; }
 
 		InputBinding* CreateInputBinding();
@@ -27,10 +27,11 @@ namespace REC
 		void SetNumberOfActiveControllers(uint8_t num);
 
 	private:
-		void HandleInput();
-		void HandleKeyboard(InputBinding* binding);
-		void HandleControllerButtons(InputBinding* binding, Controller* controller);
-		void HandleControllerRanges(InputBinding* binding, Controller* controller);
+		// TODO: everything that is private should go into the Pimpl, splitting data like this is overcomplicating it
+		void HandleInput(float deltaTime);
+		void HandleKeyboard(float deltaTime, InputBinding* binding);
+		void HandleControllerButtons(float deltaTime, InputBinding* binding, Controller* controller);
+		void HandleControllerRanges(float deltaTime, InputBinding* binding, Controller* controller);
 
 		class Impl;
 		std::unique_ptr<Impl> m_Impl;

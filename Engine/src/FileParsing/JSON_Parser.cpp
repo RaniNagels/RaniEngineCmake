@@ -1,8 +1,6 @@
 #include "JSON_Parser.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
-#include "FrameInfo.h"
-#include "AnimationInfo.h"
 
 class REC::JSONParser::Impl
 {

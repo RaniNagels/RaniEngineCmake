@@ -12,7 +12,7 @@ std::vector<REC::IInputAction*> REC::InputBinding::GetInputActions(InputActionTy
 	return outActions;
 }
 
-void REC::InputBinding::Execute(uint8_t controllerIndex, float inputStrenght) const
+void REC::InputBinding::Execute(float deltaTime, uint8_t controllerIndex, float inputStrenght) const
 {
 	for (auto& command : m_Commands)
 	{
@@ -22,6 +22,6 @@ void REC::InputBinding::Execute(uint8_t controllerIndex, float inputStrenght) co
 			GOIC->TriggeredByController(controllerIndex);
 		}
 
-		command->Execute();
+		command->Execute(deltaTime);
 	}
 }

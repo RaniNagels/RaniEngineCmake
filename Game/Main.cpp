@@ -1,3 +1,5 @@
+// Main.cpp file cannot contain pragma once
+
 #if _DEBUG && __has_include(<vld.h>)
 #include <vld.h>
 #endif
@@ -39,6 +41,7 @@ static void load(REC::Engine* engine)
 
 	// === RESOURCES ===================================================================================
 	std::vector<REC::ResourceCreateInfo*> infos{};
+	// !! double check all filepaths !! Json != json (will not give an error in MSCV or clang, but will cause vague JavaScript error)
 
 	REC::TextureResourceCreateInfo background{};
 	background.name = "background";
@@ -162,7 +165,7 @@ static void load(REC::Engine* engine)
 	auto* input = engine->GetInputSystem();
 	input->SetNumberOfActiveControllers(1);
 
-	float char1_speed{ 3.f };
+	float char1_speed{ 100.f };
 
 	auto* char1_right = input->CreateInputBinding();
 	char1_right->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_D, REC::ButtonState::Pressed);

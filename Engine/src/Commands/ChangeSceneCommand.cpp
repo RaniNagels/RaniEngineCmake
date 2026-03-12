@@ -7,7 +7,7 @@ REC::ChangeSceneCommand::ChangeSceneCommand(const EngineContext& context, Scene*
 {
 }
 
-void REC::ChangeSceneCommand::Execute()
+void REC::ChangeSceneCommand::Execute(float)
 {
 	auto* SM = GetContext()->sceneManager;
 	if (m_FromScene == nullptr || SM->GetActiveScene() == m_FromScene)
