@@ -8,13 +8,16 @@ public:
 	bool LoadFromFile(const std::string& filePath)
 	{
 		std::ifstream f(filePath);
+	
+		return LoadFromFile(f);
+	}
 
-		if (!f.is_open())
-			return false;
+	bool LoadFromFile(std::ifstream& file)
+	{
+		if (!file.is_open()) return false;
 
-		f >> m_Json;
-		if (m_Json.empty())
-			return false;
+		file >> m_Json;
+		if (m_Json.empty()) return false;
 
 		return true;
 	}
@@ -101,6 +104,11 @@ REC::JSONParser::~JSONParser() = default;
 bool REC::JSONParser::LoadFromFile(const std::string& path)
 {
 	return m_impl->LoadFromFile(path);
+}
+
+bool REC::JSONParser::LoadFromFile(std::ifstream& file)
+{
+	return m_impl->LoadFromFile(file);
 }
 
 bool REC::JSONParser::GetFrames(std::unordered_map<std::string, FrameInfo>& out)

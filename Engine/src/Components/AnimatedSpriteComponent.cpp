@@ -9,7 +9,7 @@ REC::AnimatedSpriteComponent::AnimatedSpriteComponent(GameObject* owner, const A
 	: Component(owner)
 	, m_Descriptor{descriptor}
 {
-	m_AnimationInfo = ResourceManager::GetInstance().GetResource<AnimationInfo>( m_Descriptor.animationKey);
+	m_AnimationInfo = ResourceManager::GetInstance().GetResourceFromDataFile<AnimationInfo>( m_Descriptor.animationDataFileKey, m_Descriptor.animationKey);
 	
 	if (!GetOwner()->HasComponent<SpriteRenderComponent>())
 		throw std::runtime_error("animated sprite relies on spriteRenderComponent!");

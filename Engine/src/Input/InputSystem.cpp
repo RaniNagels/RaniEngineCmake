@@ -135,10 +135,10 @@ private:
 			HandleKeyboard(deltaTime, binding.get());
 
 			// --- Controllers -------------------------------------------------------------------------------
-			for (auto& controller : m_Controllers)
+			for (uint8_t controllerID{}; controllerID < m_AmountOfActiveControllers; ++controllerID)
 			{
-				HandleControllerButtons(deltaTime, binding.get(), controller.get());
-				HandleControllerRanges(deltaTime, binding.get(), controller.get());
+				HandleControllerButtons(deltaTime, binding.get(), m_Controllers[controllerID].get());
+				HandleControllerRanges(deltaTime, binding.get(), m_Controllers[controllerID].get());
 			}
 		}
 	}
@@ -172,21 +172,24 @@ private:
 		for (auto* action : actions)
 		{
 			auto* controllerButtonAction = static_cast<ControllerButtonAction*>(action);
-			switch (controllerButtonAction->state)
+			if (controllerButtonAction->playerIndex == controller->GetID())
 			{
-			case ButtonState::Pressed:
-				if (controller->IsPressed(controllerButtonAction->button) || \
-					controller->IsDownThisFrame(controllerButtonAction->button)) // ensure the first time it is pressed is also accounted for
-					binding->Execute(deltaTime, controller->GetID());
-				break;
-			case ButtonState::Down:
-				if (controller->IsDownThisFrame(controllerButtonAction->button))
-					binding->Execute(deltaTime, controller->GetID());
-				break;
-			case ButtonState::Up:
-				if (controller->IsUpThisFrame(controllerButtonAction->button))
-					binding->Execute(deltaTime, controller->GetID());
-				break;
+				switch (controllerButtonAction->state)
+				{
+				case ButtonState::Pressed:
+					if (controller->IsPressed(controllerButtonAction->button) || \
+						controller->IsDownThisFrame(controllerButtonAction->button)) // ensure the first time it is pressed is also accounted for
+						binding->Execute(deltaTime);
+					break;
+				case ButtonState::Down:
+					if (controller->IsDownThisFrame(controllerButtonAction->button))
+						binding->Execute(deltaTime);
+					break;
+				case ButtonState::Up:
+					if (controller->IsUpThisFrame(controllerButtonAction->button))
+						binding->Execute(deltaTime);
+					break;
+				}
 			}
 		}
 	}
@@ -196,9 +199,12 @@ private:
 		for (auto* action : actions)
 		{
 			auto* controllerRangeAction = static_cast<ControllerRangeAction*>(action);
-			if (controller->IsRangeActive(controllerRangeAction->range))
+			if (controllerRangeAction->playerIndex == controller->GetID())
 			{
-				binding->Execute(deltaTime, controller->GetID(), controller->GetRange(controllerRangeAction->range));
+				if (controller->IsRangeActive(controllerRangeAction->range))
+				{
+					binding->Execute(deltaTime, controller->GetRange(controllerRangeAction->range));
+				}
 			}
 		}
 	}

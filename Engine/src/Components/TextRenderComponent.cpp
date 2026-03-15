@@ -1,8 +1,8 @@
 #include "../../inc/Components/TextRenderComponent.h"
 #include <SDL3_ttf/SDL_ttf.h>
 #include "../Renderer.h"
-#include "../Font.h"
-#include "../Texture2D.h"
+#include "../Resources/Font.h"
+#include "../Resources/Texture2D.h"
 #include <memory>
 #include <stdexcept>
 #include "../ResourceManager.h"

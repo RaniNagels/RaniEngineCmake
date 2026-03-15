@@ -22,7 +22,8 @@
 #include "../Engine/inc/Components/GridComponent.h"
 #include "../Engine/inc/Components/DebugGridRenderComponent.h"
 #include <Components/AnimatedSpriteComponent.h>
-#include "MoveCommand.h"
+#include "Commands/MoveCommand.h"
+#include "Commands/PlaceBombCommand.h"
 #include <Components/ControllerComponent.h>
 #include <Commands/ChangeSceneCommand.h>
 #include <Input/InputSystem.h>
@@ -76,13 +77,15 @@ static void load(REC::Engine* engine)
 	infos.emplace_back(&debugFont20);
 
 	REC::FileResourceCreateInfo dataFile{};
+	dataFile.name = "characterData";
 	dataFile.filePath = "characterFramesData.json";
-	dataFile.dataTypes = REC::FileResourceCreateInfo::LoadTypes::Frames | REC::FileResourceCreateInfo::LoadTypes::Animations;
+	dataFile.dataTypes = REC::LoadTypes::Frames | REC::LoadTypes::Animations;
 	infos.emplace_back(&dataFile);
 
 	REC::FileResourceCreateInfo titleScreenDataFile{};
+	titleScreenDataFile.name = "startScreenData";
 	titleScreenDataFile.filePath = "TitleScreenFramesData.json";
-	titleScreenDataFile.dataTypes = REC::FileResourceCreateInfo::LoadTypes::Frames | REC::FileResourceCreateInfo::LoadTypes::TextureFont;
+	titleScreenDataFile.dataTypes = REC::LoadTypes::Frames | REC::LoadTypes::TextureFont;
 	infos.emplace_back(&titleScreenDataFile);
 
 	REC::TextureResourceCreateInfo titleScreen{};
@@ -99,6 +102,7 @@ static void load(REC::Engine* engine)
 	REC::SpriteDescriptor startScreenBackdrop{};
 	startScreenBackdrop.drawHeight = 750;
 	startScreenBackdrop.textureKey = "titleScreen";
+	startScreenBackdrop.frameDataFileKey = "startScreenData";
 	startScreenBackdrop.frameKey = "start_up_screen_1987";
 	
 	auto* stsc = startScreen->CreateGameObject(125,0);
@@ -117,6 +121,7 @@ static void load(REC::Engine* engine)
 
 	REC::SpriteDescriptor backdrop{};
 	backdrop.drawHeight = uint16_t(grid.cellHeight)*uint16_t(grid.rows);
+	backdrop.frameDataFileKey = "characterData";
 	backdrop.frameKey = "background";
 	backdrop.textureKey = "background";
 
@@ -142,9 +147,11 @@ static void load(REC::Engine* engine)
 
 	REC::SpriteDescriptor character1{};
 	character1.drawHeight = 50;
+	character1.frameDataFileKey = "characterData";
 	character1.textureKey = "generalSprites";
 
 	REC::AnimationDescriptor animation1{};
+	animation1.animationDataFileKey = "characterData";
 	animation1.animationKey = "bomberman_walk_left";
 	animation1.startOnStartup = true;
 
@@ -152,18 +159,21 @@ static void load(REC::Engine* engine)
 	parent->AddComponent<REC::SpriteRenderComponent>(character1);
 	parent->AddComponent<REC::AnimatedSpriteComponent>(animation1);
 
-	REC::SpriteDescriptor character2{};
-	character2.drawHeight = 50;
-	character2.textureKey = "generalSprites";
+	uint8_t balloomControllerId{ 0 };
 
-	REC::AnimationDescriptor animation2{};
-	animation2.animationKey = "balloom_look_left";
-	animation2.startOnStartup = true;
+	REC::SpriteDescriptor balloomSpriteDesc{};
+	balloomSpriteDesc.drawHeight = 50;
+	balloomSpriteDesc.frameDataFileKey = "characterData";
+	balloomSpriteDesc.textureKey = "generalSprites";
+
+	REC::AnimationDescriptor balloomAnimDesc{};
+	balloomAnimDesc.animationDataFileKey = "characterData";
+	balloomAnimDesc.animationKey = "balloom_look_left";
+	balloomAnimDesc.startOnStartup = true;
 	
-	auto child = scene->CreateGameObject(350.f, 250.f); 
-	child->AddComponent<REC::SpriteRenderComponent>(character2);
-	child->AddComponent<REC::AnimatedSpriteComponent>(animation2);
-	child->AddComponent<REC::ControllerComponent>(uint8_t(0));
+	auto balloom = scene->CreateGameObject(350.f, 250.f); 
+	balloom->AddComponent<REC::SpriteRenderComponent>(balloomSpriteDesc);
+	balloom->AddComponent<REC::AnimatedSpriteComponent>(balloomAnimDesc);
 
 	// === INPUT =======================================================================================
 	auto* input = engine->GetInputSystem();
@@ -190,27 +200,35 @@ static void load(REC::Engine* engine)
 	float char2_speed{ char1_speed*2 };
 
 	auto* char2_right = input->CreateInputBinding();
-	char2_right->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Right, REC::ButtonState::Pressed);
-	char2_right->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_X);
-	char2_right->AddCommand<Game::MoveCommand>(child, glm::vec2{ 1, 0 }, char2_speed);
+	char2_right->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Right, REC::ButtonState::Pressed, balloomControllerId);
+	char2_right->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_X, balloomControllerId);
+	char2_right->AddCommand<Game::MoveCommand>(balloom, glm::vec2{ 1, 0 }, char2_speed);
 
 	auto* char2_left = input->CreateInputBinding();
-	char2_left->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Left, REC::ButtonState::Pressed);
-	char2_left->AddCommand<Game::MoveCommand>(child, glm::vec2{ -1, 0 }, char2_speed);
+	char2_left->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Left, REC::ButtonState::Pressed, balloomControllerId);
+	char2_left->AddCommand<Game::MoveCommand>(balloom, glm::vec2{ -1, 0 }, char2_speed);
 
 	auto* char2_up = input->CreateInputBinding();
-	char2_up->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Up, REC::ButtonState::Pressed);
-	char2_up->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_Y);
-	char2_up->AddCommand<Game::MoveCommand>(child, glm::vec2{ 0, -1 }, char2_speed);
+	char2_up->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Up, REC::ButtonState::Pressed, balloomControllerId);
+	char2_up->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_Y, balloomControllerId);
+	char2_up->AddCommand<Game::MoveCommand>(balloom, glm::vec2{ 0, -1 }, char2_speed);
 
 	auto* char2_down = input->CreateInputBinding();
-	char2_down->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Down, REC::ButtonState::Pressed);
-	char2_down->AddCommand<Game::MoveCommand>(child, glm::vec2{ 0, 1 }, char2_speed);
+	char2_down->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Down, REC::ButtonState::Pressed, balloomControllerId);
+	char2_down->AddCommand<Game::MoveCommand>(balloom, glm::vec2{ 0, 1 }, char2_speed);
 
 	auto* changeScene = input->CreateInputBinding();
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_5, REC::ButtonState::Up);
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keypad_5, REC::ButtonState::Up);
 	changeScene->AddCommand<REC::ChangeSceneCommand>(engine->GetEngineContext(), scene, startScreen);
+
+	auto* controllerDropBomb = input->CreateInputBinding();
+	controllerDropBomb->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::Gamepad_A, REC::ButtonState::Up, balloomControllerId);
+	controllerDropBomb->AddCommand<Game::PlaceBombCommand>(balloom, SM);
+
+	auto* keyboardDropBomb = input->CreateInputBinding();
+	keyboardDropBomb->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Space, REC::ButtonState::Up);
+	keyboardDropBomb->AddCommand<Game::PlaceBombCommand>(parent, SM);
 }
 
 void CreateUI(REC::Scene* scene)
@@ -226,6 +244,7 @@ void CreateUI(REC::Scene* scene)
 	REC::SpriteDescriptor bombermanIcon{};
 	bombermanIcon.drawHeight = 20;
 	bombermanIcon.textureKey = "generalSprites";
+	bombermanIcon.frameDataFileKey = "characterData";
 	bombermanIcon.frameKey = "bomberman_walk_front_0";
 
 	auto bombermanUILives = scene->CreateGameObject();
@@ -236,6 +255,7 @@ void CreateUI(REC::Scene* scene)
 	REC::SpriteDescriptor balloomIcon{};
 	balloomIcon.drawHeight = 20;
 	balloomIcon.textureKey = "generalSprites";
+	balloomIcon.frameDataFileKey = "characterData";
 	balloomIcon.frameKey = "balloom_look_right_0";
 
 	auto balloomUILives = scene->CreateGameObject(0.f, 30.f);

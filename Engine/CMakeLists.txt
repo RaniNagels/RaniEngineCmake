@@ -22,14 +22,17 @@ set(SOURCE_FILES
     "src/FileParsing/JSON_Parser.cpp"
     
     "src/Commands/ChangeSceneCommand.cpp"
-	"src/Font.cpp"
+
+	"src/Resources/Font.cpp"
+	"src/Resources/Texture2D.cpp"
+    "src/Resources/DataFile.cpp"
+
 	"src/GameObject.cpp"
 	"src/Engine.cpp"
 	"src/Renderer.cpp"
 	"src/ResourceManager.cpp"
 	"src/Scene.cpp"
 	"src/SceneManager.cpp"
-	"src/Texture2D.cpp"
 	"src/TimeSystem.cpp"
 	"src/Window.cpp"
 )

@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "../inc/SceneManager.h"
 #include "../inc/Scene.h"
-#include "Texture2D.h"
+#include "Resources/Texture2D.h"
 #include "SDLHelpers.h"
 
 void REC::Renderer::Init(SDL_Window* window)

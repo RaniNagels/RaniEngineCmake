@@ -2,6 +2,7 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
+#include <fstream>
 
 #include "../FrameInfo.h"
 #include "../AnimationInfo.h"
@@ -21,6 +22,7 @@ namespace REC
 		JSONParser& operator= (const JSONParser&&) = delete;
 
 		bool LoadFromFile(const std::string& path);
+		bool LoadFromFile(std::ifstream& file);
 
 		bool GetFrames(std::unordered_map<std::string, FrameInfo>& out);
 		bool GetAnimations(std::unordered_map<std::string, AnimationInfo>& out);

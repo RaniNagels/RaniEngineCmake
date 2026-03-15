@@ -15,11 +15,17 @@ namespace Game
 		explicit MoveCommand(REC::GameObject* actor, glm::vec2 direction, float speed);
 		~MoveCommand() = default;
 
+		MoveCommand(const MoveCommand&) = delete;
+		MoveCommand(MoveCommand&&) = delete;
+		MoveCommand& operator= (const MoveCommand&) = delete;
+		MoveCommand& operator= (const MoveCommand&&) = delete;
+
 		virtual void Execute(float deltaTime) override;
 
 	private:
 		glm::vec2 m_Direction;
 		float m_Speed;
+		float m_Strength;
 		REC::ControllerComponent* m_pControllerComponent;
 	};
 }

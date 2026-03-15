@@ -2,20 +2,21 @@
 #include <filesystem>
 #include <string>
 #include <memory>
-#include <map>
 #include "Singleton.h"
 #include <ResourceCreateInfos.h>
 
 #include <unordered_map>
 #include <stdexcept>
 #include <assert.h>
-#include "Font.h"	
-#include "Texture2D.h"
+
+#include "Resources/Font.h"	
+#include "Resources/Texture2D.h"
+#include "Resources/DataFile.h"
 #include "FrameInfo.h"
 #include "AnimationInfo.h"
+#include "TextureFontInfo.h"
 
 #include <FileParsing/JSON_Parser.h>
-#include "TextureFontInfo.h"
 
 namespace REC
 {
@@ -33,49 +34,41 @@ namespace REC
 		{
 			if constexpr (std::is_same_v<T, Texture2D>)
 			{
-				auto it = m_TextureResources.find(key);
-				if (it != m_TextureResources.end())
-					return it->second.get();
-				else
-					assert(false && "Requested resource type is not supported!");
+				return GetResourceFromMap<T>(m_TextureResources, key);
 			}
 			else if constexpr (std::is_same_v<T, Font>)
 			{
-				auto it = m_FontResources.find(key);
-				if (it != m_FontResources.end())
-					return it->second.get();
-				else 
-					assert(false && "Requested resource type is not supported!");
+				return GetResourceFromMap<T>(m_FontResources, key);
 			}
-			else if constexpr (std::is_same_v<T, FrameInfo>)
-			{
-				auto it = m_FrameResources.find(key);
-				if (it != m_FrameResources.end())
-					return &it->second;
-				else
-					assert(false && "Requested resource type is not supported!");
-			}
-			else if constexpr (std::is_same_v<T, AnimationInfo>)
-			{
-				auto it = m_AnimationResources.find(key);
-				if (it != m_AnimationResources.end())
-					return &it->second;
-				else
-					assert(false && "Requested resource type is not supported!");
-			}
-			else if constexpr (std::is_same_v<T, TextureFontInfo>)
-			{
-				auto it = m_AnimationResources.find(key);
-				if (it != m_AnimationResources.end())
-					return &it->second;
-				else
-					assert(false && "Requested resource type is not supported!");
-			}
+
+			// unreachable code?!
+			//assert(false && "Requested resource type is not supported!");
+			//return nullptr;
+		}
+
+		template <typename T>
+		T* GetResourceFromDataFile(const std::string& fileKey, const std::string& key)
+		{
+			auto it = m_DataFileResources.find(fileKey);
+			if (it != m_DataFileResources.end())
+				return it->second->GetResource<T>(key);
+
 			assert(false && "Requested resource type is not supported!");
 			return nullptr;
 		}
 
 	private:
+		template <typename T>
+		T* GetResourceFromMap(std::unordered_map<std::string, std::unique_ptr<T>>& in, const std::string& key)
+		{
+			auto it = in.find(key);
+			if (it != in.end())
+				return it->second.get();
+
+			assert(false && "Requested resource type is not supported!");
+			return nullptr;
+		}
+
 		friend class Singleton<ResourceManager>;
 		ResourceManager() = default;
 
@@ -83,10 +76,7 @@ namespace REC
 
 		std::unordered_map<std::string, std::unique_ptr<Texture2D>> m_TextureResources{};
 		std::unordered_map<std::string, std::unique_ptr<Font>> m_FontResources{};
-
-		std::unordered_map<std::string, FrameInfo> m_FrameResources{};
-		std::unordered_map<std::string, AnimationInfo> m_AnimationResources{};
-		std::unordered_map<std::string, TextureFontInfo> m_TextureFontResources{}; 
+		std::unordered_map<std::string, std::unique_ptr<DataFile>> m_DataFileResources{};
 
 		std::unique_ptr<JSONParser> m_Parser{};
 

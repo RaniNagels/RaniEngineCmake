@@ -2,8 +2,8 @@
 #include "../inc/GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "Font.h"
-#include "Texture2D.h"
+#include "Resources/Font.h"
+#include "Resources/Texture2D.h"
 #include "../inc/Components/TransformComponent.h"
 #include "../inc/Components/RenderComponent.h"
 

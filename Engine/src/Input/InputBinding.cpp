@@ -12,14 +12,13 @@ std::vector<REC::IInputAction*> REC::InputBinding::GetInputActions(InputActionTy
 	return outActions;
 }
 
-void REC::InputBinding::Execute(float deltaTime, uint8_t controllerIndex, float inputStrenght) const
+void REC::InputBinding::Execute(float deltaTime, float inputStrenght) const
 {
 	for (auto& command : m_Commands)
 	{
 		if (auto GOIC = dynamic_cast<GameObjectInputCommand*>(command.get()))
 		{
-			GOIC->SetInputStrength(inputStrenght);
-			GOIC->TriggeredByController(controllerIndex);
+			GOIC->SetStrength(inputStrenght);
 		}
 
 		command->Execute(deltaTime);

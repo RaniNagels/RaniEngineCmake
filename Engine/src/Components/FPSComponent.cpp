@@ -2,7 +2,7 @@
 #include "../../inc/Components/TextRenderComponent.h"
 #include "../../inc/GameObject.h"
 #include "../ResourceManager.h"
-#include "../Font.h"
+#include "../Resources/Font.h"
 #include <chrono>
 #include <iomanip>
 

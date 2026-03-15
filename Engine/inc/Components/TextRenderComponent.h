@@ -2,7 +2,6 @@
 #include <string>
 #include <memory>
 #include "SpriteRenderComponent.h"
-#include "../../src/Texture2D.h"
 #include "../RECColor.h"
 
 namespace REC

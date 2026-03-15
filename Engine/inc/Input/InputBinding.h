@@ -39,7 +39,7 @@ namespace REC
 		std::vector<IInputAction*> GetInputActions(InputActionType type) const;
 
 		// will execute all commands
-		void Execute(float deltaTime, uint8_t controllerIndex = -1, float inputStrength = 1.f) const;
+		void Execute(float deltaTime, float inputStrength = 1.f) const;
 
 	private:
 		std::vector<std::unique_ptr<IInputAction>> m_Actions{};

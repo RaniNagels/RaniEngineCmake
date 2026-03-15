@@ -330,10 +330,11 @@
       "frames": [
         "bom_0",
         "bom_1",
-        "bom_2"
+        "bom_2",
+        "bom_1"
       ],
       "duration": 1.0,
-      "loop": false
+      "loop": true
     },
     "soft_block_destruction": {
       "frames": [

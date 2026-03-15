@@ -112,7 +112,7 @@ void REC::SpriteRenderComponent::SetFrame(const FrameInfo* info)
 
 REC::FrameInfo* REC::SpriteRenderComponent::RequestFrameInfo(const std::string& key)
 {
-	return ResourceManager::GetInstance().GetResource<FrameInfo>(key);
+	return ResourceManager::GetInstance().GetResourceFromDataFile<FrameInfo>(m_Descriptor.frameDataFileKey, key);
 }
 
 REC::Rect REC::SpriteRenderComponent::GetSrcRect() const

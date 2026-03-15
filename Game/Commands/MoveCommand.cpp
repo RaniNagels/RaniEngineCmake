@@ -14,18 +14,8 @@ Game::MoveCommand::MoveCommand(REC::GameObject* actor, glm::vec2 direction, floa
 
 void Game::MoveCommand::Execute(float deltaTime)
 {
-    // needs to be executed when: controllerIndex == -1 OR if controllerIndex != -1 AND controllerIndex == ControllerComponent.id
-    if (GetControllerIndex() != static_cast<uint8_t>(-1))
-    {
-        if (!m_pControllerComponent || !m_pControllerComponent->MatchId(GetControllerIndex()))
-            return;
-    }
-
     glm::vec3 movement{ m_Direction, 0.f };
-    movement *= m_Speed * deltaTime;
-
-    if (GetControllerIndex() != static_cast<uint8_t>(-1))
-        movement *= GetInputStrength();
+    movement *= m_Speed * deltaTime * GetStrength();
 
     GetGameObject()->GetTransform()->AddToLocalPosition(movement);
 }

@@ -48,27 +48,35 @@ bool REC::ResourceManager::AddResource(const ResourceCreateInfo& resource)
 	else if (typeid(resource) == typeid(FileResourceCreateInfo))
 	{
 		const auto fdesc = static_cast<const FileResourceCreateInfo&>(resource);
-
-		if (!m_Parser->LoadFromFile(GetFullPath(fdesc.filePath)))
-			throw std::runtime_error("failed to load file");
-
-		if (uint8_t(fdesc.dataTypes & FileResourceCreateInfo::LoadTypes::Frames))
+		if (m_DataFileResources.find(fdesc.name) != m_DataFileResources.end())
 		{
-			if (!m_Parser->GetFrames(m_FrameResources))
-				throw std::runtime_error("failed to load frames");
+			assert(false && "Name already exists in DataFile Resources");
+			return false;
 		}
+		auto dataFile = std::make_unique<DataFile>(GetFullPath(fdesc.filePath));
+		dataFile->Parse(fdesc.dataTypes);
+		m_DataFileResources.insert({ fdesc.name, std::move(dataFile)});
 
-		if (uint8_t(fdesc.dataTypes & FileResourceCreateInfo::LoadTypes::Animations))
-		{
-			if (!m_Parser->GetAnimations(m_AnimationResources))
-				throw std::runtime_error("failed to load animations");
-		}
+		//if (!m_Parser->LoadFromFile(GetFullPath(fdesc.filePath)))
+		//	throw std::runtime_error("failed to load file");
 
-		if (uint8_t(fdesc.dataTypes & FileResourceCreateInfo::LoadTypes::TextureFont))
-		{
-			if (!m_Parser->GetTextureFonts(m_TextureFontResources))
-				throw std::runtime_error("failed to load texture fonts");
-		}
+		//if (uint8_t(fdesc.dataTypes & LoadTypes::Frames))
+		//{
+		//	if (!m_Parser->GetFrames(m_FrameResources))
+		//		throw std::runtime_error("failed to load frames");
+		//}
+		//
+		//if (uint8_t(fdesc.dataTypes & LoadTypes::Animations))
+		//{
+		//	if (!m_Parser->GetAnimations(m_AnimationResources))
+		//		throw std::runtime_error("failed to load animations");
+		//}
+		//
+		//if (uint8_t(fdesc.dataTypes & LoadTypes::TextureFont))
+		//{
+		//	if (!m_Parser->GetTextureFonts(m_TextureFontResources))
+		//		throw std::runtime_error("failed to load texture fonts");
+		//}
 
 		return true;
 	}
