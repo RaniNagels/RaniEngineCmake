@@ -3,26 +3,60 @@
 
 REC::GameObject* REC::Scene::CreateGameObject(float x, float y, float z)
 {
-	m_objects.emplace_back(std::make_unique<GameObject>(x, y, z));
-	return m_objects.back().get();
+	m_Objects.emplace_back(std::make_unique<GameObject>(x, y, z));
+	m_RenderLayers.emplace_back(uint8_t(0));
+	m_RenderOrder.emplace_back(m_RenderLayers.size() - 1);
+	m_RenderOrderDirty = true;
+	return m_Objects.back().get();
+}
+
+void REC::Scene::SetRenderLayer(GameObject* object, uint8_t layer)
+{
+	for (size_t i{}; i < m_Objects.size(); ++i)
+	{
+		if (m_Objects[i].get() == object)
+		{
+			m_RenderLayers[i] = layer;
+			m_RenderOrderDirty = true;
+			return;
+		}
+	}
+
 }
 
 void REC::Scene::RemoveMarkedObjects()
 {
-	m_objects.erase(
-		std::remove_if(
-			m_objects.begin(),
-			m_objects.end(),
-			[](const std::unique_ptr<GameObject>& object) 
-			{ return object->IsAboutToBeDestroyed(); }
-		),
-		m_objects.end()
-	);
+	for (int i{ static_cast<int>(m_Objects.size()) - 1 }; i >= 0; --i)
+	{
+		if (m_Objects[i]->IsAboutToBeDestroyed())
+		{
+			m_Objects.erase(m_Objects.begin() + i);
+			m_RenderLayers.erase(m_RenderLayers.begin() + i);
+			m_RenderOrder.erase(std::remove_if(m_RenderOrder.begin(), m_RenderOrder.end(), [i](size_t idx) {return static_cast<int>(idx) == i; }), m_RenderOrder.end());
+
+			for (size_t& idx : m_RenderOrder)
+			{
+				if (idx > static_cast<size_t>(i))
+					--idx;
+			}
+		}
+	}
+
+
+	//m_Objects.erase(
+	//	std::remove_if(
+	//		m_Objects.begin(),
+	//		m_Objects.end(),
+	//		[](const std::unique_ptr<GameObject>& object)
+	//		{ return object->IsAboutToBeDestroyed(); }
+	//	),
+	//	m_Objects.end()
+	//);
 }
 
 void REC::Scene::RemoveAll()
 {
-	for (auto& object : m_objects)
+	for (auto& object : m_Objects)
 	{
 		object->Destroy();
 	}
@@ -30,19 +64,31 @@ void REC::Scene::RemoveAll()
 
 void REC::Scene::Update(float deltaT)
 {
-	for(auto& object : m_objects)
+	for(auto& object : m_Objects)
 	{
 		object->Update(deltaT);
 	}
 
 	RemoveMarkedObjects();
+
+	if (m_RenderOrderDirty)
+	{
+		ReorderRenderOrder();
+		m_RenderOrderDirty = false;
+	}
 }
 
 void REC::Scene::Render() const
 {
-	for (const auto& object : m_objects)
+	// first render gameObjects on layer 0, then 1 ...
+	for (auto index : m_RenderOrder)
 	{
-		object->Render();
+		m_Objects[index]->Render();
 	}
 }
 
+void REC::Scene::ReorderRenderOrder()
+{
+	std::sort(m_RenderOrder.begin(), m_RenderOrder.end(),
+		[&](size_t a, size_t b) { return m_RenderLayers[a] < m_RenderLayers[b]; });
+}

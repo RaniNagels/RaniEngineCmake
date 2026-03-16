@@ -29,6 +29,8 @@
 #include <Input/InputSystem.h>
 #include <Components/LabeledStatComponent.h>
 
+#include "RenderLayers.h"
+
 namespace fs = std::filesystem;
 
 void CreateUI(REC::Scene* scene);
@@ -107,9 +109,11 @@ static void load(REC::Engine* engine)
 	
 	auto* stsc = startScreen->CreateGameObject(125,0);
 	stsc->AddComponent<REC::SpriteRenderComponent>(startScreenBackdrop);
+	startScreen->SetRenderLayer(stsc, Game::GetLayer(Game::RenderLayer::BACKGROUND));
 
 	auto* stscInstruction = startScreen->CreateGameObject(75, 320);
 	stscInstruction->AddComponent<REC::TextRenderComponent>("Press '5' to start", "dogicapixel20", REC::Color{0,255,255});
+	startScreen->SetRenderLayer(stscInstruction, Game::GetLayer(Game::RenderLayer::UI));
 
 	auto* scene = SM->CreateScene();
 
@@ -129,8 +133,10 @@ static void load(REC::Engine* engine)
 	go->AddComponent<REC::SpriteRenderComponent>(backdrop);
 	go->AddComponent<REC::GridComponent>(grid);
 	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
+	scene->SetRenderLayer(go, Game::GetLayer(Game::RenderLayer::BACKGROUND));
 
 	auto instructions = scene->CreateGameObject(20.f, 20.f);
+	scene->SetRenderLayer(instructions, Game::GetLayer(Game::RenderLayer::UI));
 	
 	auto instructionsBalloom = scene->CreateGameObject();
 	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel16");
@@ -144,6 +150,7 @@ static void load(REC::Engine* engine)
 
 	auto fps = scene->CreateGameObject(880.f, 20.f); 
 	fps->AddComponent<REC::FPSComponent>("dogicapixel20");
+	scene->SetRenderLayer(fps, Game::GetLayer(Game::RenderLayer::UI));
 
 	REC::SpriteDescriptor character1{};
 	character1.drawHeight = 50;
@@ -158,6 +165,7 @@ static void load(REC::Engine* engine)
 	auto parent = scene->CreateGameObject(200.f, 200.f); 
 	parent->AddComponent<REC::SpriteRenderComponent>(character1);
 	parent->AddComponent<REC::AnimatedSpriteComponent>(animation1);
+	scene->SetRenderLayer(parent, Game::GetLayer(Game::RenderLayer::PLAYER));
 
 	uint8_t balloomControllerId{ 0 };
 
@@ -174,6 +182,7 @@ static void load(REC::Engine* engine)
 	auto balloom = scene->CreateGameObject(350.f, 250.f); 
 	balloom->AddComponent<REC::SpriteRenderComponent>(balloomSpriteDesc);
 	balloom->AddComponent<REC::AnimatedSpriteComponent>(balloomAnimDesc);
+	scene->SetRenderLayer(instructions, Game::GetLayer(Game::RenderLayer::ENEMIES));
 
 	// === INPUT =======================================================================================
 	auto* input = engine->GetInputSystem();
@@ -234,6 +243,7 @@ static void load(REC::Engine* engine)
 void CreateUI(REC::Scene* scene)
 {
 	auto UI = scene->CreateGameObject(20.f, 680.f);
+	scene->SetRenderLayer(UI, Game::GetLayer(Game::RenderLayer::UI));
 
 	REC::LabeledStatDescriptor livesStatDesciptor{};
 	livesStatDesciptor.fontkey = "dogicapixel16";

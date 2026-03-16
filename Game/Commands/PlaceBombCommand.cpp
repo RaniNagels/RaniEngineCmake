@@ -3,6 +3,7 @@
 #include <Components/TransformComponent.h>
 #include <Components/SpriteRenderComponent.h>
 #include <Components/AnimatedSpriteComponent.h>
+#include "../RenderLayers.h"
 
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
@@ -17,6 +18,7 @@ void Game::PlaceBombCommand::Execute(float)
 	// TODO: place in grid, not just willy nilly on the GameObject
 	auto PlayerPosition = GetGameObject()->GetTransform()->GetWorldPosition();
 	auto bomb = activeScene->CreateGameObject(PlayerPosition.x, PlayerPosition.y);
+	activeScene->SetRenderLayer(bomb, GetLayer(RenderLayer::PLACEBLES));
 
 	REC::SpriteDescriptor bombSpriteDescriptor{};
 	bombSpriteDescriptor.drawHeight = 50;
