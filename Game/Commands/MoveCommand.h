@@ -25,7 +25,6 @@ namespace Game
 	private:
 		glm::vec2 m_Direction;
 		float m_Speed;
-		float m_Strength;
 		REC::ControllerComponent* m_pControllerComponent;
 	};
 }
