@@ -28,6 +28,8 @@ REC::TextRenderComponent::TextRenderComponent(GameObject* owner, const std::stri
 	RequestFont(font);
 }
 
+REC::TextRenderComponent::~TextRenderComponent() = default;
+
 void REC::TextRenderComponent::Update(float)
 {
 	if (m_NeedsUpdate)
