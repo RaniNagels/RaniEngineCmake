@@ -182,7 +182,7 @@ static void load(REC::Engine* engine)
 	auto balloom = scene->CreateGameObject(350.f, 250.f); 
 	balloom->AddComponent<REC::SpriteRenderComponent>(balloomSpriteDesc);
 	balloom->AddComponent<REC::AnimatedSpriteComponent>(balloomAnimDesc);
-	scene->SetRenderLayer(instructions, Game::GetLayer(Game::RenderLayer::ENEMIES));
+	scene->SetRenderLayer(balloom, Game::GetLayer(Game::RenderLayer::ENEMIES));
 
 	// === INPUT =======================================================================================
 	auto* input = engine->GetInputSystem();

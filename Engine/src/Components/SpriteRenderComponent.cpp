@@ -35,6 +35,8 @@ REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const Sprit
 	else m_pFrameInfo = nullptr;
 }
 
+REC::SpriteRenderComponent::~SpriteRenderComponent() = default;
+
 void REC::SpriteRenderComponent::Update(float)
 {
 }

@@ -15,7 +15,7 @@ namespace REC
 		explicit SpriteRenderComponent(GameObject* owner, Texture2D* texture, uint16_t width = 0, uint16_t height = 0);
 		explicit SpriteRenderComponent(GameObject* owner, const std::string& textureName, uint16_t width = 0, uint16_t height = 0);
 		explicit SpriteRenderComponent(GameObject* owner, const SpriteDescriptor& descriptor);
-		virtual ~SpriteRenderComponent() = default;
+		virtual ~SpriteRenderComponent();
 
 		SpriteRenderComponent(const SpriteRenderComponent& other) = delete;
 		SpriteRenderComponent(SpriteRenderComponent&& other) = delete;
