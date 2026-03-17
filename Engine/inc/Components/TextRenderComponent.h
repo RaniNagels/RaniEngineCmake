@@ -6,6 +6,8 @@
 
 namespace REC
 {
+	class Font;
+
 	class TextRenderComponent : public SpriteRenderComponent
 	{
 	public:
