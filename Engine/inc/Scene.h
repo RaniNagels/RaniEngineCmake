@@ -20,6 +20,8 @@ namespace REC
 		Scene& operator= (const Scene&&) = delete;
 
 		GameObject* CreateGameObject(float x = 0.f, float y = 0.f, float z = 0.f);
+
+		// TODO: maybe have this be set in the GameObject to make it easier for childeren to inherit the layer
 		void SetRenderLayer(GameObject* object, uint8_t layer); // 255 possible layers, layer 0 is rendered first, layer 255 is rendered last (on top)
 		void RemoveAll();
 

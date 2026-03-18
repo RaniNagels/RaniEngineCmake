@@ -24,6 +24,8 @@ namespace REC
 		void SubscribeToEvents(IListener* listener);
 		void UnSubscribeToEvents(IListener* listener);
 
+		void ResetLives() { m_CurrentAmountOfLives = MAX_LIVES; }
+
 	private:
 		const int MAX_LIVES;
 		int m_CurrentAmountOfLives;

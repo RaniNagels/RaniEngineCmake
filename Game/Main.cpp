@@ -149,18 +149,22 @@ static void load(REC::Engine* engine)
 	auto instructionsBalloom = scene->CreateGameObject();
 	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel16");
 	instructionsBalloom->SetParent(instructions);
+	scene->SetRenderLayer(instructionsBalloom, Game::GetLayer(Game::RenderLayer::UI));
 	
 	auto instructionsBomberman = scene->CreateGameObject(0.f, 28.f);
 	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman", "dogicapixel16");
 	instructionsBomberman->SetParent(instructions);
+	scene->SetRenderLayer(instructionsBomberman, Game::GetLayer(Game::RenderLayer::UI));
 
 	auto intstructionsBalloomBomb = scene->CreateGameObject(30.f, 110.f);
 	intstructionsBalloomBomb->AddComponent<REC::TextRenderComponent>("BALLOOM: Press A to place bomb, place 2 bombs and kill bomberman", "dogicapixel16");
 	intstructionsBalloomBomb->SetParent(instructions);
+	scene->SetRenderLayer(intstructionsBalloomBomb, Game::GetLayer(Game::RenderLayer::UI));
 
 	auto intstructionsbombermanBomb = scene->CreateGameObject(30.f, 130.f);
 	intstructionsbombermanBomb->AddComponent<REC::TextRenderComponent>("BOMBERMAN: Press 'space' to place bomb, place 2 bombs and kill balloom", "dogicapixel16");
 	intstructionsbombermanBomb->SetParent(instructions);
+	scene->SetRenderLayer(intstructionsbombermanBomb, Game::GetLayer(Game::RenderLayer::UI));
 
 	auto UI = scene->CreateGameObject(20.f, 680.f);
 	scene->SetRenderLayer(UI, Game::GetLayer(Game::RenderLayer::UI));
@@ -181,6 +185,7 @@ static void load(REC::Engine* engine)
 	auto bomberman_livesStatComp = bombermanUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
 	bombermanUILives->AddComponent<REC::SpriteRenderComponent>(bombermanIcon);
 	bombermanUILives->SetParent(UI);
+	scene->SetRenderLayer(bombermanUILives, Game::GetLayer(Game::RenderLayer::UI));
 
 	REC::SpriteDescriptor balloomIcon{};
 	balloomIcon.drawHeight = 20;
@@ -192,6 +197,7 @@ static void load(REC::Engine* engine)
 	auto balloom_livesStatComp = balloomUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
 	balloomUILives->AddComponent<REC::SpriteRenderComponent>(balloomIcon);
 	balloomUILives->SetParent(UI);
+	scene->SetRenderLayer(balloomUILives, Game::GetLayer(Game::RenderLayer::UI));
 
 	REC::LabeledStatDescriptor scoreStatDesciptor{};
 	scoreStatDesciptor.fontkey = "dogicapixel16";
@@ -202,15 +208,18 @@ static void load(REC::Engine* engine)
 	auto bombermanUIScore = scene->CreateGameObject(350.f, 0);
 	auto bomberman_scoreStatComp = bombermanUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
 	bombermanUIScore->SetParent(UI);
+	scene->SetRenderLayer(bombermanUIScore, Game::GetLayer(Game::RenderLayer::UI));
 
 	auto balloomUIScore = scene->CreateGameObject(350.f, 30.f);
 	auto balloom_scoreStatComp = balloomUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
 	balloomUIScore->SetParent(UI);
+	scene->SetRenderLayer(balloomUIScore, Game::GetLayer(Game::RenderLayer::UI));
 
 	auto fps = scene->CreateGameObject(880.f, 20.f); 
 	fps->AddComponent<REC::FPSComponent>("dogicapixel20");
 	scene->SetRenderLayer(fps, Game::GetLayer(Game::RenderLayer::UI));
 
+	// Create a player class in game that does this instead, to avoid repetition
 	REC::SpriteDescriptor character1{};
 	character1.drawHeight = 50;
 	character1.frameDataFileKey = "characterData";
