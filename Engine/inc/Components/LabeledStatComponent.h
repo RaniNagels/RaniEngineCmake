@@ -20,6 +20,8 @@ namespace REC
 
 		void AddToStatValue(int value);
 
+		int GetStatValue() const { return m_StatValue; }
+
 	private:
 		LabeledStatDescriptor m_Descriptor;
 		int m_StatValue;

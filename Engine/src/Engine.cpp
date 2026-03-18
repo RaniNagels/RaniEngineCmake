@@ -21,6 +21,13 @@
 #include <thread>
 #include <chrono>
 
+#if USE_STEAMWORKS
+#pragma warning (push)
+#pragma warning (disable:4996)
+#include <steam_api.h>
+#pragma warning (pop)
+#endif
+
 void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 {
 #if WIN32
@@ -78,10 +85,19 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	m_pInputSystem = std::make_unique<InputSystem>();
 
 	m_EngineContext.sceneManager = m_pSceneManager.get();
+
+#if USE_STEAMWORKS
+	if (!SteamAPI_Init())
+		throw std::runtime_error(std::string("Fatal Error - Steam must be running to play this game (SteamAPI_Init() failed)."));
+#endif
 }
 
 REC::Engine::~Engine()
 {
+#if USE_STEAMWORKS
+	SteamAPI_Shutdown();
+#endif
+
 	Renderer::GetInstance().Destroy();
 	ResourceManager::GetInstance().Destroy();
 	m_pWindow->Destroy();
@@ -110,6 +126,10 @@ void REC::Engine::RunOneFrame()
 	m_pInputSystem->ProcessInput(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Render();
+
+#if USE_STEAMWORKS
+	SteamAPI_RunCallbacks();
+#endif 
 
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
 }
