@@ -19,9 +19,12 @@ REC::LabeledStatComponent::LabeledStatComponent(GameObject* owner, const Labeled
 	}
 }
 
-void REC::LabeledStatComponent::Update(float)
-{
+void REC::LabeledStatComponent::Update(float) { }
 
+void REC::LabeledStatComponent::AddToStatValue(int value)
+{
+	m_StatValue += value;
+	m_pTextRenderComponent->SetText(CreateText());
 }
 
 std::string REC::LabeledStatComponent::CreateText()

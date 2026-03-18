@@ -1,13 +1,18 @@
 #pragma once
 #include <Components/Component.h>
 
+namespace REC
+{
+	class GameObject;
+}
+
 // TODO: change namespace
 namespace Game
 {
 	class BombComponent final : public REC::Component
 	{
 	public:
-		explicit BombComponent(GameObject* owner);
+		explicit BombComponent(REC::GameObject* owner);
 		~BombComponent() = default;
 
 		BombComponent(const BombComponent& other) = delete;

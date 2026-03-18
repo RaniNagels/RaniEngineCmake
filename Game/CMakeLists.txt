@@ -12,7 +12,10 @@ set(SOURCE_FILES
 	"Main.cpp"
     "Commands/MoveCommand.cpp"
     "Commands/PlaceBombCommand.cpp"
+    "Commands/ChangeHealthCommand.cpp"
     "Components/BombComponent.cpp"
+    "Components/UILivesComponent.cpp"
+    "Components/UIScoreComponent.cpp"
 )
 
 

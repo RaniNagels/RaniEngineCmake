@@ -5,7 +5,7 @@
 namespace REC
 {
 	class TextRenderComponent;
-	class LabeledStatComponent final : public Component
+	class LabeledStatComponent : public Component
 	{
 	public:
 		explicit LabeledStatComponent(GameObject* owner, const LabeledStatDescriptor& descriptor );
@@ -17,6 +17,8 @@ namespace REC
 		LabeledStatComponent& operator=(LabeledStatComponent&& other) = delete;
 
 		virtual void Update(float deltaT) override;
+
+		void AddToStatValue(int value);
 
 	private:
 		LabeledStatDescriptor m_Descriptor;

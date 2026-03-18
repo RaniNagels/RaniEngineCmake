@@ -8,7 +8,9 @@ set(SOURCE_FILES
 	"src/Components/DebugGridRenderComponent.cpp"
 	"src/Components/FPSComponent.cpp"
 	"src/Components/GridComponent.cpp"
+    "src/Components/HealthComponent.cpp"
     "src/Components/LabeledStatComponent.cpp"
+    "src/Components/LivesComponent.cpp"
 	"src/Components/RotatorComponent.cpp"
 	"src/Components/SpriteRenderComponent.cpp"
 	"src/Components/TextRenderComponent.cpp"
@@ -35,6 +37,7 @@ set(SOURCE_FILES
 	"src/SceneManager.cpp"
 	"src/TimeSystem.cpp"
 	"src/Window.cpp"
+    "src/Event.cpp"
 )
 
 # --- Include Libraries -------------

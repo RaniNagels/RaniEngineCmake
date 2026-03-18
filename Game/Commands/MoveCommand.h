@@ -1,11 +1,6 @@
 #pragma once
 #include <Commands/ICommand.h>
 
-namespace REC
-{
-	class ControllerComponent;
-}
-
 // TODO: change game namespace
 namespace Game
 {
@@ -25,6 +20,5 @@ namespace Game
 	private:
 		glm::vec2 m_Direction;
 		float m_Speed;
-		REC::ControllerComponent* m_pControllerComponent;
 	};
 }

@@ -24,16 +24,19 @@
 #include <Components/AnimatedSpriteComponent.h>
 #include "Commands/MoveCommand.h"
 #include "Commands/PlaceBombCommand.h"
-#include <Components/ControllerComponent.h>
 #include <Commands/ChangeSceneCommand.h>
 #include <Input/InputSystem.h>
 #include <Components/LabeledStatComponent.h>
+#include <sdbm_hash.h>
 
 #include "RenderLayers.h"
+#include <Components/HealthComponent.h>
+#include "Components/UILivesComponent.h"
+#include "Components/UIScoreComponent.h"
+#include "Commands/ChangeHealthCommand.h"
+#include <Components/LivesComponent.h>
 
 namespace fs = std::filesystem;
-
-void CreateUI(REC::Scene* scene);
 
 static void load(REC::Engine* engine)
 {
@@ -46,6 +49,7 @@ static void load(REC::Engine* engine)
 	engine->SetEngineData(engineData);
 
 	// === RESOURCES ===================================================================================
+#pragma region Resources
 	std::vector<REC::ResourceCreateInfo*> infos{};
 	// !! double check all filepaths !! Json != json (will not give an error in MSCV or clang, but will cause vague JavaScript error)
 	// TODO: pass ownership instead
@@ -96,9 +100,12 @@ static void load(REC::Engine* engine)
 	infos.emplace_back(&titleScreen);
 	
 	engine->AddResources(infos);
+#pragma endregion Resources
 
 	// === SCENE =======================================================================================
 	auto* SM = engine->GetSceneManager();
+
+#pragma region StartScreen
 	auto* startScreen = SM->CreateScene();
 	
 	REC::SpriteDescriptor startScreenBackdrop{};
@@ -114,6 +121,7 @@ static void load(REC::Engine* engine)
 	auto* stscInstruction = startScreen->CreateGameObject(75, 320);
 	stscInstruction->AddComponent<REC::TextRenderComponent>("Press '5' to start", "dogicapixel20", REC::Color{0,255,255});
 	startScreen->SetRenderLayer(stscInstruction, Game::GetLayer(Game::RenderLayer::UI));
+#pragma endregion StartScreen
 
 	auto* scene = SM->CreateScene();
 
@@ -146,7 +154,58 @@ static void load(REC::Engine* engine)
 	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman", "dogicapixel16");
 	instructionsBomberman->SetParent(instructions);
 
-	CreateUI(scene);
+	auto intstructionsBalloomBomb = scene->CreateGameObject(30.f, 110.f);
+	intstructionsBalloomBomb->AddComponent<REC::TextRenderComponent>("BALLOOM: Press A to place bomb, place 2 bombs and kill bomberman", "dogicapixel16");
+	intstructionsBalloomBomb->SetParent(instructions);
+
+	auto intstructionsbombermanBomb = scene->CreateGameObject(30.f, 130.f);
+	intstructionsbombermanBomb->AddComponent<REC::TextRenderComponent>("BOMBERMAN: Press 'space' to place bomb, place 2 bombs and kill balloom", "dogicapixel16");
+	intstructionsbombermanBomb->SetParent(instructions);
+
+	auto UI = scene->CreateGameObject(20.f, 680.f);
+	scene->SetRenderLayer(UI, Game::GetLayer(Game::RenderLayer::UI));
+
+	REC::LabeledStatDescriptor livesStatDesciptor{};
+	livesStatDesciptor.fontkey = "dogicapixel16";
+	livesStatDesciptor.label = "   Remaining Lives";
+	livesStatDesciptor.initialValue = 3;
+	livesStatDesciptor.color = REC::Color{ 255,255,255 };
+
+	REC::SpriteDescriptor bombermanIcon{};
+	bombermanIcon.drawHeight = 20;
+	bombermanIcon.textureKey = "generalSprites";
+	bombermanIcon.frameDataFileKey = "characterData";
+	bombermanIcon.frameKey = "bomberman_walk_front_0";
+
+	auto bombermanUILives = scene->CreateGameObject();
+	auto bomberman_livesStatComp = bombermanUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
+	bombermanUILives->AddComponent<REC::SpriteRenderComponent>(bombermanIcon);
+	bombermanUILives->SetParent(UI);
+
+	REC::SpriteDescriptor balloomIcon{};
+	balloomIcon.drawHeight = 20;
+	balloomIcon.textureKey = "generalSprites";
+	balloomIcon.frameDataFileKey = "characterData";
+	balloomIcon.frameKey = "balloom_look_right_0";
+
+	auto balloomUILives = scene->CreateGameObject(0.f, 30.f);
+	auto balloom_livesStatComp = balloomUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
+	balloomUILives->AddComponent<REC::SpriteRenderComponent>(balloomIcon);
+	balloomUILives->SetParent(UI);
+
+	REC::LabeledStatDescriptor scoreStatDesciptor{};
+	scoreStatDesciptor.fontkey = "dogicapixel16";
+	scoreStatDesciptor.label = "Score";
+	scoreStatDesciptor.initialValue = 0;
+	scoreStatDesciptor.color = REC::Color{ 255,255,255 };
+
+	auto bombermanUIScore = scene->CreateGameObject(350.f, 0);
+	auto bomberman_scoreStatComp = bombermanUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
+	bombermanUIScore->SetParent(UI);
+
+	auto balloomUIScore = scene->CreateGameObject(350.f, 30.f);
+	auto balloom_scoreStatComp = balloomUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
+	balloomUIScore->SetParent(UI);
 
 	auto fps = scene->CreateGameObject(880.f, 20.f); 
 	fps->AddComponent<REC::FPSComponent>("dogicapixel20");
@@ -162,10 +221,14 @@ static void load(REC::Engine* engine)
 	animation1.animationKey = "bomberman_walk_left";
 	animation1.startOnStartup = true;
 
-	auto parent = scene->CreateGameObject(200.f, 200.f); 
-	parent->AddComponent<REC::SpriteRenderComponent>(character1);
-	parent->AddComponent<REC::AnimatedSpriteComponent>(animation1);
-	scene->SetRenderLayer(parent, Game::GetLayer(Game::RenderLayer::PLAYER));
+	auto bomberman = scene->CreateGameObject(200.f, 200.f); 
+	bomberman->AddComponent<REC::SpriteRenderComponent>(character1);
+	bomberman->AddComponent<REC::AnimatedSpriteComponent>(animation1);
+	auto bom_health = bomberman->AddComponent<REC::HealthComponent>(100.f, 100.f);
+	auto bom_lives = bomberman->AddComponent<REC::LivesComponent>(3);
+	bom_health->SubscribeToEvents(bom_lives);
+	bom_lives->SubscribeToEvents(bomberman_livesStatComp);
+	scene->SetRenderLayer(bomberman, Game::GetLayer(Game::RenderLayer::PLAYER));
 
 	uint8_t balloomControllerId{ 0 };
 
@@ -182,6 +245,10 @@ static void load(REC::Engine* engine)
 	auto balloom = scene->CreateGameObject(350.f, 250.f); 
 	balloom->AddComponent<REC::SpriteRenderComponent>(balloomSpriteDesc);
 	balloom->AddComponent<REC::AnimatedSpriteComponent>(balloomAnimDesc);
+	auto bal_health = balloom->AddComponent<REC::HealthComponent>(100.f, 100.f);
+	auto bal_lives = balloom->AddComponent<REC::LivesComponent>(3);
+	bal_health->SubscribeToEvents(bal_lives);
+	bal_lives->SubscribeToEvents(balloom_livesStatComp);
 	scene->SetRenderLayer(balloom, Game::GetLayer(Game::RenderLayer::ENEMIES));
 
 	// === INPUT =======================================================================================
@@ -192,19 +259,19 @@ static void load(REC::Engine* engine)
 
 	auto* char1_right = input->CreateInputBinding();
 	char1_right->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_D, REC::ButtonState::Pressed);
-	char1_right->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 1, 0 }, char1_speed);
+	char1_right->AddCommand<Game::MoveCommand>(bomberman, glm::vec2{ 1, 0 }, char1_speed);
 
 	auto* char1_left = input->CreateInputBinding();
 	char1_left->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_A, REC::ButtonState::Pressed);
-	char1_left->AddCommand<Game::MoveCommand>(parent, glm::vec2{ -1, 0 }, char1_speed);
+	char1_left->AddCommand<Game::MoveCommand>(bomberman, glm::vec2{ -1, 0 }, char1_speed);
 
 	auto* char1_up = input->CreateInputBinding();
 	char1_up->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_W, REC::ButtonState::Pressed);
-	char1_up->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 0, -1 }, char1_speed);
+	char1_up->AddCommand<Game::MoveCommand>(bomberman, glm::vec2{ 0, -1 }, char1_speed);
 
 	auto* char1_down = input->CreateInputBinding();
 	char1_down->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_S, REC::ButtonState::Pressed);
-	char1_down->AddCommand<Game::MoveCommand>(parent, glm::vec2{ 0, 1 }, char1_speed);
+	char1_down->AddCommand<Game::MoveCommand>(bomberman, glm::vec2{ 0, 1 }, char1_speed);
 
 	float char2_speed{ char1_speed*2 };
 
@@ -233,59 +300,15 @@ static void load(REC::Engine* engine)
 
 	auto* controllerDropBomb = input->CreateInputBinding();
 	controllerDropBomb->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::Gamepad_A, REC::ButtonState::Up, balloomControllerId);
-	controllerDropBomb->AddCommand<Game::PlaceBombCommand>(balloom, SM);
+	controllerDropBomb->AddCommand<Game::ChangeHealthCommand>(bomberman, 50.f);
+	auto balloom_bomCommand = controllerDropBomb->AddCommand<Game::PlaceBombCommand>(balloom, SM);
+	balloom_bomCommand->SubscribeToEvents(balloom_scoreStatComp);
 
 	auto* keyboardDropBomb = input->CreateInputBinding();
 	keyboardDropBomb->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Space, REC::ButtonState::Up);
-	keyboardDropBomb->AddCommand<Game::PlaceBombCommand>(parent, SM);
-}
-
-void CreateUI(REC::Scene* scene)
-{
-	auto UI = scene->CreateGameObject(20.f, 680.f);
-	scene->SetRenderLayer(UI, Game::GetLayer(Game::RenderLayer::UI));
-
-	REC::LabeledStatDescriptor livesStatDesciptor{};
-	livesStatDesciptor.fontkey = "dogicapixel16";
-	livesStatDesciptor.label = "   Remaining Lives";
-	livesStatDesciptor.initialValue = 3;
-	livesStatDesciptor.color = REC::Color{ 255,255,255 };
-
-	REC::SpriteDescriptor bombermanIcon{};
-	bombermanIcon.drawHeight = 20;
-	bombermanIcon.textureKey = "generalSprites";
-	bombermanIcon.frameDataFileKey = "characterData";
-	bombermanIcon.frameKey = "bomberman_walk_front_0";
-
-	auto bombermanUILives = scene->CreateGameObject();
-	bombermanUILives->AddComponent<REC::LabeledStatComponent>(livesStatDesciptor);
-	bombermanUILives->AddComponent<REC::SpriteRenderComponent>(bombermanIcon);
-	bombermanUILives->SetParent(UI);
-
-	REC::SpriteDescriptor balloomIcon{};
-	balloomIcon.drawHeight = 20;
-	balloomIcon.textureKey = "generalSprites";
-	balloomIcon.frameDataFileKey = "characterData";
-	balloomIcon.frameKey = "balloom_look_right_0";
-
-	auto balloomUILives = scene->CreateGameObject(0.f, 30.f);
-	balloomUILives->AddComponent<REC::LabeledStatComponent>(livesStatDesciptor);
-	balloomUILives->AddComponent<REC::SpriteRenderComponent>(balloomIcon);
-	balloomUILives->SetParent(UI);
-
-	REC::LabeledStatDescriptor scoreStatDesciptor{};
-	scoreStatDesciptor.fontkey = "dogicapixel16";
-	scoreStatDesciptor.label = "Score";
-	scoreStatDesciptor.initialValue = 0;
-	scoreStatDesciptor.color = REC::Color{ 255,255,255 };
-
-	auto bombermanUIScore = scene->CreateGameObject(350.f, 0);
-	bombermanUIScore->AddComponent<REC::LabeledStatComponent>(scoreStatDesciptor);
-	bombermanUIScore->SetParent(UI);
-
-	auto balloomUIScore = scene->CreateGameObject(350.f, 30.f);
-	balloomUIScore->AddComponent<REC::LabeledStatComponent>(scoreStatDesciptor);
-	balloomUIScore->SetParent(UI);
+	keyboardDropBomb->AddCommand<Game::ChangeHealthCommand>(balloom, 50.f);
+	auto bomberman_bomCommand = keyboardDropBomb->AddCommand<Game::PlaceBombCommand>(bomberman, SM);
+	bomberman_bomCommand->SubscribeToEvents(bomberman_scoreStatComp);
 }
 
 int main(int, char*[]) 

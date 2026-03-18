@@ -25,9 +25,10 @@ namespace REC
 		InputBinding& operator=(InputBinding&& other) = delete;
 
 		template <Command C, typename... Args>
-		void AddCommand(Args&&... args)
+		C* AddCommand(Args&&... args)
 		{
 			m_Commands.emplace_back(std::make_unique<C>(std::forward<Args>(args)...));
+			return static_cast<C*>(m_Commands.back().get());
 		}
 
 		template <Action A, typename... Args>
