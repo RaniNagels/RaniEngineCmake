@@ -1,19 +1,23 @@
 #pragma once
-#include "RenderComponent.h"
-#include "../RECColor.h"
+#include <Components/RenderComponent.h>
+#include <RECColor.h>
 #include <string>
 
 namespace REC
 {
+	class IRenderer;
+}
+
+namespace Game
+{
 	class GridComponent;
-	class Font;
 
 	// depends on the GridComponent to work
 	// no grid component -> error
-	class DebugGridRenderComponent final : public RenderComponent
+	class DebugGridRenderComponent final : public REC::RenderComponent
 	{
 	public:
-		explicit DebugGridRenderComponent(GameObject* owner, const Color& color = { 255, 255, 255, 255 });
+		explicit DebugGridRenderComponent(REC::GameObject* owner, REC::IRenderer* renderer, const REC::Color& color = { 255, 255, 255, 255 });
 		virtual ~DebugGridRenderComponent() = default;
 
 		DebugGridRenderComponent(const DebugGridRenderComponent& other) = delete;
@@ -26,6 +30,7 @@ namespace REC
 
 	private:
 		GridComponent* m_pGridComponent;
-		Color m_Color;
+		REC::IRenderer* m_pRenderer;
+		REC::Color m_Color;
 	};
 }

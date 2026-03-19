@@ -14,6 +14,8 @@ set(SOURCE_FILES
     "Commands/PlaceBombCommand.cpp"
     "Commands/ChangeHealthCommand.cpp"
     "Components/BombComponent.cpp"
+    "Components/GridComponent.cpp"
+    "Components/DebugGridRenderComponent.cpp"
     "Components/UILivesComponent.cpp"
     "Components/UIScoreComponent.cpp"
 )

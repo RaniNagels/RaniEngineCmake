@@ -1,9 +1,9 @@
 #pragma once
-#include "Component.h"
+#include <Components/Component.h>
 #include <cstdint>
 #include <glm/glm.hpp>
 
-namespace REC
+namespace Game
 {
 	struct GridDescriptor final
 	{
@@ -16,10 +16,10 @@ namespace REC
 		glm::vec2 origin;
 	};
 
-	class GridComponent final : public Component
+	class GridComponent final : public REC::Component
 	{
 	public:
-		explicit GridComponent(GameObject* owner, const GridDescriptor& desc);
+		explicit GridComponent(REC::GameObject* owner, const GridDescriptor& desc);
 		virtual ~GridComponent() = default;
 
 		GridComponent(const GridComponent& other) = delete;

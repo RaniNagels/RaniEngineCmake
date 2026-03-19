@@ -10,7 +10,7 @@
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
 	, m_pSceneManager{sceneManager}
-	, m_HasPlacedBombEvent{std::make_unique<REC::ValueChangedEvent>(REC::make_sdbm_hash("ValueChangedEvent"))}
+	, m_HasPlacedBombEvent{std::make_unique<REC::ValueChangedEvent>(REC::make_sdbm_hash("HasPlacedBombEvent"))}
 {
 }
 
@@ -40,7 +40,6 @@ void Game::PlaceBombCommand::Execute(float)
 
 	bomb->AddComponent<REC::AnimatedSpriteComponent>(animation);
 
-	m_HasPlacedBombEvent->SetDelta(30.f); // the score the player gets for placing a bomb
 	m_HasPlacedBombEvent->NotifyListeners();
 }
 

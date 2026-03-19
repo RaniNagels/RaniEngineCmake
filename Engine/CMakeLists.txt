@@ -5,9 +5,7 @@ set(TARGET_NAME REC)
 set(SOURCE_FILES
     "src/Components/AnimatedSpriteComponent.cpp"
 	"src/Components/Component.cpp"
-	"src/Components/DebugGridRenderComponent.cpp"
 	"src/Components/FPSComponent.cpp"
-	"src/Components/GridComponent.cpp"
     "src/Components/HealthComponent.cpp"
     "src/Components/LabeledStatComponent.cpp"
     "src/Components/LivesComponent.cpp"
@@ -173,36 +171,3 @@ if(WIN32)
     )
 endif()
 
-
-# Add steam if available
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/steam")
-find_package(Steamworks QUIET)
-
-if(WIN32)
-
-  set(FIND_STEAMWORKS_SDK_FILE ${CMAKE_SOURCE_DIR}/cmake/steam/FindSteamworks.cmake)
-
-  if(Steamworks_FOUND)
-    message(STATUS "Steamworks_FOUND")
-    target_link_libraries("${TARGET_NAME}" PUBLIC Steamworks::Steamworks)
-    target_compile_definitions(${TARGET_NAME} PRIVATE USE_STEAMWORKS)
-    add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-      COMMAND "${CMAKE_COMMAND}" -E copy "${Steamworks_RUNTIME_DLL}" "$<TARGET_FILE_DIR:${TARGET_NAME}>")
-    add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-      COMMAND "${CMAKE_COMMAND}" -E echo "480" > "$<TARGET_FILE_DIR:${TARGET_NAME}>/steam_appid.txt"
-      COMMENT "Generating steam_appid.txt"
-    )
-  endif()
-else()
- if(Steamworks_FOUND)
-    target_link_libraries("${TARGET_NAME}" PUBLIC Steamworks::Steamworks)
-    target_compile_definitions(${TARGET_NAME} PRIVATE USE_STEAMWORKS)
-    add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-      COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${Steamworks_LIBRARIES}" "$<TARGET_FILE_DIR:${TARGET_NAME}>"
-    )
-    add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-      COMMAND "${CMAKE_COMMAND}" -E echo "480" > "$<TARGET_FILE_DIR:${TARGET_NAME}>/steam_appid.txt"
-      COMMENT "Generating steam_appid.txt"
-    )
-  endif()
- endif()

@@ -1,12 +1,13 @@
-#include "../../inc/Components/DebugGridRenderComponent.h"
-#include "../../inc/GameObject.h"
-#include "../../inc/Components/GridComponent.h"
-#include "../../inc/Components/TransformComponent.h"
+#include "DebugGridRenderComponent.h"
+#include <GameObject.h>
+#include "GridComponent.h"
+#include <Components/TransformComponent.h>
 #include <stdexcept>
-#include "../Renderer.h"
+#include <IRenderer.h>
 
-REC::DebugGridRenderComponent::DebugGridRenderComponent(GameObject* owner, const Color& color)
+Game::DebugGridRenderComponent::DebugGridRenderComponent(REC::GameObject* owner, REC::IRenderer* renderer, const REC::Color& color)
 	: RenderComponent(owner)
+	, m_pRenderer{renderer}
 	, m_Color{ color }
 {
 	if (!GetOwner()->HasComponent<GridComponent>())
@@ -15,15 +16,14 @@ REC::DebugGridRenderComponent::DebugGridRenderComponent(GameObject* owner, const
 		m_pGridComponent = GetOwner()->GetComponent<GridComponent>();
 }
 
-void REC::DebugGridRenderComponent::Update(float) {}
+void Game::DebugGridRenderComponent::Update(float) {}
 
-void REC::DebugGridRenderComponent::Render()
+void Game::DebugGridRenderComponent::Render()
 {
 	auto data = m_pGridComponent->GetDescriptorData();
-	auto& R = Renderer::GetInstance();
 	auto worldPos = GetOwner()->GetTransform()->GetWorldPosition();
 
-	Rect rect{};
+	REC::Rect rect{};
 	rect.width = data.cellWidth;
 	rect.height = data.cellHeight;
 
@@ -33,7 +33,7 @@ void REC::DebugGridRenderComponent::Render()
 		{
 			rect.x = worldPos.x + (c * data.cellWidth);
 			rect.y = worldPos.y + (r * data.cellHeight);
-			R.RenderRect(m_Color, rect);
+			m_pRenderer->RenderRect(m_Color, rect);
 		}
 	}
 }

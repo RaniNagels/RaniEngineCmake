@@ -3,6 +3,7 @@
 #include "../inc/RECColor.h"
 #include "../inc/Singleton.h"
 #include "../inc/GeneralStructs.h"
+#include <IRenderer.h>
 
 namespace REC
 {
@@ -11,7 +12,7 @@ namespace REC
 	/**
 	 * Simple RAII wrapper for the SDL renderer
 	 */
-	class Renderer final : public Singleton<Renderer>
+	class Renderer final : public Singleton<Renderer>, public IRenderer
 	{
 	public:
 		void Init(SDL_Window* window);
@@ -22,8 +23,8 @@ namespace REC
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 		void RenderTexture(const Texture2D& texture, const Rect& textureRegion, const Rect& screenRegion) const;
 
-		void RenderLine(const Color& color, glm::vec2 start, glm::vec2 end) const;
-		void RenderRect(const Color& color, const Rect& rect, bool fill = false) const;
+		virtual void RenderLine(const Color& color, glm::vec2 start, glm::vec2 end) const override;
+		virtual void RenderRect(const Color& color, const Rect& rect, bool fill = false) const override;
 
 		SDL_Renderer* GetSDLRenderer() const;
 

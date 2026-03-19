@@ -19,8 +19,6 @@
 
 #include <filesystem>
 #include <ComponentDescriptors.h>
-#include "../Engine/inc/Components/GridComponent.h"
-#include "../Engine/inc/Components/DebugGridRenderComponent.h"
 #include <Components/AnimatedSpriteComponent.h>
 #include "Commands/MoveCommand.h"
 #include "Commands/PlaceBombCommand.h"
@@ -33,6 +31,8 @@
 #include <Components/HealthComponent.h>
 #include "Components/UILivesComponent.h"
 #include "Components/UIScoreComponent.h"
+#include "Components/GridComponent.h"
+#include "Components/DebugGridRenderComponent.h"
 #include "Commands/ChangeHealthCommand.h"
 #include <Components/LivesComponent.h>
 
@@ -125,7 +125,7 @@ static void load(REC::Engine* engine)
 
 	auto* scene = SM->CreateScene();
 
-	REC::GridDescriptor grid{};
+	Game::GridDescriptor grid{};
 	grid.cellHeight = uint8_t(45); //51
 	grid.cellWidth = uint8_t(45);  //51
 	grid.rows = uint8_t(13);
@@ -139,8 +139,8 @@ static void load(REC::Engine* engine)
 
 	auto go = scene->CreateGameObject(0.f, 80.f);
 	go->AddComponent<REC::SpriteRenderComponent>(backdrop);
-	go->AddComponent<REC::GridComponent>(grid);
-	go->AddComponent<REC::DebugGridRenderComponent>(REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
+	go->AddComponent<Game::GridComponent>(grid);
+	go->AddComponent<Game::DebugGridRenderComponent>(engine->GetRenderer(), REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
 	scene->SetRenderLayer(go, Game::GetLayer(Game::RenderLayer::BACKGROUND));
 
 	auto instructions = scene->CreateGameObject(20.f, 20.f);
@@ -220,19 +220,19 @@ static void load(REC::Engine* engine)
 	scene->SetRenderLayer(fps, Game::GetLayer(Game::RenderLayer::UI));
 
 	// Create a player class in game that does this instead, to avoid repetition
-	REC::SpriteDescriptor character1{};
-	character1.drawHeight = 50;
-	character1.frameDataFileKey = "characterData";
-	character1.textureKey = "generalSprites";
+	REC::SpriteDescriptor charactersSpriteDescriptors{};
+	charactersSpriteDescriptors.drawHeight = 50;
+	charactersSpriteDescriptors.frameDataFileKey = "characterData";
+	charactersSpriteDescriptors.textureKey = "generalSprites";
 
-	REC::AnimationDescriptor animation1{};
-	animation1.animationDataFileKey = "characterData";
-	animation1.animationKey = "bomberman_walk_left";
-	animation1.startOnStartup = true;
+	REC::AnimationDescriptor bombermanWalkAnimDesc{};
+	bombermanWalkAnimDesc.animationDataFileKey = "characterData";
+	bombermanWalkAnimDesc.animationKey = "bomberman_walk_left";
+	bombermanWalkAnimDesc.startOnStartup = true;
 
 	auto bomberman = scene->CreateGameObject(200.f, 200.f); 
-	bomberman->AddComponent<REC::SpriteRenderComponent>(character1);
-	bomberman->AddComponent<REC::AnimatedSpriteComponent>(animation1);
+	bomberman->AddComponent<REC::SpriteRenderComponent>(charactersSpriteDescriptors);
+	bomberman->AddComponent<REC::AnimatedSpriteComponent>(bombermanWalkAnimDesc);
 	auto bom_health = bomberman->AddComponent<REC::HealthComponent>(100.f, 100.f);
 	auto bom_lives = bomberman->AddComponent<REC::LivesComponent>(3);
 	bom_health->SubscribeToEvents(bom_lives);
@@ -241,18 +241,13 @@ static void load(REC::Engine* engine)
 
 	uint8_t balloomControllerId{ 0 };
 
-	REC::SpriteDescriptor balloomSpriteDesc{};
-	balloomSpriteDesc.drawHeight = 50;
-	balloomSpriteDesc.frameDataFileKey = "characterData";
-	balloomSpriteDesc.textureKey = "generalSprites";
-
 	REC::AnimationDescriptor balloomAnimDesc{};
 	balloomAnimDesc.animationDataFileKey = "characterData";
 	balloomAnimDesc.animationKey = "balloom_look_left";
 	balloomAnimDesc.startOnStartup = true;
 	
 	auto balloom = scene->CreateGameObject(350.f, 250.f); 
-	balloom->AddComponent<REC::SpriteRenderComponent>(balloomSpriteDesc);
+	balloom->AddComponent<REC::SpriteRenderComponent>(charactersSpriteDescriptors);
 	balloom->AddComponent<REC::AnimatedSpriteComponent>(balloomAnimDesc);
 	auto bal_health = balloom->AddComponent<REC::HealthComponent>(100.f, 100.f);
 	auto bal_lives = balloom->AddComponent<REC::LivesComponent>(3);

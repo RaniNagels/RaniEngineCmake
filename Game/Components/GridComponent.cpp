@@ -1,6 +1,6 @@
-#include "../../inc/Components/GridComponent.h"
+#include "GridComponent.h"
 
-REC::GridComponent::GridComponent(GameObject* owner, const GridDescriptor& desc)
+Game::GridComponent::GridComponent(REC::GameObject* owner, const GridDescriptor& desc)
 	: Component(owner)
 	, m_Descriptor{desc}
 	, m_Cells{}
@@ -20,14 +20,14 @@ REC::GridComponent::GridComponent(GameObject* owner, const GridDescriptor& desc)
 	}
 }
 
-void REC::GridComponent::Update(float) {}
+void Game::GridComponent::Update(float) {}
 
-uint32_t REC::GridComponent::GetIndex(Cell* cell)
+uint32_t Game::GridComponent::GetIndex(Cell* cell)
 {
 	return uint16_t(m_Descriptor.cols) * uint16_t(cell->row) + uint16_t(cell->col);
 }
 
-uint32_t REC::GridComponent::GetIndex(uint8_t row, uint8_t col)
+uint32_t Game::GridComponent::GetIndex(uint8_t row, uint8_t col)
 {
 	return uint16_t(m_Descriptor.cols) * uint16_t(row) + uint16_t(col);
 }

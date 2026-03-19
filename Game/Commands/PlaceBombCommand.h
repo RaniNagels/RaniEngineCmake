@@ -3,7 +3,7 @@
 
 namespace REC
 {
-	class ValueChangedEvent;
+	class Event;
 	class IListener;
 }
 
@@ -29,6 +29,6 @@ namespace Game
 
 	private:
 		REC::SceneManager* m_pSceneManager; // retrieve active scene and add new GameObject to it
-		std::unique_ptr<REC::ValueChangedEvent> m_HasPlacedBombEvent;
+		std::unique_ptr<REC::Event> m_HasPlacedBombEvent;
 	};
 }

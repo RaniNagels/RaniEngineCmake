@@ -14,6 +14,7 @@ namespace REC
 	class SceneManager;
 	class InputSystem;
 	class IResourceManager;
+	class IRenderer;
 
 	class Engine final
 	{
@@ -32,6 +33,7 @@ namespace REC
 		void SetEngineData(const EngineSettings& data);
 		SceneManager* GetSceneManager() const { return m_pSceneManager.get(); }
 		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
+		IRenderer* GetRenderer() const;
 
 		const EngineContext& GetEngineContext() const { return m_EngineContext; }
 
