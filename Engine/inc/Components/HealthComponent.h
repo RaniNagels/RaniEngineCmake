@@ -1,6 +1,6 @@
 #pragma once
 #include <Components/Component.h>
-#include <Event.h>
+#include <Events/Event.h>
 #include <memory>
 
 namespace REC
@@ -21,9 +21,6 @@ namespace REC
 
 		void ChangeHealth(float delta);
 		void ResetHealth();
-
-		void SubscribeToEvents(IListener* listener);
-		void UnSubscribeToEvents(IListener* listener);
 
 	private:
 		const float MAX_HEALTH;

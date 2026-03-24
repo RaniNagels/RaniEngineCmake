@@ -1,8 +1,8 @@
-#include "../../inc/Components/Component.h"
-#include "../../inc/GameObject.h"
+#include <Components/Component.h>
+#include <GameObject.h>
 #include <stdexcept>
 
-REC::Component::Component(GameObject* owner)
+REC::Component::Component(GameObject *const owner)
 	: m_pOwner(owner)
 {
 	if (m_pOwner == nullptr)

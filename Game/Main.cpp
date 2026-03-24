@@ -9,6 +9,7 @@
 #include <ResourceCreateInfos.h>
 #include <SceneManager.h>
 #include <Input/InputSystem.h>
+#include <Events/EventSystem.h>
 
 #include <ComponentDescriptors.h>
 
@@ -126,6 +127,7 @@ static void load(REC::Engine* engine)
 #pragma endregion StartScreen
 
 	auto* scene = SM->CreateScene();
+	auto* ES = engine->GetEventSystem();
 
 	Game::GridDescriptor grid{};
 	grid.cellHeight = uint8_t(45); //51
@@ -185,6 +187,7 @@ static void load(REC::Engine* engine)
 
 	auto bombermanUILives = scene->CreateGameObject();
 	auto bomberman_livesStatComp = bombermanUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
+	ES->Subscribe(bomberman_livesStatComp, { REC::make_sdbm_hash("LostLiveEvent") });
 	bombermanUILives->AddComponent<REC::SpriteRenderComponent>(bombermanIcon);
 	bombermanUILives->SetParent(UI);
 	scene->SetRenderLayer(bombermanUILives, Game::GetLayer(Game::RenderLayer::Ui));
@@ -197,6 +200,7 @@ static void load(REC::Engine* engine)
 
 	auto balloomUILives = scene->CreateGameObject(0.f, 30.f);
 	auto balloom_livesStatComp = balloomUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
+	ES->Subscribe(balloom_livesStatComp, { REC::make_sdbm_hash("LostLiveEvent") });
 	balloomUILives->AddComponent<REC::SpriteRenderComponent>(balloomIcon);
 	balloomUILives->SetParent(UI);
 	scene->SetRenderLayer(balloomUILives, Game::GetLayer(Game::RenderLayer::Ui));
@@ -240,8 +244,10 @@ static void load(REC::Engine* engine)
 	bombermanDescriptor.renderLayer = Game::GetLayer(Game::RenderLayer::Player);
 	bombermanDescriptor.startPosition = { 200.f, 200.f };
 
-	Game::Player bomberman{ scene, bombermanDescriptor };
-	bomberman.GetComponents().livesComp->SubscribeToEvents(bomberman_livesStatComp);
+	Game::Player bomberman{ scene, ES, bombermanDescriptor };
+	bomberman_livesStatComp->SetConnectedPlayer(bomberman.Get());
+	bomberman_scoreStatComp->SetConnectedPlayer(bomberman.Get());
+	ES->Subscribe(bomberman.GetComponents().livesComp, { REC::make_sdbm_hash("HasZeroHealthEvent") });
 
 	uint8_t balloomControllerId{ 0 };
 
@@ -258,8 +264,10 @@ static void load(REC::Engine* engine)
 	balloomDescriptor.renderLayer = Game::GetLayer(Game::RenderLayer::Enemies);
 	balloomDescriptor.startPosition = { 350.f, 250.f };
 
-	Game::Player balloom{ scene, balloomDescriptor };
-	balloom.GetComponents().livesComp->SubscribeToEvents(balloom_livesStatComp);
+	Game::Player balloom{ scene, ES, balloomDescriptor };
+	balloom_livesStatComp->SetConnectedPlayer(balloom.Get());
+	balloom_scoreStatComp->SetConnectedPlayer(balloom.Get());
+	ES->Subscribe(balloom.GetComponents().livesComp, { REC::make_sdbm_hash("HasZeroHealthEvent") });
 	
 
 	// === INPUT =======================================================================================
@@ -293,8 +301,8 @@ static void load(REC::Engine* engine)
 	balloomInputActions_rng.up    = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_Y, balloomControllerId);
 	balloom.AddInputActions(balloomInputActions_rng);
 
-	bomberman.GetCommands().placeBombCmd->SubscribeToEvents(bomberman_scoreStatComp);
-	balloom.GetCommands().placeBombCmd->SubscribeToEvents(balloom_scoreStatComp);
+	ES->Subscribe(bomberman_scoreStatComp, { REC::make_sdbm_hash("HasPlacedBombEvent") });
+	ES->Subscribe(balloom_scoreStatComp, { REC::make_sdbm_hash("HasPlacedBombEvent") });
 
 	auto* changeScene = input->CreateInputBinding();
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_5, REC::ButtonState::Up);

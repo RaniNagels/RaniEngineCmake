@@ -28,6 +28,7 @@ set(SOURCE_FILES
     "src/Resources/DataFile.cpp"
 
     "src/Events/EventSystem.cpp"
+    "src/Events/Event.cpp"
 
 	"src/GameObject.cpp"
 	"src/Engine.cpp"
@@ -37,7 +38,6 @@ set(SOURCE_FILES
 	"src/SceneManager.cpp"
 	"src/TimeSystem.cpp"
 	"src/Window.cpp"
-    "src/Event.cpp"
 )
 
 # --- Include Libraries -------------

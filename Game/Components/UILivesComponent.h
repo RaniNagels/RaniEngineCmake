@@ -21,7 +21,11 @@ namespace Game
 		UILivesComponent& operator=(const UILivesComponent& other) = delete;
 		UILivesComponent& operator=(UILivesComponent&& other) = delete;
 
+		void SetConnectedPlayer(REC::GameObject* player) { m_pConnectedPlayer = player; }
+
 		virtual void Notify(REC::Event* event) override;
 
+	private:
+		REC::GameObject* m_pConnectedPlayer{};
 	};
 }

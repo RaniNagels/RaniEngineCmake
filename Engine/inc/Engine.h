@@ -15,6 +15,7 @@ namespace REC
 	class InputSystem;
 	class IResourceManager;
 	class IRenderer;
+	class EventSystem;
 
 	class Engine final
 	{
@@ -34,6 +35,7 @@ namespace REC
 		SceneManager* GetSceneManager() const { return m_pSceneManager.get(); }
 		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
 		IRenderer* GetRenderer() const;
+		EventSystem* GetEventSystem() const { return m_pEventSystem.get(); }
 
 		const EngineContext& GetEngineContext() const { return m_EngineContext; }
 
@@ -44,6 +46,7 @@ namespace REC
 		std::unique_ptr<Window> m_pWindow;
 		std::unique_ptr<SceneManager> m_pSceneManager;
 		std::unique_ptr<InputSystem> m_pInputSystem;
+		std::unique_ptr<EventSystem> m_pEventSystem;
 
 		EngineContext m_EngineContext{};
 	};

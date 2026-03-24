@@ -12,6 +12,7 @@ namespace REC
 	class Scene;
 	class SceneManager;
 	class InputSystem;
+	class EventSystem;
 
 	class SpriteRenderComponent;
 	class AnimatedSpriteComponent;
@@ -71,7 +72,7 @@ namespace Game
 	class Player final
 	{
 	public:
-		explicit Player(REC::Scene* scene, const PlayerDescriptor& descriptor);
+		explicit Player(REC::Scene* scene, REC::EventSystem* eventSystem, const PlayerDescriptor& descriptor);
 		~Player();
 
 		Player(const Player& other) = delete;
@@ -118,5 +119,7 @@ namespace Game
 		// up, down, left, right, place bomb, ...
 		// use the same order as the PlayerInputActions struct
 		std::vector<REC::InputBinding*> m_InputBindings{};
+
+		REC::EventSystem* m_pEventSystem;
 	};
 }

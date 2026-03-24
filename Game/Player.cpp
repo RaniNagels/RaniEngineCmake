@@ -13,12 +13,14 @@
 
 #include "Commands/MoveCommand.h"
 #include "Commands/PlaceBombCommand.h"
+#include <Events/EventSystem.h>
 
-Game::Player::Player(REC::Scene* scene, const PlayerDescriptor& descriptor)
+Game::Player::Player(REC::Scene* scene, REC::EventSystem* eventSystem, const PlayerDescriptor& descriptor)
 	: m_Descriptor{descriptor}
 	, m_Components{}
 	, m_Commands{}
 	, m_pGameObject{ scene->CreateGameObject(descriptor.startPosition.x, descriptor.startPosition.y) }
+	, m_pEventSystem{ eventSystem }
 {
 	m_Components.spriteComp = m_pGameObject->AddComponent<REC::SpriteRenderComponent>(m_Descriptor.spriteDesc);
 	m_Components.animComp   = m_pGameObject->AddComponent<REC::AnimatedSpriteComponent>(m_Descriptor.animDesc);
@@ -27,8 +29,7 @@ Game::Player::Player(REC::Scene* scene, const PlayerDescriptor& descriptor)
 
 	scene->SetRenderLayer(m_pGameObject, m_Descriptor.renderLayer);
 
-	m_Components.healthComp->SubscribeToEvents(m_Components.livesComp);
-
+	m_pEventSystem->Subscribe(m_Components.livesComp, { REC::make_sdbm_hash("LostLiveEvent")});
 }
 
 Game::Player::~Player() = default;

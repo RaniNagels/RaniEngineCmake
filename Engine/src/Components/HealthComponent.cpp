@@ -4,7 +4,7 @@ REC::HealthComponent::HealthComponent(GameObject* owner, float maxHealth, float 
 	: Component(owner)
 	, MAX_HEALTH{maxHealth}
 	, m_CurrentHealth{currentHealth}
-	, m_HasZeroHealthEvent{std::make_unique<Event>(REC::make_sdbm_hash("HasZeroHealthEvent"))}
+	, m_HasZeroHealthEvent{std::make_unique<Event>(GetOwner(), REC::make_sdbm_hash("HasZeroHealthEvent"))}
 {
 }
 
@@ -22,21 +22,11 @@ void REC::HealthComponent::ChangeHealth(float delta)
 		if (m_CurrentHealth > MAX_HEALTH)
 			m_CurrentHealth = MAX_HEALTH;
 		else if (m_CurrentHealth <= 0)
-			m_HasZeroHealthEvent->NotifyListeners();
+			m_HasZeroHealthEvent->Broadcast();
 	}
 }
 
 void REC::HealthComponent::ResetHealth()
 {
 	m_CurrentHealth = MAX_HEALTH;
-}
-
-void REC::HealthComponent::SubscribeToEvents(IListener* listener)
-{
-	m_HasZeroHealthEvent->Subscribe(listener);
-}
-
-void REC::HealthComponent::UnSubscribeToEvents(IListener* listener)
-{
-	m_HasZeroHealthEvent->Unsubscribe(listener);
 }

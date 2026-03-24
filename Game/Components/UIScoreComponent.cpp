@@ -1,5 +1,5 @@
 #include "UIScoreComponent.h"
-#include <Event.h>
+#include <Events/Event.h>
 #include <sdbm_hash.h>
 
 Game::UIScoreComponent::UIScoreComponent(REC::GameObject* owner, const REC::LabeledStatDescriptor& descriptor)
@@ -9,7 +9,7 @@ Game::UIScoreComponent::UIScoreComponent(REC::GameObject* owner, const REC::Labe
 
 void Game::UIScoreComponent::Notify(REC::Event* event)
 {
-	if (event->IsEvent(REC::make_sdbm_hash("HasPlacedBombEvent")))
+	if (event->IsEvent(REC::make_sdbm_hash("HasPlacedBombEvent")) && event->IsSender(m_pConnectedPlayer))
 	{
 		AddToStatValue(30);
 	}

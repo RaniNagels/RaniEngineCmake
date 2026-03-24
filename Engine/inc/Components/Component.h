@@ -10,7 +10,7 @@ namespace REC
 	{
 	protected:
 		// enforce that only derived classes can create components!
-		explicit Component(GameObject* owner);
+		explicit Component(GameObject *const owner);
 
 	public:
 		virtual ~Component() = default;
@@ -22,14 +22,14 @@ namespace REC
 		
 		virtual void Update(float deltaT) = 0;
 
-		GameObject* GetOwner() const { return m_pOwner; }
+		GameObject *const GetOwner() const { return m_pOwner; }
 
 		virtual void Destroy();
 		virtual bool IsAboutToBeDestroyed() const { return m_IsAboutToBeDestroyed; }
 		virtual bool CanRender() const { return false; }
 
 	private:
-		GameObject* m_pOwner = nullptr;
+		GameObject *const m_pOwner;
 		bool m_IsAboutToBeDestroyed = false;
 	};
 }

@@ -24,9 +24,6 @@ namespace Game
 
 		virtual void Execute(float deltaTime) override;
 
-		void SubscribeToEvents(REC::IListener* listener);
-		void UnSubscribeToEvents(REC::IListener* listener);
-
 	private:
 		REC::SceneManager* m_pSceneManager; // retrieve active scene and add new GameObject to it
 		std::unique_ptr<REC::Event> m_HasPlacedBombEvent;

@@ -5,12 +5,12 @@
 #include <Components/AnimatedSpriteComponent.h>
 #include <sdbm_hash.h>
 #include "../RenderLayers.h"
-#include <Event.h>
+#include <Events/Event.h>
 
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
 	, m_pSceneManager{sceneManager}
-	, m_HasPlacedBombEvent{std::make_unique<REC::ValueChangedEvent>(REC::make_sdbm_hash("HasPlacedBombEvent"))}
+	, m_HasPlacedBombEvent{std::make_unique<REC::Event>(GetGameObject(), REC::make_sdbm_hash("HasPlacedBombEvent"))}
 {
 }
 
@@ -40,15 +40,5 @@ void Game::PlaceBombCommand::Execute(float)
 
 	bomb->AddComponent<REC::AnimatedSpriteComponent>(animation);
 
-	m_HasPlacedBombEvent->NotifyListeners();
-}
-
-void Game::PlaceBombCommand::SubscribeToEvents(REC::IListener* listener)
-{
-	m_HasPlacedBombEvent->Subscribe(listener);
-}
-
-void Game::PlaceBombCommand::UnSubscribeToEvents(REC::IListener* listener)
-{
-	m_HasPlacedBombEvent->Unsubscribe(listener);
+	m_HasPlacedBombEvent->Broadcast();
 }

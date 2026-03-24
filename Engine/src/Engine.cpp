@@ -13,6 +13,8 @@
 #include <Engine.h>
 #include "../inc/Input/InputSystem.h"
 #include "../inc/SceneManager.h"
+#include <Events/EventSystem.h>
+#include <Events/EventBroadcaster.h>
 #include <IRenderer.h>
 #include "Renderer.h"
 #include "ResourceManager.h"
@@ -35,6 +37,7 @@ void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
+#include <Events/EventBroadcaster.h>
 
 void LoopCallback(void* arg)
 {
@@ -77,6 +80,8 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	m_pTimeSystem->SetFrameRate(60);
 	m_pSceneManager = std::make_unique<SceneManager>();
 	m_pInputSystem = std::make_unique<InputSystem>();
+	m_pEventSystem = std::make_unique<EventSystem>();
+	EventBroadcaster::SetEventSystem(m_pEventSystem.get());
 
 	m_EngineContext.sceneManager = m_pSceneManager.get();
 }
@@ -110,6 +115,7 @@ void REC::Engine::RunOneFrame()
 
 	m_pInputSystem->ProcessInput(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
+	m_pEventSystem->ProcessEvents();
 	m_pSceneManager->Render();
 
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());

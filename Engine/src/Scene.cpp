@@ -41,17 +41,6 @@ void REC::Scene::RemoveMarkedObjects()
 			}
 		}
 	}
-
-
-	//m_Objects.erase(
-	//	std::remove_if(
-	//		m_Objects.begin(),
-	//		m_Objects.end(),
-	//		[](const std::unique_ptr<GameObject>& object)
-	//		{ return object->IsAboutToBeDestroyed(); }
-	//	),
-	//	m_Objects.end()
-	//);
 }
 
 void REC::Scene::RemoveAll()

@@ -6,7 +6,7 @@ REC::LivesComponent::LivesComponent(GameObject* owner, int totalLives)
 	: Component(owner)
 	, MAX_LIVES{totalLives}
 	, m_CurrentAmountOfLives{totalLives}
-	, m_LostLiveEvent{std::make_unique<Event>(make_sdbm_hash("LostLiveEvent"))}
+	, m_LostLiveEvent{std::make_unique<Event>(GetOwner(), make_sdbm_hash("LostLiveEvent"))}
 	, m_pHealthComponent{GetOwner()->GetComponent<HealthComponent>()}
 {
 }
@@ -17,23 +17,13 @@ void REC::LivesComponent::Update(float) {}
 
 void REC::LivesComponent::Notify(Event* event)
 {
-	if (event->IsEvent(make_sdbm_hash("HasZeroHealthEvent")))
+	if (event->IsEvent(make_sdbm_hash("HasZeroHealthEvent")) && event->IsSender(GetOwner()))
 	{
 		m_pHealthComponent->ResetHealth();
 		if (m_CurrentAmountOfLives > 0)
 		{
 			--m_CurrentAmountOfLives;
-			m_LostLiveEvent->NotifyListeners();
+			m_LostLiveEvent->Broadcast();
 		}
 	}
-}
-
-void REC::LivesComponent::SubscribeToEvents(IListener* listener)
-{
-	m_LostLiveEvent->Subscribe(listener);
-}
-
-void REC::LivesComponent::UnSubscribeToEvents(IListener* listener)
-{
-	m_LostLiveEvent->Unsubscribe(listener);
 }

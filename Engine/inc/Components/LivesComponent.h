@@ -1,6 +1,6 @@
 #pragma once
 #include <Components/Component.h>
-#include <Event.h>
+#include <Events/Event.h>
 #include <memory>
 #include <Components/IListener.h>
 
@@ -20,9 +20,6 @@ namespace REC
 
 		virtual void Update(float deltaT) override;
 		virtual void Notify(Event* event) override;
-
-		void SubscribeToEvents(IListener* listener);
-		void UnSubscribeToEvents(IListener* listener);
 
 		void ResetLives() { m_CurrentAmountOfLives = MAX_LIVES; }
 
