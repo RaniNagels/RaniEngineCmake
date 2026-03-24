@@ -22,7 +22,7 @@ namespace REC
 		
 		virtual void Update(float deltaT) = 0;
 
-		GameObject *const GetOwner() const { return m_pOwner; }
+		GameObject* GetOwner() const { return m_pOwner; }
 
 		virtual void Destroy();
 		virtual bool IsAboutToBeDestroyed() const { return m_IsAboutToBeDestroyed; }
