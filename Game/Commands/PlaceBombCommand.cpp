@@ -23,7 +23,7 @@ void Game::PlaceBombCommand::Execute(float)
 	// TODO: place in grid, not just willy nilly on the GameObject
 	auto PlayerPosition = GetGameObject()->GetTransform()->GetWorldPosition();
 	auto bomb = activeScene->CreateGameObject(PlayerPosition.x, PlayerPosition.y);
-	activeScene->SetRenderLayer(bomb, GetLayer(RenderLayer::PLACEBLES));
+	activeScene->SetRenderLayer(bomb, GetLayer(RenderLayer::Placables));
 
 	REC::SpriteDescriptor bombSpriteDescriptor{};
 	bombSpriteDescriptor.drawHeight = 50;

@@ -27,6 +27,8 @@ set(SOURCE_FILES
 	"src/Resources/Texture2D.cpp"
     "src/Resources/DataFile.cpp"
 
+    "src/Events/EventSystem.cpp"
+
 	"src/GameObject.cpp"
 	"src/Engine.cpp"
 	"src/Renderer.cpp"

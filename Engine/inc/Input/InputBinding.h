@@ -37,6 +37,12 @@ namespace REC
 			m_Actions.emplace_back(std::make_unique<A>(std::forward<Args>(args)...));
 		}
 
+		template <Action A>
+		void AddInputAction(std::unique_ptr<A> action)
+		{
+			m_Actions.emplace_back(std::move(action));
+		}
+
 		std::vector<IInputAction*> GetInputActions(InputActionType type) const;
 
 		// will execute all commands

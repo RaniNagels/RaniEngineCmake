@@ -2,12 +2,10 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include "Scene.h"
+#include <Scene.h>
 
 namespace REC
 {
-	class Scene;
-
 	class SceneManager final
 	{
 	public:

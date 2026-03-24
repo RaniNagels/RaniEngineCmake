@@ -26,6 +26,7 @@ namespace REC
 			: button{ btn }, state{ st }, playerIndex{ plIdx }
 		{
 		}
+		virtual ~ControllerButtonAction() = default;
 
 		virtual InputActionType GetType() const override { return InputActionType::ControllerButton; }
 
@@ -40,6 +41,7 @@ namespace REC
 			: button{ btn }, state{ st }, playerIndex{ plIdx }
 		{
 		}
+		virtual ~KeyboardButtonAction() = default;
 
 		virtual InputActionType GetType() const override { return InputActionType::KeyboardButton; }
 
@@ -54,6 +56,7 @@ namespace REC
 			: range{ rg }, playerIndex{ plIdx }
 		{
 		}
+		virtual ~ControllerRangeAction() = default;
 
 		virtual InputActionType GetType() const override { return InputActionType::ControllerRange; }
 

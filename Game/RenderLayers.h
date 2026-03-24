@@ -5,11 +5,11 @@ namespace Game
 {
 	enum class RenderLayer : uint8_t
 	{
-		BACKGROUND = 0,
-		UI = 1,
-		PLACEBLES = 2,
-		ENEMIES = 3,
-		PLAYER = 4,
+		Background = 0,
+		Ui = 1,
+		Placables = 2,
+		Enemies = 3,
+		Player = 4,
 	};
 
 	static uint8_t GetLayer(RenderLayer layer)

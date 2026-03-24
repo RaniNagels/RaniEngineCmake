@@ -5,36 +5,38 @@
 #endif
 
 #include <Engine.h>
-#include "../Engine/inc/SceneManager.h"
-#include "../Engine/inc/Scene.h"
+#include <EngineSettings.h>
+#include <ResourceCreateInfos.h>
+#include <SceneManager.h>
+#include <Input/InputSystem.h>
 
-#include "../Engine/inc/Components/TransformComponent.h"
-#include "../Engine/inc/Components/SpriteRenderComponent.h"
-#include "../Engine/inc/Components/TextRenderComponent.h"
-#include "../Engine/inc/Components/FPSComponent.h"
-#include "../Engine/inc/Components/RotatorComponent.h"
+#include <ComponentDescriptors.h>
 
-#include "../Engine/inc/ResourceCreateInfos.h"
-#include "../Engine/inc/EngineSettings.h"
+#include <Components/TransformComponent.h>
+#include <Components/AnimatedSpriteComponent.h>
+#include <Components/SpriteRenderComponent.h>
+#include <Components/LabeledStatComponent.h>
+#include <Components/TextRenderComponent.h>
+#include <Components/FPSComponent.h>
+#include <Components/RotatorComponent.h>
+#include <Components/HealthComponent.h>
+#include <Components/LivesComponent.h>
+
+#include <Commands/ChangeSceneCommand.h>
 
 #include <filesystem>
-#include <ComponentDescriptors.h>
-#include <Components/AnimatedSpriteComponent.h>
-#include "Commands/MoveCommand.h"
-#include "Commands/PlaceBombCommand.h"
-#include <Commands/ChangeSceneCommand.h>
-#include <Input/InputSystem.h>
-#include <Components/LabeledStatComponent.h>
 #include <sdbm_hash.h>
 
-#include "RenderLayers.h"
-#include <Components/HealthComponent.h>
+#include "Commands/MoveCommand.h"
+#include "Commands/PlaceBombCommand.h"
+
 #include "Components/UILivesComponent.h"
 #include "Components/UIScoreComponent.h"
 #include "Components/GridComponent.h"
 #include "Components/DebugGridRenderComponent.h"
-#include "Commands/ChangeHealthCommand.h"
-#include <Components/LivesComponent.h>
+
+#include "RenderLayers.h"
+#include "Player.h"
 
 namespace fs = std::filesystem;
 
@@ -116,11 +118,11 @@ static void load(REC::Engine* engine)
 	
 	auto* stsc = startScreen->CreateGameObject(125,0);
 	stsc->AddComponent<REC::SpriteRenderComponent>(startScreenBackdrop);
-	startScreen->SetRenderLayer(stsc, Game::GetLayer(Game::RenderLayer::BACKGROUND));
+	startScreen->SetRenderLayer(stsc, Game::GetLayer(Game::RenderLayer::Background));
 
 	auto* stscInstruction = startScreen->CreateGameObject(75, 320);
 	stscInstruction->AddComponent<REC::TextRenderComponent>("Press '5' to start", "dogicapixel20", REC::Color{0,255,255});
-	startScreen->SetRenderLayer(stscInstruction, Game::GetLayer(Game::RenderLayer::UI));
+	startScreen->SetRenderLayer(stscInstruction, Game::GetLayer(Game::RenderLayer::Ui));
 #pragma endregion StartScreen
 
 	auto* scene = SM->CreateScene();
@@ -141,33 +143,33 @@ static void load(REC::Engine* engine)
 	go->AddComponent<REC::SpriteRenderComponent>(backdrop);
 	go->AddComponent<Game::GridComponent>(grid);
 	go->AddComponent<Game::DebugGridRenderComponent>(engine->GetRenderer(), REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
-	scene->SetRenderLayer(go, Game::GetLayer(Game::RenderLayer::BACKGROUND));
+	scene->SetRenderLayer(go, Game::GetLayer(Game::RenderLayer::Background));
 
 	auto instructions = scene->CreateGameObject(20.f, 20.f);
-	scene->SetRenderLayer(instructions, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(instructions, Game::GetLayer(Game::RenderLayer::Ui));
 	
 	auto instructionsBalloom = scene->CreateGameObject();
 	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel16");
 	instructionsBalloom->SetParent(instructions);
-	scene->SetRenderLayer(instructionsBalloom, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(instructionsBalloom, Game::GetLayer(Game::RenderLayer::Ui));
 	
 	auto instructionsBomberman = scene->CreateGameObject(0.f, 28.f);
 	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman", "dogicapixel16");
 	instructionsBomberman->SetParent(instructions);
-	scene->SetRenderLayer(instructionsBomberman, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(instructionsBomberman, Game::GetLayer(Game::RenderLayer::Ui));
 
 	auto intstructionsBalloomBomb = scene->CreateGameObject(30.f, 110.f);
 	intstructionsBalloomBomb->AddComponent<REC::TextRenderComponent>("BALLOOM: Press A to place bomb, place 2 bombs and kill bomberman", "dogicapixel16");
 	intstructionsBalloomBomb->SetParent(instructions);
-	scene->SetRenderLayer(intstructionsBalloomBomb, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(intstructionsBalloomBomb, Game::GetLayer(Game::RenderLayer::Ui));
 
 	auto intstructionsbombermanBomb = scene->CreateGameObject(30.f, 130.f);
 	intstructionsbombermanBomb->AddComponent<REC::TextRenderComponent>("BOMBERMAN: Press 'space' to place bomb, place 2 bombs and kill balloom", "dogicapixel16");
 	intstructionsbombermanBomb->SetParent(instructions);
-	scene->SetRenderLayer(intstructionsbombermanBomb, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(intstructionsbombermanBomb, Game::GetLayer(Game::RenderLayer::Ui));
 
 	auto UI = scene->CreateGameObject(20.f, 680.f);
-	scene->SetRenderLayer(UI, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(UI, Game::GetLayer(Game::RenderLayer::Ui));
 
 	REC::LabeledStatDescriptor livesStatDesciptor{};
 	livesStatDesciptor.fontkey = "dogicapixel16";
@@ -185,7 +187,7 @@ static void load(REC::Engine* engine)
 	auto bomberman_livesStatComp = bombermanUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
 	bombermanUILives->AddComponent<REC::SpriteRenderComponent>(bombermanIcon);
 	bombermanUILives->SetParent(UI);
-	scene->SetRenderLayer(bombermanUILives, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(bombermanUILives, Game::GetLayer(Game::RenderLayer::Ui));
 
 	REC::SpriteDescriptor balloomIcon{};
 	balloomIcon.drawHeight = 20;
@@ -197,7 +199,7 @@ static void load(REC::Engine* engine)
 	auto balloom_livesStatComp = balloomUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
 	balloomUILives->AddComponent<REC::SpriteRenderComponent>(balloomIcon);
 	balloomUILives->SetParent(UI);
-	scene->SetRenderLayer(balloomUILives, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(balloomUILives, Game::GetLayer(Game::RenderLayer::Ui));
 
 	REC::LabeledStatDescriptor scoreStatDesciptor{};
 	scoreStatDesciptor.fontkey = "dogicapixel16";
@@ -208,16 +210,16 @@ static void load(REC::Engine* engine)
 	auto bombermanUIScore = scene->CreateGameObject(350.f, 0);
 	auto bomberman_scoreStatComp = bombermanUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
 	bombermanUIScore->SetParent(UI);
-	scene->SetRenderLayer(bombermanUIScore, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(bombermanUIScore, Game::GetLayer(Game::RenderLayer::Ui));
 
 	auto balloomUIScore = scene->CreateGameObject(350.f, 30.f);
 	auto balloom_scoreStatComp = balloomUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
 	balloomUIScore->SetParent(UI);
-	scene->SetRenderLayer(balloomUIScore, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(balloomUIScore, Game::GetLayer(Game::RenderLayer::Ui));
 
 	auto fps = scene->CreateGameObject(880.f, 20.f); 
 	fps->AddComponent<REC::FPSComponent>("dogicapixel20");
-	scene->SetRenderLayer(fps, Game::GetLayer(Game::RenderLayer::UI));
+	scene->SetRenderLayer(fps, Game::GetLayer(Game::RenderLayer::Ui));
 
 	// Create a player class in game that does this instead, to avoid repetition
 	REC::SpriteDescriptor charactersSpriteDescriptors{};
@@ -230,14 +232,16 @@ static void load(REC::Engine* engine)
 	bombermanWalkAnimDesc.animationKey = "bomberman_walk_left";
 	bombermanWalkAnimDesc.startOnStartup = true;
 
-	auto bomberman = scene->CreateGameObject(200.f, 200.f); 
-	bomberman->AddComponent<REC::SpriteRenderComponent>(charactersSpriteDescriptors);
-	bomberman->AddComponent<REC::AnimatedSpriteComponent>(bombermanWalkAnimDesc);
-	auto bom_health = bomberman->AddComponent<REC::HealthComponent>(100.f, 100.f);
-	auto bom_lives = bomberman->AddComponent<REC::LivesComponent>(3);
-	bom_health->SubscribeToEvents(bom_lives);
-	bom_lives->SubscribeToEvents(bomberman_livesStatComp);
-	scene->SetRenderLayer(bomberman, Game::GetLayer(Game::RenderLayer::PLAYER));
+	Game::PlayerDescriptor bombermanDescriptor{};
+	bombermanDescriptor.amountOfLives = 3;
+	bombermanDescriptor.animDesc = bombermanWalkAnimDesc;
+	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
+	bombermanDescriptor.maxHealth = 100.f;
+	bombermanDescriptor.renderLayer = Game::GetLayer(Game::RenderLayer::Player);
+	bombermanDescriptor.startPosition = { 200.f, 200.f };
+
+	Game::Player bomberman{ scene, bombermanDescriptor };
+	bomberman.GetComponents().livesComp->SubscribeToEvents(bomberman_livesStatComp);
 
 	uint8_t balloomControllerId{ 0 };
 
@@ -245,74 +249,57 @@ static void load(REC::Engine* engine)
 	balloomAnimDesc.animationDataFileKey = "characterData";
 	balloomAnimDesc.animationKey = "balloom_look_left";
 	balloomAnimDesc.startOnStartup = true;
+
+	Game::PlayerDescriptor balloomDescriptor{};
+	balloomDescriptor.amountOfLives = 3;
+	balloomDescriptor.animDesc = balloomAnimDesc;
+	balloomDescriptor.spriteDesc = charactersSpriteDescriptors;
+	balloomDescriptor.maxHealth = 100.f;
+	balloomDescriptor.renderLayer = Game::GetLayer(Game::RenderLayer::Enemies);
+	balloomDescriptor.startPosition = { 350.f, 250.f };
+
+	Game::Player balloom{ scene, balloomDescriptor };
+	balloom.GetComponents().livesComp->SubscribeToEvents(balloom_livesStatComp);
 	
-	auto balloom = scene->CreateGameObject(350.f, 250.f); 
-	balloom->AddComponent<REC::SpriteRenderComponent>(charactersSpriteDescriptors);
-	balloom->AddComponent<REC::AnimatedSpriteComponent>(balloomAnimDesc);
-	auto bal_health = balloom->AddComponent<REC::HealthComponent>(100.f, 100.f);
-	auto bal_lives = balloom->AddComponent<REC::LivesComponent>(3);
-	bal_health->SubscribeToEvents(bal_lives);
-	bal_lives->SubscribeToEvents(balloom_livesStatComp);
-	scene->SetRenderLayer(balloom, Game::GetLayer(Game::RenderLayer::ENEMIES));
 
 	// === INPUT =======================================================================================
 	auto* input = engine->GetInputSystem();
 	input->SetNumberOfActiveControllers(1);
 
-	float char1_speed{ 100.f };
+	using namespace REC::Input;
+	float bombermanMovementSpeed{ 100.f };
 
-	auto* char1_right = input->CreateInputBinding();
-	char1_right->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_D, REC::ButtonState::Pressed);
-	char1_right->AddCommand<Game::MoveCommand>(bomberman, glm::vec2{ 1, 0 }, char1_speed);
+	bomberman.CreateInputBindings(input, SM, bombermanMovementSpeed);
+	Game::PlayerInputActions<REC::KeyboardButtonAction> bombermanInputActions{};
+	bombermanInputActions.right		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_D,		REC::ButtonState::Pressed);
+	bombermanInputActions.left		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_A,		REC::ButtonState::Pressed);
+	bombermanInputActions.up		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_W,		REC::ButtonState::Pressed);
+	bombermanInputActions.down		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_S,		REC::ButtonState::Pressed);
+	bombermanInputActions.placeBomb = std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_Space, REC::ButtonState::Up);
+	bomberman.AddInputActions(bombermanInputActions);
 
-	auto* char1_left = input->CreateInputBinding();
-	char1_left->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_A, REC::ButtonState::Pressed);
-	char1_left->AddCommand<Game::MoveCommand>(bomberman, glm::vec2{ -1, 0 }, char1_speed);
+	float balloomMovementSpeed{ bombermanMovementSpeed *2 };
+	balloom.CreateInputBindings(input, SM, balloomMovementSpeed);
+	Game::PlayerInputActions<REC::ControllerButtonAction> balloomInputActions_btn{};
+	balloomInputActions_btn.right		= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Right, REC::ButtonState::Pressed,  balloomControllerId);
+	balloomInputActions_btn.left		= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Left,	REC::ButtonState::Pressed,  balloomControllerId);
+	balloomInputActions_btn.up			= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Up,	REC::ButtonState::Pressed,  balloomControllerId);
+	balloomInputActions_btn.down		= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Down,	REC::ButtonState::Pressed,  balloomControllerId);
+	balloomInputActions_btn.placeBomb	= std::make_unique<REC::ControllerButtonAction>(Controller::Button::Gamepad_A,			REC::ButtonState::Up,		balloomControllerId);
+	balloom.AddInputActions(balloomInputActions_btn);
 
-	auto* char1_up = input->CreateInputBinding();
-	char1_up->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_W, REC::ButtonState::Pressed);
-	char1_up->AddCommand<Game::MoveCommand>(bomberman, glm::vec2{ 0, -1 }, char1_speed);
+	Game::PlayerInputActions<REC::ControllerRangeAction> balloomInputActions_rng{};
+	balloomInputActions_rng.right = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_X, balloomControllerId);
+	balloomInputActions_rng.up    = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_Y, balloomControllerId);
+	balloom.AddInputActions(balloomInputActions_rng);
 
-	auto* char1_down = input->CreateInputBinding();
-	char1_down->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_S, REC::ButtonState::Pressed);
-	char1_down->AddCommand<Game::MoveCommand>(bomberman, glm::vec2{ 0, 1 }, char1_speed);
-
-	float char2_speed{ char1_speed*2 };
-
-	auto* char2_right = input->CreateInputBinding();
-	char2_right->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Right, REC::ButtonState::Pressed, balloomControllerId);
-	char2_right->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_X, balloomControllerId);
-	char2_right->AddCommand<Game::MoveCommand>(balloom, glm::vec2{ 1, 0 }, char2_speed);
-
-	auto* char2_left = input->CreateInputBinding();
-	char2_left->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Left, REC::ButtonState::Pressed, balloomControllerId);
-	char2_left->AddCommand<Game::MoveCommand>(balloom, glm::vec2{ -1, 0 }, char2_speed);
-
-	auto* char2_up = input->CreateInputBinding();
-	char2_up->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Up, REC::ButtonState::Pressed, balloomControllerId);
-	char2_up->AddInputAction<REC::ControllerRangeAction>(REC::Input::Controller::Range::Gamepad_LeftStick_Y, balloomControllerId);
-	char2_up->AddCommand<Game::MoveCommand>(balloom, glm::vec2{ 0, -1 }, char2_speed);
-
-	auto* char2_down = input->CreateInputBinding();
-	char2_down->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Down, REC::ButtonState::Pressed, balloomControllerId);
-	char2_down->AddCommand<Game::MoveCommand>(balloom, glm::vec2{ 0, 1 }, char2_speed);
+	bomberman.GetCommands().placeBombCmd->SubscribeToEvents(bomberman_scoreStatComp);
+	balloom.GetCommands().placeBombCmd->SubscribeToEvents(balloom_scoreStatComp);
 
 	auto* changeScene = input->CreateInputBinding();
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_5, REC::ButtonState::Up);
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keypad_5, REC::ButtonState::Up);
 	changeScene->AddCommand<REC::ChangeSceneCommand>(engine->GetEngineContext(), scene, startScreen);
-
-	auto* controllerDropBomb = input->CreateInputBinding();
-	controllerDropBomb->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::Gamepad_A, REC::ButtonState::Up, balloomControllerId);
-	controllerDropBomb->AddCommand<Game::ChangeHealthCommand>(bomberman, 50.f);
-	auto balloom_bomCommand = controllerDropBomb->AddCommand<Game::PlaceBombCommand>(balloom, SM);
-	balloom_bomCommand->SubscribeToEvents(balloom_scoreStatComp);
-
-	auto* keyboardDropBomb = input->CreateInputBinding();
-	keyboardDropBomb->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Space, REC::ButtonState::Up);
-	keyboardDropBomb->AddCommand<Game::ChangeHealthCommand>(balloom, 50.f);
-	auto bomberman_bomCommand = keyboardDropBomb->AddCommand<Game::PlaceBombCommand>(bomberman, SM);
-	bomberman_bomCommand->SubscribeToEvents(bomberman_scoreStatComp);
 }
 
 int main(int, char*[]) 

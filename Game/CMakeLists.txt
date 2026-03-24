@@ -10,9 +10,11 @@ endif()
 # --- List Source Files -------------
 set(SOURCE_FILES
 	"Main.cpp"
+    "Player.cpp"
+
     "Commands/MoveCommand.cpp"
     "Commands/PlaceBombCommand.cpp"
-    "Commands/ChangeHealthCommand.cpp"
+
     "Components/BombComponent.cpp"
     "Components/GridComponent.cpp"
     "Components/DebugGridRenderComponent.cpp"
