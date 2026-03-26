@@ -5,18 +5,15 @@
 
 namespace REC
 {
-	class Texture2D;
-	class Font;
-	class DataFile;
-
 	struct ResourceCreateInfo
 	{
 		std::string name = ""; // the internal name for this resource. how will you refer to this resource in Game
 		std::string filePath = ""; // relative to the data folder
 		virtual ~ResourceCreateInfo() = default;
 
-		// TODO: implement create virtual function to avoid creating everything in the resourceManager
-		//virtual void Create() = 0;
+		// implement create virtual function to avoid creating everything in the resourceManager
+		virtual bool Create() const = 0;
+
 	protected:
 		ResourceCreateInfo() = default;
 	};
@@ -25,12 +22,17 @@ namespace REC
 	{
 		TextureResourceCreateInfo() = default;
 		virtual ~TextureResourceCreateInfo() = default;
+
+		virtual bool Create() const override;
 	};
 
 	struct FontResourceCreateInfo : public ResourceCreateInfo
 	{
 		FontResourceCreateInfo() = default;
 		virtual ~FontResourceCreateInfo() = default;
+		
+		virtual bool Create() const override;
+
 		uint8_t size = 0;
 	};
 
@@ -45,6 +47,8 @@ namespace REC
 	{
 		FileResourceCreateInfo() = default;
 		virtual ~FileResourceCreateInfo() = default;
+
+		virtual bool Create() const override;
 
 		// the datatypes in the file that need to be extracted!
 		LoadTypes dataTypes{};

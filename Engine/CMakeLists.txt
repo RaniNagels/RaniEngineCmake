@@ -23,9 +23,11 @@ set(SOURCE_FILES
     
     "src/Commands/ChangeSceneCommand.cpp"
 
-	"src/Resources/Font.cpp"
-	"src/Resources/Texture2D.cpp"
-    "src/Resources/DataFile.cpp"
+	"src/Resources/ResourceTypes/Font.cpp"
+	"src/Resources/ResourceTypes/Texture2D.cpp"
+    "src/Resources/ResourceTypes/DataFile.cpp"
+    "src/Resources/ResourceCreateInfos.cpp"
+	"src/Resources/ResourceManager.cpp"
 
     "src/Events/EventSystem.cpp"
     "src/Events/Event.cpp"
@@ -33,7 +35,6 @@ set(SOURCE_FILES
 	"src/GameObject.cpp"
 	"src/Engine.cpp"
 	"src/Renderer.cpp"
-	"src/ResourceManager.cpp"
 	"src/Scene.cpp"
 	"src/SceneManager.cpp"
 	"src/TimeSystem.cpp"
@@ -124,12 +125,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(json)
 
 # --- Create Dynamic/Static Library -------------
-if(EMSCRIPTEN)
-	add_library(${TARGET_NAME} STATIC ${SOURCE_FILES})
-else()
-    add_library(${TARGET_NAME} STATIC ${SOURCE_FILES})
-	#add_library(${TARGET_NAME} SHARED ${SOURCE_FILES})
-endif()
+add_library(${TARGET_NAME} STATIC ${SOURCE_FILES})
 message(STATUS "GameEngine Library Created")
 
 # --- Include Directories -------------

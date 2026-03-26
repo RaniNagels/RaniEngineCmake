@@ -6,10 +6,10 @@
 
 #include <Engine.h>
 #include <EngineSettings.h>
-#include <ResourceCreateInfos.h>
 #include <SceneManager.h>
 #include <Input/InputSystem.h>
 #include <Events/EventSystem.h>
+#include <Resources/IResourceManager.h>
 
 #include <ComponentDescriptors.h>
 
@@ -53,56 +53,61 @@ static void load(REC::Engine* engine)
 
 	// === RESOURCES ===================================================================================
 #pragma region Resources
-	std::vector<REC::ResourceCreateInfo*> infos{};
 	// !! double check all filepaths !! Json != json (will not give an error in MSCV or clang, but will cause vague JavaScript error)
-	// TODO: pass ownership instead
+	auto* RM = engine->GetResourceManager();
 
 	REC::TextureResourceCreateInfo background{};
 	background.name = "background";
 	background.filePath = "NES - Bomberman - Backgrounds - Playfield.png";
-	infos.emplace_back(&background);
+	if (!RM->AddResource(background))
+		throw std::runtime_error("Failed to load background texture");
 
 	REC::TextureResourceCreateInfo generalSprites{};
 	generalSprites.name = "generalSprites";
 	generalSprites.filePath = "NES - Bomberman - Miscellaneous - General Sprites.png";
-	infos.emplace_back(&generalSprites);
+	if (!RM->AddResource(generalSprites))
+		throw std::runtime_error("Failed to load general sprites texture");
 
 	REC::FontResourceCreateInfo font{};
 	font.name = "lingua36";
 	font.filePath = "Lingua.otf";
 	font.size = uint8_t(36);
-	infos.emplace_back(&font);
+	if (!RM->AddResource(font))
+		throw std::runtime_error("Failed to load font");
 
 	REC::FontResourceCreateInfo debugFont{};
 	debugFont.name = "dogicapixel16";
 	debugFont.filePath = "dogicapixel.otf";
 	debugFont.size = uint8_t(16);
-	infos.emplace_back(&debugFont);
+	if (!RM->AddResource(debugFont))
+		throw std::runtime_error("Failed to load debug font");
 
 	REC::FontResourceCreateInfo debugFont20{};
 	debugFont20.name = "dogicapixel20";
 	debugFont20.filePath = "dogicapixel.otf";
 	debugFont20.size = uint8_t(20);
-	infos.emplace_back(&debugFont20);
+	if (!RM->AddResource(debugFont20))
+		throw std::runtime_error("Failed to load debug font 20");
 
 	REC::FileResourceCreateInfo dataFile{};
 	dataFile.name = "characterData";
 	dataFile.filePath = "characterFramesData.json";
 	dataFile.dataTypes = REC::LoadTypes::Frames | REC::LoadTypes::Animations;
-	infos.emplace_back(&dataFile);
+	if (!RM->AddResource(dataFile))
+		throw std::runtime_error("Failed to load character data file");
 
 	REC::FileResourceCreateInfo titleScreenDataFile{};
 	titleScreenDataFile.name = "startScreenData";
 	titleScreenDataFile.filePath = "TitleScreenFramesData.json";
 	titleScreenDataFile.dataTypes = REC::LoadTypes::Frames | REC::LoadTypes::TextureFont;
-	infos.emplace_back(&titleScreenDataFile);
+	if (!RM->AddResource(titleScreenDataFile))
+		throw std::runtime_error("Failed to load title screen data file");
 
 	REC::TextureResourceCreateInfo titleScreen{};
 	titleScreen.name = "titleScreen";
 	titleScreen.filePath = "NES - Bomberman - Miscellaneous - Title Screen & Text.png";
-	infos.emplace_back(&titleScreen);
-	
-	engine->AddResources(infos);
+	if (!RM->AddResource(titleScreen))
+		throw std::runtime_error("Failed to load title screen texture");
 #pragma endregion Resources
 
 	// === SCENE =======================================================================================

@@ -1,11 +1,14 @@
-#include <string>
-#include "../inc/GameObject.h"
-#include "ResourceManager.h"
+#include <GameObject.h>
+
 #include "Renderer.h"
-#include "Resources/Font.h"
-#include "Resources/Texture2D.h"
-#include "../inc/Components/TransformComponent.h"
-#include "../inc/Components/RenderComponent.h"
+#include "Resources/ResourceManager.h"
+#include "Resources/ResourceTypes/Font.h"
+#include "Resources/ResourceTypes/Texture2D.h"
+
+#include <Components/TransformComponent.h>
+#include <Components/RenderComponent.h>
+
+#include <string>
 
 REC::GameObject::GameObject()
 	: GameObject(glm::vec3{})

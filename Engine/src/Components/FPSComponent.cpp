@@ -1,8 +1,10 @@
-#include "../../inc/Components/FPSComponent.h"
-#include "../../inc/Components/TextRenderComponent.h"
-#include "../../inc/GameObject.h"
-#include "../ResourceManager.h"
-#include "../Resources/Font.h"
+#include <Components/FPSComponent.h>
+#include <Components/TextRenderComponent.h>
+#include <GameObject.h>
+
+#include "../Resources/ResourceManager.h"
+#include "../Resources/ResourceTypes/Font.h"
+
 #include <chrono>
 #include <iomanip>
 

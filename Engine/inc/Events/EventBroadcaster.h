@@ -19,7 +19,7 @@ namespace REC
 
 		static void SetEventSystem(EventSystem* eventSystem) { m_pEventSystem = eventSystem; }
 
-		void Broadcast(Event* event)
+		static void Broadcast(Event* event)
 		{
 			if (event != nullptr)
 				m_pEventSystem->BroadcastEvent(event);

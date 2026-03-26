@@ -11,13 +11,13 @@
 //#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <Engine.h>
-#include "../inc/Input/InputSystem.h"
-#include "../inc/SceneManager.h"
+#include <Input/InputSystem.h>
+#include <SceneManager.h>
 #include <Events/EventSystem.h>
 #include <Events/EventBroadcaster.h>
 #include <IRenderer.h>
 #include "Renderer.h"
-#include "ResourceManager.h"
+#include "Resources/ResourceManager.h"
 #include "TimeSystem.h"
 #include "Window.h"
 
@@ -128,13 +128,9 @@ void REC::Engine::SetEngineData(const EngineSettings& data)
 	m_pWindow->SetTitle(data.windowTitle);
 }
 
-void REC::Engine::AddResources(const std::vector<ResourceCreateInfo*>& resources)
+REC::IResourceManager* REC::Engine::GetResourceManager() const
 {
-	auto& RM = ResourceManager::GetInstance();
-	for (auto* resource : resources)
-	{
-		RM.AddResource(*resource);
-	}
+	return &ResourceManager::GetInstance();
 }
 
 REC::IRenderer* REC::Engine::GetRenderer() const

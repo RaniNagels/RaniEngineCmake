@@ -3,30 +3,67 @@
 #include <string>
 #include <memory>
 #include "Singleton.h"
-#include <ResourceCreateInfos.h>
+#include <Resources/IResourceManager.h>
 
 #include <unordered_map>
 #include <stdexcept>
 #include <assert.h>
 
-#include "Resources/Font.h"	
-#include "Resources/Texture2D.h"
-#include "Resources/DataFile.h"
+#include "Resources/ResourceTypes/Font.h"	
+#include "Resources/ResourceTypes/Texture2D.h"
+#include "Resources/ResourceTypes/DataFile.h"
 #include "FrameInfo.h"
 #include "AnimationInfo.h"
 #include "TextureFontInfo.h"
 
-#include <FileParsing/JSON_Parser.h>
-
 namespace REC
 {
-	class ResourceManager final : public Singleton<ResourceManager>
+	class ResourceManager final : public Singleton<ResourceManager>, public IResourceManager
 	{
 	public:
 		void Init(const std::filesystem::path& data);
 		void Destroy();
 
-		bool AddResource(const ResourceCreateInfo& resource);
+		virtual bool AddResource(const ResourceCreateInfo& resource) override;
+
+		template <typename T>
+		bool AddResource(const std::string& key, std::unique_ptr<T> resource)
+		{
+			if constexpr (std::is_same_v<T, Texture2D>)
+			{
+				if (m_TextureResources.find(key) != m_TextureResources.end())
+				{
+					assert(false && "Name already exists in Texture Resources");
+					return false;
+				}
+				m_TextureResources.insert({ key, std::move(resource) });
+				return true;
+			}
+			else if constexpr (std::is_same_v<T, Font>)
+			{
+				if (m_FontResources.find(key) != m_FontResources.end())
+				{
+					assert(false && "Name already exists in Font Resources");
+					return false;
+				}
+				m_FontResources.insert({ key, std::move(resource) });
+				return true;
+			}
+			else if constexpr (std::is_same_v<T, DataFile>)
+			{
+				if (m_DataFileResources.find(key) != m_DataFileResources.end())
+				{
+					assert(false && "Name already exists in DataFile Resources");
+					return false;
+				}
+				m_DataFileResources.insert({ key, std::move(resource) });
+				return true;
+			}
+
+			// unreachable code?!
+			//assert(false && "Requested resource type is not supported!");
+			//return false;
+		}
 
 		// TODO: re add const to the GetResource methods
 		template <typename T>
@@ -57,6 +94,8 @@ namespace REC
 			return nullptr;
 		}
 
+		std::string GetFullPath(const std::string& relativePath);
+
 	private:
 		template <typename T>
 		T* GetResourceFromMap(std::unordered_map<std::string, std::unique_ptr<T>>& in, const std::string& key)
@@ -77,9 +116,5 @@ namespace REC
 		std::unordered_map<std::string, std::unique_ptr<Texture2D>> m_TextureResources{};
 		std::unordered_map<std::string, std::unique_ptr<Font>> m_FontResources{};
 		std::unordered_map<std::string, std::unique_ptr<DataFile>> m_DataFileResources{};
-
-		std::unique_ptr<JSONParser> m_Parser{};
-
-		std::string GetFullPath(const std::string& relativePath);
 	};
 }

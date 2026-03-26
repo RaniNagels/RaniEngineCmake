@@ -1,5 +1,6 @@
 #include <Events/Event.h>
 #include <Components/IListener.h>
+#include <Events/EventBroadcaster.h>
 
 REC::Event::Event(GameObject* const sender, EventId id)
 	:m_Id{ id }
@@ -10,5 +11,5 @@ REC::Event::Event(GameObject* const sender, EventId id)
 
 void REC::Event::Broadcast()
 {
-	m_EventBroadcaster.Broadcast(this);
+	EventBroadcaster::Broadcast(this);
 }

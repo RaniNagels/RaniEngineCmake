@@ -3,7 +3,7 @@
 #include <functional>
 #include <filesystem>
 #include "EngineSettings.h"
-#include "ResourceCreateInfos.h"
+#include <Resources/ResourceCreateInfos.h>
 #include <Input/InputBinding.h>
 #include <EngineContext.h>
 
@@ -32,14 +32,14 @@ namespace REC
 		Engine& operator=(Engine&& other) = delete;
 
 		void SetEngineData(const EngineSettings& data);
+
 		SceneManager* GetSceneManager() const { return m_pSceneManager.get(); }
 		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
 		IRenderer* GetRenderer() const;
 		EventSystem* GetEventSystem() const { return m_pEventSystem.get(); }
+		IResourceManager* GetResourceManager() const;
 
 		const EngineContext& GetEngineContext() const { return m_EngineContext; }
-
-		void AddResources(const std::vector<ResourceCreateInfo*>& resources);
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;

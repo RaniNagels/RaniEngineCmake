@@ -1,7 +1,9 @@
 #include <Components/AnimatedSpriteComponent.h>
-#include "../ResourceManager.h"
+
+#include "../Resources/ResourceManager.h"
 #include "AnimationInfo.h"
 #include "FrameInfo.h"
+
 #include <Components/SpriteRenderComponent.h>
 #include <GameObject.h>
 

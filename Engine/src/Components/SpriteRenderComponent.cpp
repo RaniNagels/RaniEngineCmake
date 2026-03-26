@@ -1,7 +1,8 @@
-#include "../../inc/Components/SpriteRenderComponent.h"
-#include "../../inc/Components/TransformComponent.h"
-#include "../../inc/GameObject.h"
-#include "../ResourceManager.h"
+#include <Components/SpriteRenderComponent.h>
+#include <Components/TransformComponent.h>
+#include <GameObject.h>
+
+#include "../Resources/ResourceManager.h"
 #include "../Renderer.h"
 #include "../FrameInfo.h"
 

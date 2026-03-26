@@ -1,7 +1,6 @@
 #pragma once
 #include <sdbm_hash.h>
 #include <vector>
-#include <Events/EventBroadcaster.h>
 #include <memory>
 
 namespace REC
@@ -36,7 +35,6 @@ namespace REC
 
 	private:
 		const EventId m_Id;
-		EventBroadcaster m_EventBroadcaster{};
 		std::unique_ptr<EventArgs> m_pArgs;
 	};
 }

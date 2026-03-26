@@ -1,5 +1,5 @@
 #include "DataFile.h"
-#include <ResourceCreateInfos.h>
+#include <Resources/ResourceCreateInfos.h>
 
 REC::DataFile::DataFile(const std::string& filePath)
 	: m_FileStream{std::ifstream(filePath)}
