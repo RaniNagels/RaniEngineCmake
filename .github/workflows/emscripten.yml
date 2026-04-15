@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      EMCC_CFLAGS: "-s USE_SDL=3 -s USE_FREETYPE=1 -s USE_HARFBUZZ=1"
+      EMCC_CFLAGS: "-s USE_SDL=3 -s USE_FREETYPE=1 -s USE_HARFBUZZ=1 -Wno-experimental"
 
     steps:
       - uses: actions/checkout@v4
