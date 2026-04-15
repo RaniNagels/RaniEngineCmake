@@ -39,6 +39,7 @@ set(SOURCE_FILES
 	"src/SceneManager.cpp"
 	"src/TimeSystem.cpp"
 	"src/Window.cpp"
+    "src/CollisionSystem.cpp"
 )
 
 # --- Include Libraries -------------
@@ -144,8 +145,8 @@ if (NOT EMSCRIPTEN)
 endif()
 
 # --- Set C++20 for library and all dependents -------------
-target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
-message(STATUS "Set Language to C++ 20")
+target_compile_features(${TARGET_NAME} PUBLIC cxx_std_23)
+message(STATUS "Set Language to C++ 23")
 
 # --- compile at warning level 4 + treat warnings as errors -------------
 add_library(engine_warnings INTERFACE)

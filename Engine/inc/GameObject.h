@@ -5,6 +5,7 @@
 #include <vector>
 #include <assert.h>
 #include <glm/glm.hpp>
+#include <GameObjectDescriptor.h>
 
 namespace REC
 {
@@ -18,12 +19,16 @@ namespace REC
 	class Texture2D;
 	class TransformComponent;
 
+	// a static gameobject may not descended from a non static gameObject!
+	// children may be non static
+
 	class GameObject final
 	{
 	public:
 		explicit GameObject();
 		explicit GameObject(float x, float y, float z = 0);
 		explicit GameObject(glm::vec3 position);
+		explicit GameObject(const GameObjectDescriptor& descriptor);
 		~GameObject();
 
 		GameObject(const GameObject& other) = delete;
@@ -131,5 +136,7 @@ namespace REC
 
 		GameObject* m_pParent = nullptr;
 		std::vector<GameObject*> m_pChildren{};
+
+		const GameObjectDescriptor m_Descriptor;
 	};
 }

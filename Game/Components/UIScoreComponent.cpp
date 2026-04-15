@@ -9,8 +9,12 @@ Game::UIScoreComponent::UIScoreComponent(REC::GameObject* owner, const REC::Labe
 
 void Game::UIScoreComponent::Notify(REC::Event* event)
 {
-	if (event->IsEvent(REC::make_sdbm_hash("HasPlacedBombEvent")) && event->IsSender(m_pConnectedPlayer))
+	if (event->IsEvent(REC::make_sdbm_hash("HasPlacedBombEvent")))
 	{
-		AddToStatValue(30);
+		auto* eventArgs = dynamic_cast<REC::GameObjectEventArgs*>(event->GetArgs());
+		if (eventArgs != nullptr && eventArgs->sender == GetOwner())
+		{
+			AddToStatValue(30);
+		}
 	}
 }

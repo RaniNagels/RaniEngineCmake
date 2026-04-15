@@ -38,6 +38,7 @@
 
 #include "RenderLayers.h"
 #include "Player.h"
+#include <utility>
 
 namespace fs = std::filesystem;
 
@@ -146,21 +147,29 @@ static void load(REC::Engine* engine)
 	backdrop.frameKey = "background";
 	backdrop.textureKey = "background";
 
-	auto go = scene->CreateGameObject(0.f, 80.f);
-	go->AddComponent<REC::SpriteRenderComponent>(backdrop);
-	go->AddComponent<Game::GridComponent>(grid);
-	go->AddComponent<Game::DebugGridRenderComponent>(engine->GetRenderer(), REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120) });
-	scene->SetRenderLayer(go, Game::GetLayer(Game::RenderLayer::Background));
+	REC::GameObjectDescriptor backdropObjectDesc{};
+	backdropObjectDesc.startPosX = 0;
+	backdropObjectDesc.startPosY = 80;
+	backdropObjectDesc.renderLayer = std::to_underlying(Game::RenderLayer::Background); // C++23 feature
+	backdropObjectDesc.bounds = REC::Rect{ 0.f, 0.f, float(grid.cellWidth) * float(grid.cols), float(grid.cellHeight) * float(grid.rows) };
 
-	auto instructions = scene->CreateGameObject(20.f, 20.f);
-	scene->SetRenderLayer(instructions, Game::GetLayer(Game::RenderLayer::Ui));
+	auto* go = scene->CreateGameObject(backdropObjectDesc);
+	go->AddComponent<REC::SpriteRenderComponent>(backdrop);
+	auto* playfield = go->AddComponent<Game::GridComponent>(grid);
+	go->AddComponent<Game::DebugGridRenderComponent>(engine->GetRenderer(), REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120)});
+
+	REC::GameObjectDescriptor instructionObjectDesc{};
+	instructionObjectDesc.startPosX = 20;
+	instructionObjectDesc.startPosY = 20;
+	instructionObjectDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	auto* instructions = scene->CreateGameObject(instructionObjectDesc);
 	
-	auto instructionsBalloom = scene->CreateGameObject();
+	auto* instructionsBalloom = scene->CreateGameObject();
 	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel16");
 	instructionsBalloom->SetParent(instructions);
 	scene->SetRenderLayer(instructionsBalloom, Game::GetLayer(Game::RenderLayer::Ui));
 	
-	auto instructionsBomberman = scene->CreateGameObject(0.f, 28.f);
+	auto* instructionsBomberman = scene->CreateGameObject(0.f, 28.f);
 	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman", "dogicapixel16");
 	instructionsBomberman->SetParent(instructions);
 	scene->SetRenderLayer(instructionsBomberman, Game::GetLayer(Game::RenderLayer::Ui));
@@ -247,7 +256,7 @@ static void load(REC::Engine* engine)
 	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
 	bombermanDescriptor.maxHealth = 100.f;
 	bombermanDescriptor.renderLayer = Game::GetLayer(Game::RenderLayer::Player);
-	bombermanDescriptor.startPosition = { 200.f, 200.f };
+	bombermanDescriptor.startPosition = { 230.f, 230.f };
 
 	Game::Player bomberman{ scene, ES, bombermanDescriptor };
 	bomberman_livesStatComp->SetConnectedPlayer(bomberman.Get());
@@ -280,9 +289,8 @@ static void load(REC::Engine* engine)
 	input->SetNumberOfActiveControllers(1);
 
 	using namespace REC::Input;
-	float bombermanMovementSpeed{ 100.f };
 
-	bomberman.CreateInputBindings(input, SM, bombermanMovementSpeed);
+	bomberman.CreateInputBindings(input, SM, 100.f, playfield);
 	Game::PlayerInputActions<REC::KeyboardButtonAction> bombermanInputActions{};
 	bombermanInputActions.right		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_D,		REC::ButtonState::Pressed);
 	bombermanInputActions.left		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_A,		REC::ButtonState::Pressed);
@@ -291,8 +299,7 @@ static void load(REC::Engine* engine)
 	bombermanInputActions.placeBomb = std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_Space, REC::ButtonState::Up);
 	bomberman.AddInputActions(bombermanInputActions);
 
-	float balloomMovementSpeed{ bombermanMovementSpeed *2 };
-	balloom.CreateInputBindings(input, SM, balloomMovementSpeed);
+	balloom.CreateInputBindings(input, SM, 150.f, playfield);
 	Game::PlayerInputActions<REC::ControllerButtonAction> balloomInputActions_btn{};
 	balloomInputActions_btn.right		= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Right, REC::ButtonState::Pressed,  balloomControllerId);
 	balloomInputActions_btn.left		= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Left,	REC::ButtonState::Pressed,  balloomControllerId);
@@ -328,3 +335,16 @@ int main(int, char*[])
 	engine.Run(load);
     return 0;
 }
+
+/*
+NOTES:
+-- Collision Theories
+Needed Data: for each object: position, bounds, static?
+Detection: When an object moves, check - once per frame - if it collides with any other object. a central Collision system class?
+Response: Messenger System? each object decides what happens on collision
+
+AABB Collision: check if the bounding boxes of 2 objects overlap. only works for rectangles.
+
+=> TODO: Collision System class. each GameObject has an input struct where the user can say if it has collision and if yes, static. (static is default true)
+=> TODO: Collision System creates and sends events. (OnEntry (once), OnExit (once), Overlap (persitent) )
+*/

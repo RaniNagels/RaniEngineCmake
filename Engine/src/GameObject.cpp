@@ -19,8 +19,15 @@ REC::GameObject::GameObject(float x, float y, float z)
 { }
 
 REC::GameObject::GameObject(glm::vec3 position)
+	: m_Descriptor{}
 {
 	m_pTransform = AddComponent<TransformComponent>(position);
+}
+
+REC::GameObject::GameObject(const GameObjectDescriptor& descriptor)
+	: m_Descriptor{ descriptor }
+{
+	m_pTransform = AddComponent<TransformComponent>(glm::vec3(descriptor.startPosX, descriptor.startPosY, 0.f));
 }
 
 REC::GameObject::~GameObject() = default;

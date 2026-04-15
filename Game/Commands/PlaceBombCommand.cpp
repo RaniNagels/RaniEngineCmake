@@ -10,8 +10,10 @@
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
 	, m_pSceneManager{sceneManager}
-	, m_HasPlacedBombEvent{std::make_unique<REC::Event>(GetGameObject(), REC::make_sdbm_hash("HasPlacedBombEvent"))}
 {
+	REC::GameObjectEventArgs args{};
+	args.sender = GetGameObject();
+	m_HasPlacedBombEvent = std::make_unique<REC::Event>(REC::make_sdbm_hash("HasPlacedBombEvent"), args);
 }
 
 Game::PlaceBombCommand::~PlaceBombCommand() = default;

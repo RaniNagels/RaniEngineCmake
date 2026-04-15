@@ -20,6 +20,7 @@
 #include "Resources/ResourceManager.h"
 #include "TimeSystem.h"
 #include "Window.h"
+#include "CollisionSystem.h"
 
 #include <thread>
 #include <chrono>
@@ -82,6 +83,7 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	m_pInputSystem = std::make_unique<InputSystem>();
 	m_pEventSystem = std::make_unique<EventSystem>();
 	EventBroadcaster::SetEventSystem(m_pEventSystem.get());
+	m_pCollisionSystem = std::make_unique<CollisionSystem>();
 
 	m_EngineContext.sceneManager = m_pSceneManager.get();
 }
@@ -115,6 +117,7 @@ void REC::Engine::RunOneFrame()
 
 	m_pInputSystem->ProcessInput(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
+	m_pCollisionSystem->CheckCollisions(m_pSceneManager->GetActiveScene(), m_pTimeSystem->GetDeltaTime());
 	m_pEventSystem->ProcessEvents();
 	m_pSceneManager->Render();
 

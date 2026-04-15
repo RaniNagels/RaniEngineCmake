@@ -1,11 +1,14 @@
 #include <Components/HealthComponent.h>
+#include <sdbm_hash.h>
 
 REC::HealthComponent::HealthComponent(GameObject* owner, float maxHealth, float currentHealth)
 	: Component(owner)
 	, MAX_HEALTH{maxHealth}
 	, m_CurrentHealth{currentHealth}
-	, m_HasZeroHealthEvent{std::make_unique<Event>(GetOwner(), REC::make_sdbm_hash("HasZeroHealthEvent"))}
 {
+	GameObjectEventArgs args{};
+	args.sender = GetOwner();
+	m_HasZeroHealthEvent = std::make_unique<Event>(REC::make_sdbm_hash("HasZeroHealthEvent"), args);
 }
 
 REC::HealthComponent::~HealthComponent() = default;

@@ -20,20 +20,10 @@ void Game::DebugGridRenderComponent::Update(float) {}
 
 void Game::DebugGridRenderComponent::Render()
 {
-	auto data = m_pGridComponent->GetDescriptorData();
-	auto worldPos = GetOwner()->GetTransform()->GetWorldPosition();
+	const std::vector<Game::GridComponent::Cell>& cells = m_pGridComponent->GetCells();
 
-	REC::Rect rect{};
-	rect.width = data.cellWidth;
-	rect.height = data.cellHeight;
-
-	for (uint8_t r{}; r < data.rows; ++r)
+	for (const auto& cell : cells)
 	{
-		for (uint8_t c{}; c < data.cols; ++c)
-		{
-			rect.x = worldPos.x + (c * data.cellWidth);
-			rect.y = worldPos.y + (r * data.cellHeight);
-			m_pRenderer->RenderRect(m_Color, rect);
-		}
+		m_pRenderer->RenderRect(m_Color, cell.GetRect(), cell.isWall);
 	}
 }

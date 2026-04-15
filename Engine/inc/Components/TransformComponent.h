@@ -38,5 +38,6 @@ namespace REC
 
 		glm::vec3 m_WorldPosition{};
 		bool m_NeedsUpdate{ true };
+		bool m_IsStatic{ false }; // if true, may not move, under no cercumstance. if parent moves -> error, if current object moves -> error. non static children may move
 	};
 }

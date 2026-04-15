@@ -5,6 +5,7 @@
 #include <GameObject.h>
 #include <Input/InputSystem.h>
 #include <Input/InputBinding.h>
+#include <Events/EventSystem.h>
 
 #include <Components/SpriteRenderComponent.h>
 #include <Components/AnimatedSpriteComponent.h>
@@ -13,7 +14,8 @@
 
 #include "Commands/MoveCommand.h"
 #include "Commands/PlaceBombCommand.h"
-#include <Events/EventSystem.h>
+#include "Components/GridComponent.h"
+#include <sdbm_hash.h>
 
 Game::Player::Player(REC::Scene* scene, REC::EventSystem* eventSystem, const PlayerDescriptor& descriptor)
 	: m_Descriptor{descriptor}
@@ -34,14 +36,14 @@ Game::Player::Player(REC::Scene* scene, REC::EventSystem* eventSystem, const Pla
 
 Game::Player::~Player() = default;
 
-void Game::Player::CreateInputBindings(REC::InputSystem* inputsystem, REC::SceneManager* sceneManager, float movementSpeed)
+void Game::Player::CreateInputBindings(REC::InputSystem* inputsystem, REC::SceneManager* sceneManager, float movementSpeed, GridComponent* playfield)
 {
 	for (int i{}; i < InputBindingIndex::Count; ++i)
 		m_InputBindings.push_back(inputsystem->CreateInputBinding());
 	
-	m_InputBindings[InputBindingIndex::Up]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 0, -1 }, movementSpeed);
-	m_InputBindings[InputBindingIndex::Down]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 0, 1 }, movementSpeed);
-	m_InputBindings[InputBindingIndex::Left]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ -1, 0 }, movementSpeed);
-	m_InputBindings[InputBindingIndex::Right]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 1, 0 }, movementSpeed); 
+	m_InputBindings[InputBindingIndex::Up]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 0, -1 }, movementSpeed, playfield);
+	m_InputBindings[InputBindingIndex::Down]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 0, 1 }, movementSpeed, playfield);
+	m_InputBindings[InputBindingIndex::Left]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ -1, 0 }, movementSpeed, playfield);
+	m_InputBindings[InputBindingIndex::Right]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 1, 0 }, movementSpeed, playfield); 
 	m_Commands.placeBombCmd = m_InputBindings[InputBindingIndex::PlaceBomb]->AddCommand<Game::PlaceBombCommand>(m_pGameObject, sceneManager);
 }

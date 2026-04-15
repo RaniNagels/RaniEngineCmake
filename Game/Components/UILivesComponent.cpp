@@ -9,8 +9,12 @@ Game::UILivesComponent::UILivesComponent(REC::GameObject* owner, const REC::Labe
 
 void Game::UILivesComponent::Notify(REC::Event* event)
 {
-	if (event->IsEvent(REC::make_sdbm_hash("LostLiveEvent")) && event->IsSender(m_pConnectedPlayer))
+	if (event->IsEvent(REC::make_sdbm_hash("LostLiveEvent")))
 	{
-		AddToStatValue(-1);
+		auto* eventArgs = dynamic_cast<REC::GameObjectEventArgs*>(event->GetArgs());
+		if (eventArgs != nullptr && eventArgs->sender == GetOwner())
+		{
+			AddToStatValue(-1);
+		}
 	}
 }

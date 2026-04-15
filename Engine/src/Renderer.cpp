@@ -82,12 +82,17 @@ void REC::Renderer::RenderLine(const Color& color, glm::vec2 start, glm::vec2 en
 
 void REC::Renderer::RenderRect(const Color& color, const Rect& rect, bool fill) const
 {
-	SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
 	SDL_FRect sdl_rect = ToRect(rect);
 	if (fill)
+	{
+		SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
 		SDL_RenderFillRect(m_pRenderer, &sdl_rect);
+	}
 	else
+	{
+		SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
 		SDL_RenderRect(m_pRenderer, &sdl_rect);
+	}
 }
 
 SDL_Renderer* REC::Renderer::GetSDLRenderer() const { return m_pRenderer; }

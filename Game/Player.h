@@ -18,12 +18,12 @@ namespace REC
 	class AnimatedSpriteComponent;
 	class HealthComponent;
 	class LivesComponent;
-
 }
 
 namespace Game
 {
 	class PlaceBombCommand;
+	class GridComponent;
 
 	struct PlayerDescriptor
 	{
@@ -34,7 +34,6 @@ namespace Game
 		float maxHealth{ 0.f };
 
 		uint8_t renderLayer{ 0 };
-
 		glm::vec2 startPosition{};
 	};
 
@@ -84,7 +83,7 @@ namespace Game
 		const PlayerCommands& GetCommands() const { return m_Commands; }
 		REC::GameObject* Get() const { return m_pGameObject; }
 
-		void CreateInputBindings(REC::InputSystem* inputsystem, REC::SceneManager* sceneManager, float movementSpeed);
+		void CreateInputBindings(REC::InputSystem* inputsystem, REC::SceneManager* sceneManager, float movementSpeed, GridComponent* playfield);
 
 		template <ActionType AT>
 		void AddInputActions(PlayerInputActions<AT>& inputActions) // inputActions cannot be const due to the move

@@ -16,6 +16,7 @@ namespace REC
 	class IResourceManager;
 	class IRenderer;
 	class EventSystem;
+	class CollisionSystem;
 
 	class Engine final
 	{
@@ -47,6 +48,7 @@ namespace REC
 		std::unique_ptr<SceneManager> m_pSceneManager;
 		std::unique_ptr<InputSystem> m_pInputSystem;
 		std::unique_ptr<EventSystem> m_pEventSystem;
+		std::unique_ptr<CollisionSystem> m_pCollisionSystem;
 
 		EngineContext m_EngineContext{};
 	};

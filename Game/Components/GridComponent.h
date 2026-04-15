@@ -2,6 +2,7 @@
 #include <Components/Component.h>
 #include <cstdint>
 #include <glm/glm.hpp>
+#include <GeneralStructs.h>
 
 namespace Game
 {
@@ -32,17 +33,51 @@ namespace Game
 		struct Cell
 		{
 			glm::vec2 origin{};
-			uint8_t row{};
-			uint8_t col{};
+
+			uint8_t width{};
+			uint8_t height{};
+
+			uint8_t row{uint8_t(-1)};
+			uint8_t col{uint8_t(-1)};
+
+			bool isWall{ false };
+
+			bool operator==(const Cell& other) const
+			{
+				 return row == other.row && col == other.col && origin == other.origin && isWall == other.isWall && width == other.width && height == other.height;
+			}
+
+			bool operator!=(const Cell& other) const
+			{
+				return !(*this == other);
+			}
+
+			REC::Rect GetRect() const
+			{
+				return REC::Rect{ origin.x, origin.y, float(width), float(height) };
+			}
+
+			bool IsInCell(const glm::vec2& pos) const
+			{
+				return pos.x >= origin.x && pos.x < origin.x + width
+					&& pos.y >= origin.y && pos.y < origin.y + height;
+			}
+
+			bool IsValid() const
+			{
+				return row != uint8_t(-1) && col != uint8_t(-1);
+			}
 		};
 
-		const GridDescriptor& GetDescriptorData() const { return m_Descriptor; }
 		const std::vector<Cell>& GetCells() const { return m_Cells; }
+		const Cell& GetCell(uint8_t row, uint8_t col);
+		const Cell& GetCell(const glm::vec2& pos);
 
 	private:
 
 		GridDescriptor m_Descriptor;
 		std::vector<Cell> m_Cells;
+		static Cell s_InvalidCell;
 
 		uint32_t GetIndex(Cell* cell);
 		uint32_t GetIndex(uint8_t row, uint8_t col);

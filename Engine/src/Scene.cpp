@@ -10,6 +10,15 @@ REC::GameObject* REC::Scene::CreateGameObject(float x, float y, float z)
 	return m_Objects.back().get();
 }
 
+REC::GameObject* REC::Scene::CreateGameObject(const GameObjectDescriptor& descriptor)
+{
+	m_Objects.emplace_back(std::make_unique<GameObject>(descriptor));
+	m_RenderLayers.emplace_back(descriptor.renderLayer);
+	m_RenderOrder.emplace_back(m_RenderLayers.size() - 1);
+	m_RenderOrderDirty = true;
+	return m_Objects.back().get();
+}
+
 void REC::Scene::SetRenderLayer(GameObject* object, uint8_t layer)
 {
 	for (size_t i{}; i < m_Objects.size(); ++i)
