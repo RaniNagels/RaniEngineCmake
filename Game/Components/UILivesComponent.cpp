@@ -5,6 +5,7 @@
 Game::UILivesComponent::UILivesComponent(REC::GameObject* owner, const REC::LabeledStatDescriptor& descriptor)
 	: LabeledStatComponent(owner, descriptor)
 {
+	SubscribeToEvent({ REC::make_sdbm_hash("LostLiveEvent") });
 }
 
 void Game::UILivesComponent::Notify(REC::Event* event)
@@ -12,9 +13,12 @@ void Game::UILivesComponent::Notify(REC::Event* event)
 	if (event->IsEvent(REC::make_sdbm_hash("LostLiveEvent")))
 	{
 		auto* eventArgs = dynamic_cast<REC::GameObjectEventArgs*>(event->GetArgs());
-		if (eventArgs != nullptr && eventArgs->sender == GetOwner())
+		if (eventArgs != nullptr && eventArgs->sender == m_pConnectedPlayer)
 		{
 			AddToStatValue(-1);
+
+			// when owner lost all lives
+			// UnsubscribeFromEvent({ REC::make_sdbm_hash("LostLiveEvent") });
 		}
 	}
 }

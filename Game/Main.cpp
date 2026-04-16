@@ -122,18 +122,33 @@ static void load(REC::Engine* engine)
 	startScreenBackdrop.textureKey = "titleScreen";
 	startScreenBackdrop.frameDataFileKey = "startScreenData";
 	startScreenBackdrop.frameKey = "start_up_screen_1987";
-	
-	auto* stsc = startScreen->CreateGameObject(125,0);
-	stsc->AddComponent<REC::SpriteRenderComponent>(startScreenBackdrop);
-	startScreen->SetRenderLayer(stsc, Game::GetLayer(Game::RenderLayer::Background));
 
-	auto* stscInstruction = startScreen->CreateGameObject(75, 320);
-	stscInstruction->AddComponent<REC::TextRenderComponent>("Press '5' to start", "dogicapixel20", REC::Color{0,255,255});
-	startScreen->SetRenderLayer(stscInstruction, Game::GetLayer(Game::RenderLayer::Ui));
+	REC::GameObjectDescriptor startScreenBackdropDesc{};
+	startScreenBackdropDesc.startPosX = 125.f;
+	startScreenBackdropDesc.startPosY = 0.f;
+	startScreenBackdropDesc.renderLayer = std::to_underlying(Game::RenderLayer::Background); // C++23 feature
+	startScreenBackdropDesc.collisionType = REC::CollisionType::NoCollision;
+	
+	auto* stsc = startScreen->CreateGameObject(startScreenBackdropDesc);
+	stsc->AddComponent<REC::SpriteRenderComponent>(startScreenBackdrop);
+
+	REC::TextDescriptor startScreenTextInstructionDesc{};
+	startScreenTextInstructionDesc.color = REC::Color{ 0,255,255 };
+	startScreenTextInstructionDesc.fontKey = "dogicapixel20";
+	startScreenTextInstructionDesc.text = "Press '5' to start";
+
+	REC::GameObjectDescriptor startScreenInstructionDesc{};
+	startScreenInstructionDesc.startPosX = 75.f;
+	startScreenInstructionDesc.startPosY = 320.f;
+	startScreenInstructionDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui); // C++23 feature
+	startScreenInstructionDesc.collisionType = REC::CollisionType::NoCollision;
+
+	auto* stscInstruction = startScreen->CreateGameObject(startScreenInstructionDesc);
+	stscInstruction->AddComponent<REC::TextRenderComponent>(startScreenTextInstructionDesc);
 #pragma endregion StartScreen
 
 	auto* scene = SM->CreateScene();
-	auto* ES = engine->GetEventSystem();
+	//auto* ES = engine->GetEventSystem();
 
 	Game::GridDescriptor grid{};
 	grid.cellHeight = uint8_t(45); //51
@@ -201,7 +216,6 @@ static void load(REC::Engine* engine)
 
 	auto bombermanUILives = scene->CreateGameObject();
 	auto bomberman_livesStatComp = bombermanUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
-	ES->Subscribe(bomberman_livesStatComp, { REC::make_sdbm_hash("LostLiveEvent") });
 	bombermanUILives->AddComponent<REC::SpriteRenderComponent>(bombermanIcon);
 	bombermanUILives->SetParent(UI);
 	scene->SetRenderLayer(bombermanUILives, Game::GetLayer(Game::RenderLayer::Ui));
@@ -214,7 +228,6 @@ static void load(REC::Engine* engine)
 
 	auto balloomUILives = scene->CreateGameObject(0.f, 30.f);
 	auto balloom_livesStatComp = balloomUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
-	ES->Subscribe(balloom_livesStatComp, { REC::make_sdbm_hash("LostLiveEvent") });
 	balloomUILives->AddComponent<REC::SpriteRenderComponent>(balloomIcon);
 	balloomUILives->SetParent(UI);
 	scene->SetRenderLayer(balloomUILives, Game::GetLayer(Game::RenderLayer::Ui));
@@ -258,10 +271,9 @@ static void load(REC::Engine* engine)
 	bombermanDescriptor.renderLayer = Game::GetLayer(Game::RenderLayer::Player);
 	bombermanDescriptor.startPosition = { 230.f, 230.f };
 
-	Game::Player bomberman{ scene, ES, bombermanDescriptor };
+	Game::Player bomberman{ scene, bombermanDescriptor };
 	bomberman_livesStatComp->SetConnectedPlayer(bomberman.Get());
 	bomberman_scoreStatComp->SetConnectedPlayer(bomberman.Get());
-	ES->Subscribe(bomberman.GetComponents().livesComp, { REC::make_sdbm_hash("HasZeroHealthEvent") });
 
 	uint8_t balloomControllerId{ 0 };
 
@@ -278,11 +290,9 @@ static void load(REC::Engine* engine)
 	balloomDescriptor.renderLayer = Game::GetLayer(Game::RenderLayer::Enemies);
 	balloomDescriptor.startPosition = { 350.f, 250.f };
 
-	Game::Player balloom{ scene, ES, balloomDescriptor };
+	Game::Player balloom{ scene, balloomDescriptor };
 	balloom_livesStatComp->SetConnectedPlayer(balloom.Get());
 	balloom_scoreStatComp->SetConnectedPlayer(balloom.Get());
-	ES->Subscribe(balloom.GetComponents().livesComp, { REC::make_sdbm_hash("HasZeroHealthEvent") });
-	
 
 	// === INPUT =======================================================================================
 	auto* input = engine->GetInputSystem();
@@ -312,9 +322,6 @@ static void load(REC::Engine* engine)
 	balloomInputActions_rng.right = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_X, balloomControllerId);
 	balloomInputActions_rng.up    = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_Y, balloomControllerId);
 	balloom.AddInputActions(balloomInputActions_rng);
-
-	ES->Subscribe(bomberman_scoreStatComp, { REC::make_sdbm_hash("HasPlacedBombEvent") });
-	ES->Subscribe(balloom_scoreStatComp, { REC::make_sdbm_hash("HasPlacedBombEvent") });
 
 	auto* changeScene = input->CreateInputBinding();
 	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_5, REC::ButtonState::Up);

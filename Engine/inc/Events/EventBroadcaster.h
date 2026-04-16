@@ -25,6 +25,16 @@ namespace REC
 				m_pEventSystem->BroadcastEvent(event);
 		}
 
+		static void Subscribe(IListener* subscriber, std::initializer_list<EventId> events)
+		{
+			m_pEventSystem->Subscribe(subscriber, events);
+		}
+
+		static void Unsubscribe(IListener* subscriber, std::initializer_list<EventId> events)
+		{
+			m_pEventSystem->Unsubscribe(subscriber, events);
+		}
+
 	private:
 		inline static EventSystem* m_pEventSystem = nullptr;
 	};

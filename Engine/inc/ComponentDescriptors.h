@@ -22,11 +22,6 @@ namespace REC
 		std::string frameKey{}; // the key used to store the specific FrameInfo
 		std::string textureKey{};
 
-		explicit SpriteDescriptor() = default;
-		explicit SpriteDescriptor(int height, int width)
-			: drawHeight{uint16_t(height)}, drawWidth{uint16_t(width)}
-		{}
-
 		std::unique_ptr<ComponentDescriptor> Clone() const override
 		{
 			return std::make_unique<SpriteDescriptor>(*this);
@@ -46,14 +41,11 @@ namespace REC
 		}
 	};
 
-	// TODO: not yet in use
-	// describes how text shall be printed on screen
 	struct TextDescriptor final : ComponentDescriptor
 	{
-		bool isTextureFont{ false };
-		std::string fontKey{}; // either Font or TextureFont key
+		std::string fontKey{}; 
 		std::string text{}; // the text that needs to be printed
-		Color color{0,0,0}; // will be ignored if key belongs to TextureFont
+		Color color{0,0,0};
 
 		std::unique_ptr<ComponentDescriptor> Clone() const override
 		{

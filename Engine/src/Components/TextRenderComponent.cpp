@@ -26,6 +26,16 @@ REC::TextRenderComponent::TextRenderComponent(GameObject* owner, const std::stri
 	RequestFont(font);
 }
 
+REC::TextRenderComponent::TextRenderComponent(GameObject* owner, const TextDescriptor& descriptor)
+	: SpriteRenderComponent(owner, nullptr)
+	, m_NeedsUpdate{ true }
+	, m_TextTexture{}
+	, m_Text{ descriptor.text }
+	, m_Color{ descriptor.color }
+{
+	RequestFont(descriptor.fontKey);
+}
+
 REC::TextRenderComponent::~TextRenderComponent() = default;
 
 void REC::TextRenderComponent::Update(float)
