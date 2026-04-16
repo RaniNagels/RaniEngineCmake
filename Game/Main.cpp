@@ -148,8 +148,8 @@ static void load(REC::Engine* engine)
 	backdrop.textureKey = "background";
 
 	REC::GameObjectDescriptor backdropObjectDesc{};
-	backdropObjectDesc.startPosX = 0;
-	backdropObjectDesc.startPosY = 80;
+	backdropObjectDesc.startPosX = 0.f;
+	backdropObjectDesc.startPosY = 80.f;
 	backdropObjectDesc.renderLayer = std::to_underlying(Game::RenderLayer::Background); // C++23 feature
 	backdropObjectDesc.bounds = REC::Rect{ 0.f, 0.f, float(grid.cellWidth) * float(grid.cols), float(grid.cellHeight) * float(grid.rows) };
 
@@ -159,8 +159,8 @@ static void load(REC::Engine* engine)
 	go->AddComponent<Game::DebugGridRenderComponent>(engine->GetRenderer(), REC::Color{ uint8_t(20),uint8_t(30),uint8_t(120)});
 
 	REC::GameObjectDescriptor instructionObjectDesc{};
-	instructionObjectDesc.startPosX = 20;
-	instructionObjectDesc.startPosY = 20;
+	instructionObjectDesc.startPosX = 20.f;
+	instructionObjectDesc.startPosY = 20.f;
 	instructionObjectDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
 	auto* instructions = scene->CreateGameObject(instructionObjectDesc);
 	

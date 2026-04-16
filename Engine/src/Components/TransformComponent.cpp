@@ -3,16 +3,14 @@
 
 REC::TransformComponent::TransformComponent(GameObject* owner)
 	: Component(owner)
+	, m_Position{}
+	, m_IsMoveable{ true }
 { }
 
-REC::TransformComponent::TransformComponent(GameObject* owner, const glm::vec3& position)
+REC::TransformComponent::TransformComponent(GameObject* owner, float x, float y, bool isMoveable)
 	: Component(owner)
-	, m_Position{position}
-{
-}
-
-REC::TransformComponent::TransformComponent(GameObject* owner, float x, float y, float z)
-	: TransformComponent(owner, glm::vec3{x, y, z})
+	, m_Position{ x, y, 0.f }
+	, m_IsMoveable{ isMoveable }
 { }
 
 void REC::TransformComponent::Update(float) { }
@@ -37,11 +35,23 @@ glm::vec3 REC::TransformComponent::GetWorldPosition()
 
 void REC::TransformComponent::AddToLocalPosition(float x, float y, float z)
 {
+	if (!m_IsMoveable)
+	{
+		assert(false && "Cannot move an unmovable object");
+		return;
+	}
+
 	AddToLocalPosition(glm::vec3{ x, y, z });
 }
 
 void REC::TransformComponent::AddToLocalPosition(const glm::vec3& position)
 {
+	if (!m_IsMoveable)
+	{
+		assert(false && "Cannot move an unmovable object");
+		return;
+	}
+
 	m_Position += position;
 	RequiresUpdate();
 }

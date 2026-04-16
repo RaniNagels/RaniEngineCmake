@@ -10,8 +10,7 @@ namespace REC
 	{
 	public:
 		explicit TransformComponent(GameObject* owner);
-		explicit TransformComponent(GameObject* owner, const glm::vec3& position);
-		explicit TransformComponent(GameObject* owner, float x, float y, float z = 0.f);
+		explicit TransformComponent(GameObject* owner, float x, float y, bool isMoveable = true);
 		virtual ~TransformComponent() = default;
 
 		TransformComponent(const TransformComponent& other) = delete;
@@ -38,6 +37,6 @@ namespace REC
 
 		glm::vec3 m_WorldPosition{};
 		bool m_NeedsUpdate{ true };
-		bool m_IsStatic{ false }; // if true, may not move, under no cercumstance. if parent moves -> error, if current object moves -> error. non static children may move
+		bool m_IsMoveable{ true }; // if true, may not move, under no cercumstance. if parent moves -> error, if current object moves -> error. non static children may move
 	};
 }

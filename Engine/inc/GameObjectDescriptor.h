@@ -17,8 +17,8 @@ namespace REC
 	{
 		Rect bounds{}; // collision bounds
 		//std::vector<std::unique_ptr<ComponentDescriptor>> components{}; 
-		int32_t startPosX{ 0 };
-		int32_t startPosY{ 0 };
+		float startPosX{ 0 };
+		float startPosY{ 0 };
 		CollisionType collisionType{ CollisionType::NoCollision };
 		uint8_t renderLayer{ 0 };
 	};

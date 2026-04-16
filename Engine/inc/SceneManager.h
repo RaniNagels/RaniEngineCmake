@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <Scene.h>
+#include <GameObject.h>
 
 namespace REC
 {
@@ -25,7 +26,8 @@ namespace REC
 		void SetActiveScene(Scene* scene);
 
 	private:
-		std::vector<std::unique_ptr<Scene>> m_scenes{};
+		//std::vector<std::unique_ptr<GameObject*>> m_pGameObjects{};
+		std::vector<std::unique_ptr<Scene>> m_pScenes{};
 		Scene* m_pActiveScene = nullptr;
 	};
 }
