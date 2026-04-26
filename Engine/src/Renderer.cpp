@@ -17,6 +17,7 @@ void REC::Renderer::Init(SDL_Window* window)
 		std::cout << "Failed to create the renderer: " << SDL_GetError() << "\n";
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
+	SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
 }
 
 void REC::Renderer::Render(Scene* scene) const
@@ -83,16 +84,68 @@ void REC::Renderer::RenderLine(const Color& color, glm::vec2 start, glm::vec2 en
 void REC::Renderer::RenderRect(const Color& color, const Rect& rect, bool fill) const
 {
 	SDL_FRect sdl_rect = ToRect(rect);
+	SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
 	if (fill)
 	{
-		SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
 		SDL_RenderFillRect(m_pRenderer, &sdl_rect);
 	}
 	else
 	{
-		SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
 		SDL_RenderRect(m_pRenderer, &sdl_rect);
 	}
+}
+
+// Source - https://stackoverflow.com/a/74745126
+// Posted by JanSordid, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-04-23, License - CC BY-SA 4.0
+// minor modifations by Rani Nagels to prevent errors and use SDL3 instead of SDL2
+void REC::Renderer::RenderCircle(const Color& color, glm::vec2 center, float radius) const
+{
+	// 35 / 49 is a slightly biased approximation of 1/sqrt(2)
+	//const int arrSize = ((radius * 8 * 35 / 49) + (8 - 1)) & -8;
+	const int arrSize = (static_cast<int>(radius * 8.0f * 35.0f / 49.0f) + 7) & ~7;
+	std::vector<SDL_FPoint> points(arrSize);
+	int drawCount = 0;
+
+	const int32_t diameter = static_cast<int32_t>(radius * 2);
+
+	int32_t x = static_cast<int32_t>(radius - 1);
+	int32_t y = 0;
+	int32_t tx = 1;
+	int32_t ty = 1;
+	int32_t error = (tx - diameter);
+
+	while (x >= y)
+	{
+		// Each of the following renders an octant of the circle
+		points[drawCount + 0] = { center.x + x, center.y - y };
+		points[drawCount + 1] = { center.x + x, center.y + y };
+		points[drawCount + 2] = { center.x - x, center.y - y };
+		points[drawCount + 3] = { center.x - x, center.y + y };
+		points[drawCount + 4] = { center.x + y, center.y - x };
+		points[drawCount + 5] = { center.x + y, center.y + x };
+		points[drawCount + 6] = { center.x - y, center.y - x };
+		points[drawCount + 7] = { center.x - y, center.y + x };
+
+		drawCount += 8;
+
+		if (error <= 0)
+		{
+			++y;
+			error += ty;
+			ty += 2;
+		}
+
+		if (error > 0)
+		{
+			--x;
+			tx += 2;
+			error += (tx - diameter);
+		}
+	}
+
+	SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
+	SDL_RenderPoints(m_pRenderer, points.data(), drawCount);
 }
 
 SDL_Renderer* REC::Renderer::GetSDLRenderer() const { return m_pRenderer; }

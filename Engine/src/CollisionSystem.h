@@ -5,7 +5,7 @@
 
 namespace REC
 {
-	class GameObject;
+	class CollisionComponent;
 	class Scene;
 
 	class CollisionSystem final
@@ -19,10 +19,16 @@ namespace REC
 		CollisionSystem& operator=(const CollisionSystem&) = delete;
 		CollisionSystem& operator=(CollisionSystem&&) = delete;
 
-		void CheckCollisions(Scene *const currentScene, float deltaTime);
+		void CheckCollisions(Scene *const currentScene);
+		void Subscribe(CollisionComponent* subscriber);
+		void Unsubscribe(CollisionComponent* subscriber);
 
 	private:
-		std::vector<GameObject*> m_CollidableObjects{};
-		std::vector<std::unique_ptr<Event>> m_CollisionEvents{};
+		void SendCollisionEvent(CollisionComponent* comp1, CollisionComponent* comp2, CollisionEventType type);
+		bool CheckCollision(CollisionComponent* comp1, CollisionComponent* comp2);
+
+		std::vector<CollisionComponent*> m_CollidableObjects{};
+		std::vector<CollisionComponent*> m_StaticCollidableObjects{};
+		std::vector<std::unique_ptr<CollisionEvent>> m_CollisionEvents{};
 	};
 }

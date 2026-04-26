@@ -59,5 +59,17 @@ namespace REC
 			if (width > 0 && height > 0) return true;
 			else return false;
 		}
+
+		bool Overlaps(const Rect& other) const
+		{
+			if (x < other.x + other.width &&
+				x + width > other.x &&
+				y < other.y + other.height &&
+				y + height > other.y)
+			{
+				return true;
+			}
+			else return false;
+		}
 	};
 }

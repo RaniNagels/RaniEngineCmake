@@ -10,7 +10,7 @@
 #include <SDL3/SDL.h>
 //#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include <Engine.h>
+#include "Engine.h"
 #include <Input/InputSystem.h>
 #include <SceneManager.h>
 #include <Events/EventSystem.h>
@@ -63,6 +63,7 @@ void PrintSDLVersion()
 }
 
 REC::Engine::Engine(const std::filesystem::path& dataPath)
+	: IEngine()
 {
 	PrintSDLVersion();
 	
@@ -82,10 +83,15 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	m_pSceneManager = std::make_unique<SceneManager>();
 	m_pInputSystem = std::make_unique<InputSystem>();
 	m_pEventSystem = std::make_unique<EventSystem>();
-	EventBroadcaster::SetEventSystem(m_pEventSystem.get());
 	m_pCollisionSystem = std::make_unique<CollisionSystem>();
+	EventBroadcaster::SetEventSystem(m_pEventSystem.get());
+	EventBroadcaster::SetCollisionSystem(m_pCollisionSystem.get());
 
 	m_EngineContext.sceneManager = m_pSceneManager.get();
+	m_EngineContext.eventSystem = m_pEventSystem.get();
+	m_EngineContext.inputSystem = m_pInputSystem.get();
+	m_EngineContext.renderer = &Renderer::GetInstance();
+	m_EngineContext.resourceManager = &ResourceManager::GetInstance();
 }
 
 REC::Engine::~Engine()
@@ -96,9 +102,9 @@ REC::Engine::~Engine()
 	SDL_Quit();
 }
 
-void REC::Engine::Run(const std::function<void(Engine*)>& load)
+void REC::Engine::Run(void(*load)(IEngine*))
 {
-	load(this);
+	if (load) load(this);
 	m_pWindow->DisplayWindow();
 
 #ifndef __EMSCRIPTEN__
@@ -117,27 +123,32 @@ void REC::Engine::RunOneFrame()
 
 	m_pInputSystem->ProcessInput(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
-	m_pCollisionSystem->CheckCollisions(m_pSceneManager->GetActiveScene(), m_pTimeSystem->GetDeltaTime());
+	m_pCollisionSystem->CheckCollisions(m_pSceneManager->GetActiveScene());
 	m_pEventSystem->ProcessEvents();
 	m_pSceneManager->Render();
 
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
 }
 
-void REC::Engine::SetEngineData(const EngineSettings& data)
+void REC::Engine::SetEngineSettings(const EngineSettings& data)
 {
 	m_pTimeSystem->SetFrameRate(data.frameRate);
 	m_pWindow->SetSize(data.windowWidth, data.windowHeight);
 	m_pWindow->SetTitle(data.windowTitle);
 }
 
-REC::IResourceManager* REC::Engine::GetResourceManager() const
-{
-	return &ResourceManager::GetInstance();
-}
 
-REC::IRenderer* REC::Engine::GetRenderer() const
+// Engine Creation functions (global)
+extern "C"
 {
-	return &Renderer::GetInstance();
-}
+	REC::IEngine* REC::CreateEngine(const std::filesystem::path& dataPath)
+	{
+		return new REC::Engine(dataPath);
+	}
 
+	void REC::DestroyEngine(REC::IEngine* engine)
+	{
+		delete engine;
+		engine = nullptr;
+	}
+}

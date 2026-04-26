@@ -4,13 +4,11 @@
 REC::TransformComponent::TransformComponent(GameObject* owner)
 	: Component(owner)
 	, m_Position{}
-	, m_IsMoveable{ true }
 { }
 
-REC::TransformComponent::TransformComponent(GameObject* owner, float x, float y, bool isMoveable)
+REC::TransformComponent::TransformComponent(GameObject* owner, float x, float y)
 	: Component(owner)
 	, m_Position{ x, y, 0.f }
-	, m_IsMoveable{ isMoveable }
 { }
 
 void REC::TransformComponent::Update(float) { }

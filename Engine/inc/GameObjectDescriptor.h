@@ -3,23 +3,21 @@
 #include <GeneralStructs.h>
 #include <ComponentDescriptors.h>
 #include <memory>
+#include <GameObject.h>
+#include <optional>
 
 namespace REC
 {
-	enum class CollisionType : uint8_t
-	{
-		Static,
-		Dynamic,
-		NoCollision
-	};
+	using ObjectId = unsigned int;
 
 	struct GameObjectDescriptor
 	{
-		Rect bounds{}; // collision bounds
+		std::optional<ObjectId> id;
 		//std::vector<std::unique_ptr<ComponentDescriptor>> components{}; 
-		float startPosX{ 0 };
-		float startPosY{ 0 };
-		CollisionType collisionType{ CollisionType::NoCollision };
+		float startPosX{ 0 }; // relative to parent, absolute if no parent
+		float startPosY{ 0 }; // relative to parent, absolute if no parent
 		uint8_t renderLayer{ 0 };
+
+		GameObject* parent{ nullptr };
 	};
 }

@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <glm/vec2.hpp>
 #include <string>
+#include <RECColor.h>
+#include <optional>
 
 struct SDL_Texture;
 namespace REC
@@ -11,8 +13,8 @@ namespace REC
 	class Texture2D final
 	{
 	public:
-		explicit Texture2D(SDL_Texture* texture);
-		explicit Texture2D(const std::string& fullPath);
+		explicit Texture2D(SDL_Texture* texture, std::optional<REC::Color> transparentColor = {});
+		explicit Texture2D(const std::string& fullPath, std::optional<REC::Color> transparentColor = {});
 		~Texture2D();
 
 		Texture2D(const Texture2D &) = delete;

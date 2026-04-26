@@ -18,6 +18,8 @@ namespace REC
 	class AnimatedSpriteComponent;
 	class HealthComponent;
 	class LivesComponent;
+
+	using ObjectId = unsigned int;
 }
 
 namespace Game
@@ -27,6 +29,8 @@ namespace Game
 
 	struct PlayerDescriptor
 	{
+		REC::ObjectId name{};
+
 		REC::SpriteDescriptor spriteDesc{};
 		REC::AnimationDescriptor animDesc{};
 
@@ -88,18 +92,17 @@ namespace Game
 		template <ActionType AT>
 		void AddInputActions(PlayerInputActions<AT>& inputActions) // inputActions cannot be const due to the move
 		{
-			if (inputActions.up.get() != nullptr)			m_InputBindings[InputBindingIndex::Up]->AddInputAction(std::move(inputActions.up));
-			if (inputActions.down.get() != nullptr)			m_InputBindings[InputBindingIndex::Down]->AddInputAction(std::move(inputActions.down));
-			if (inputActions.left.get() != nullptr)			m_InputBindings[InputBindingIndex::Left]->AddInputAction(std::move(inputActions.left));
-			if (inputActions.right.get() != nullptr)		m_InputBindings[InputBindingIndex::Right]->AddInputAction(std::move(inputActions.right));
-			if (inputActions.placeBomb.get() != nullptr)	m_InputBindings[InputBindingIndex::PlaceBomb]->AddInputAction(std::move(inputActions.placeBomb));
+			if (inputActions.up.get() != nullptr)			m_InputBindings[std::to_underlying(InputBindingIndex::Up)]->AddInputAction(std::move(inputActions.up));
+			if (inputActions.down.get() != nullptr)			m_InputBindings[std::to_underlying(InputBindingIndex::Down)]->AddInputAction(std::move(inputActions.down));
+			if (inputActions.left.get() != nullptr)			m_InputBindings[std::to_underlying(InputBindingIndex::Left)]->AddInputAction(std::move(inputActions.left));
+			if (inputActions.right.get() != nullptr)		m_InputBindings[std::to_underlying(InputBindingIndex::Right)]->AddInputAction(std::move(inputActions.right));
+			if (inputActions.placeBomb.get() != nullptr)	m_InputBindings[std::to_underlying(InputBindingIndex::PlaceBomb)]->AddInputAction(std::move(inputActions.placeBomb));
 		}
 
 	private:
-		// unscoped for ease of access
 		// only used for indexing the input bindings
 		// DO NOT USE THIS OUTSIDE OF THE PLAYER CLASS
-		enum InputBindingIndex
+		enum class InputBindingIndex
 		{
 			Up,
 			Down,

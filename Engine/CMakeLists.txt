@@ -13,6 +13,7 @@ set(SOURCE_FILES
 	"src/Components/SpriteRenderComponent.cpp"
 	"src/Components/TextRenderComponent.cpp"
 	"src/Components/TransformComponent.cpp"
+    "src/Components/CollisionComponent.cpp"
     
     "src/Input/InputBinding.cpp"
 	"src/Input/InputSystem.cpp"
@@ -31,6 +32,7 @@ set(SOURCE_FILES
 
     "src/Events/EventSystem.cpp"
     "src/Events/Event.cpp"
+    "src/Events/EventBroadcaster.cpp"
 
 	"src/GameObject.cpp"
 	"src/Engine.cpp"
@@ -40,6 +42,7 @@ set(SOURCE_FILES
 	"src/TimeSystem.cpp"
 	"src/Window.cpp"
     "src/CollisionSystem.cpp"
+    
 )
 
 # --- Include Libraries -------------

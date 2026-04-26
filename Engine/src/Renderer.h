@@ -25,6 +25,7 @@ namespace REC
 
 		virtual void RenderLine(const Color& color, glm::vec2 start, glm::vec2 end) const override;
 		virtual void RenderRect(const Color& color, const Rect& rect, bool fill = false) const override;
+		virtual void RenderCircle(const Color& color, glm::vec2 center, float radius) const override;
 
 		SDL_Renderer* GetSDLRenderer() const;
 

@@ -1,10 +1,18 @@
 #pragma once
-#include <Events/EventSystem.h>
+#include <initializer_list>
 
 namespace REC
 {
 	class Event;
+	class CollisionEvent;
 	class EventSystem;
+	class CollisionSystem;
+	class CollisionComponent;
+
+	class IListener;
+	class ICollisionListener;
+
+	using EventId = unsigned int;
 
 	class EventBroadcaster final
 	{
@@ -18,24 +26,19 @@ namespace REC
 		EventBroadcaster& operator=(EventBroadcaster&& other) = delete;
 
 		static void SetEventSystem(EventSystem* eventSystem) { m_pEventSystem = eventSystem; }
+		static void SetCollisionSystem(CollisionSystem* collisionSystem) { m_pCollisionSystem = collisionSystem; }
 
-		static void Broadcast(Event* event)
-		{
-			if (event != nullptr)
-				m_pEventSystem->BroadcastEvent(event);
-		}
+		static void Broadcast(Event* event);
+		static void Broadcast(const CollisionEvent& event);
 
-		static void Subscribe(IListener* subscriber, std::initializer_list<EventId> events)
-		{
-			m_pEventSystem->Subscribe(subscriber, events);
-		}
+		static void Subscribe(IListener* subscriber, std::initializer_list<EventId> events);
+		static void Unsubscribe(IListener* subscriber, std::initializer_list<EventId> events);
 
-		static void Unsubscribe(IListener* subscriber, std::initializer_list<EventId> events)
-		{
-			m_pEventSystem->Unsubscribe(subscriber, events);
-		}
+		static void Subscribe(CollisionComponent* subscriber);
+		static void Unsubscribe(CollisionComponent* subscriber);
 
 	private:
 		inline static EventSystem* m_pEventSystem = nullptr;
+		inline static CollisionSystem* m_pCollisionSystem = nullptr;
 	};
 }

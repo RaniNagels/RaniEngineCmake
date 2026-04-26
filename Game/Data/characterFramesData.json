@@ -267,6 +267,38 @@
       "h": 16,
       "sheet": "General Sprites"
     },
+    "explosion_01":
+    {
+      "x": 0,
+      "y": 64,
+      "w": 80,
+      "h": 80,
+      "sheet": "General Sprites"
+    },
+    "explosion_02":
+    {
+      "x": 80,
+      "y": 64,
+      "w": 80,
+      "h": 80,
+      "sheet": "General Sprites"
+    },
+    "explosion_03":
+    {
+      "x": 0,
+      "y": 144,
+      "w": 80,
+      "h": 80,
+      "sheet": "General Sprites"
+    },
+    "explosion_04":
+    {
+      "x": 80,
+      "y": 144,
+      "w": 80,
+      "h": 80,
+      "sheet": "General Sprites"
+    },
     "background": {
       "x": 0,
       "y": 0,
@@ -357,6 +389,16 @@
       ],
       "duration": 1.0,
       "loop": true
+    },
+    "explosion": {
+      "frames": [
+        "explosion_01",
+        "explosion_02",
+        "explosion_03",
+        "explosion_04"
+      ],
+      "duration": 1.0,
+      "loop": false
     }
   }
 }

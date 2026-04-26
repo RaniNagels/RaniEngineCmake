@@ -10,7 +10,6 @@ namespace REC
 // TODO: change namespace
 namespace Game
 {
-
 	class PlaceBombCommand final : public REC::GameObjectInputCommand
 	{
 	public:

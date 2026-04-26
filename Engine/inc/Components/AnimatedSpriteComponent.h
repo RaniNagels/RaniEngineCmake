@@ -24,6 +24,7 @@ namespace REC
 
 		virtual void Update(float deltaT) override;
 
+		void ChangeAnimation(const AnimationDescriptor& descriptor);
 		void StartAnimation();
 		void StopAnimation();
 		bool IsAnimating();

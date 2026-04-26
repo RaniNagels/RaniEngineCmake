@@ -10,7 +10,7 @@ namespace REC
 	{
 	public:
 		explicit TransformComponent(GameObject* owner);
-		explicit TransformComponent(GameObject* owner, float x, float y, bool isMoveable = true);
+		explicit TransformComponent(GameObject* owner, float x, float y);
 		virtual ~TransformComponent() = default;
 
 		TransformComponent(const TransformComponent& other) = delete;
@@ -30,6 +30,8 @@ namespace REC
 		void SetLocalPosition(const glm::vec3& position);
 
 		void RequiresUpdate();
+
+		void SetStatic() { m_IsMoveable = false; }
 
 	private:
 		glm::vec3 m_Position{};

@@ -20,6 +20,8 @@ set(SOURCE_FILES
     "Components/DebugGridRenderComponent.cpp"
     "Components/UILivesComponent.cpp"
     "Components/UIScoreComponent.cpp"
+    "Components/BombermanCollisionComponent.cpp"
+    "Components/DebugBoundsRenderComponent.cpp"
 )
 
 

@@ -88,7 +88,11 @@ void REC::SpriteRenderComponent::Render()
 		dst.height = m_Descriptor.drawHeight;
 	}
 
+	if (m_Descriptor.drawPointX != 0.f) dst.x -= dst.width * m_Descriptor.drawPointX;
+	if (m_Descriptor.drawPointY != 0.f) dst.y -= dst.height * m_Descriptor.drawPointY;
+
 	Renderer::GetInstance().RenderTexture(*m_pTexture, src, dst);
+	Renderer::GetInstance().RenderCircle({ 255,0,0 }, transform->GetWorldPosition(), 5.f);
 }
 
 void REC::SpriteRenderComponent::SetTexture(Texture2D* texture)
@@ -116,6 +120,11 @@ void REC::SpriteRenderComponent::SetFrame(const FrameInfo* info)
 REC::FrameInfo* REC::SpriteRenderComponent::RequestFrameInfo(const std::string& key)
 {
 	return ResourceManager::GetInstance().GetResourceFromDataFile<FrameInfo>(m_Descriptor.frameDataFileKey, key);
+}
+
+void REC::SpriteRenderComponent::ChangeHeight(uint16_t height)
+{
+	m_Descriptor.drawHeight = height;
 }
 
 REC::Rect REC::SpriteRenderComponent::GetSrcRect() const

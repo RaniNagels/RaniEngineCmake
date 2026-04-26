@@ -31,6 +31,8 @@ namespace REC
 		void SetFrame(const FrameInfo* info);
 		FrameInfo* RequestFrameInfo(const std::string& key);
 
+		void ChangeHeight(uint16_t height);
+
 	private:
 		Texture2D* m_pTexture;
 		SpriteDescriptor m_Descriptor;

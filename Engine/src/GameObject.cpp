@@ -10,25 +10,11 @@
 
 #include <string>
 
-REC::GameObject::GameObject()
-	: GameObject(glm::vec3{})
-{ }
-
-REC::GameObject::GameObject(float x, float y, float z)
-	: GameObject(glm::vec3{x, y, z})
-{ }
-
-REC::GameObject::GameObject(glm::vec3 position)
-	: m_Descriptor{}
-{
-	m_pTransform = AddComponent<TransformComponent>(position.x, position.y);
-}
-
 REC::GameObject::GameObject(const GameObjectDescriptor& descriptor)
 	: m_Descriptor{ descriptor }
 {
-	bool movable = descriptor.collisionType != CollisionType::Static;
-	m_pTransform = AddComponent<TransformComponent>(descriptor.startPosX, descriptor.startPosY, movable);
+	m_pTransform = AddComponent<TransformComponent>(descriptor.startPosX, descriptor.startPosY);
+	if (descriptor.parent != nullptr) SetParent(descriptor.parent);
 }
 
 REC::GameObject::~GameObject() = default;

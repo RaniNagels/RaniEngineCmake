@@ -17,6 +17,7 @@ namespace Game
 	class DebugGridRenderComponent final : public REC::RenderComponent
 	{
 	public:
+		// TODO: find a different way of passing the renderer (a static in the base class?)
 		explicit DebugGridRenderComponent(REC::GameObject* owner, REC::IRenderer* renderer, const REC::Color& color = { 255, 255, 255, 255 });
 		virtual ~DebugGridRenderComponent() = default;
 

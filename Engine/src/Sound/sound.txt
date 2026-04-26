@@ -1,0 +1,18 @@
+Use Singleton
+Components will use sound
+
+slide 4: this leaks memory, constructor should be private, no final -> should not be inherited, no rule of 5, no default initializer, Instance is not thread safe (multiple threads can make multiple instances)
+slide 5: constructor is private
+slide 6: rule of 5
+slide 7: std::lock_guard<std::mutex> lock(mutex); // thread safe
+slide 8: no new or lock needed, just pass reference to instance
+
+slide 9: CRTP = Curiously Recurring Template Pattern
+slide 10: Singleton <-> dependency injection. Thightly coupled: I know the exact type of the singleton. Ivisibly coupled: the users of your class don't know how when or where the singleton is used! your hiding the dependency
+
+
+the play method should avoid loading the audio file! load once at startup
+playing on the hotcode path in the main thread should also be avoided. Create a separate thread for playing sounds
+most of the games have to much audio to preload all at once
+the sounds that are used often should be preloaded, the rest can be loaded on demand
+

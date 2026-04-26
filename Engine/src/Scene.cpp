@@ -1,15 +1,6 @@
 #include <algorithm>
 #include "../inc/Scene.h"
 
-REC::GameObject* REC::Scene::CreateGameObject(float x, float y, float z)
-{
-	m_Objects.emplace_back(std::make_unique<GameObject>(x, y, z));
-	m_RenderLayers.emplace_back(uint8_t(0));
-	m_RenderOrder.emplace_back(m_RenderLayers.size() - 1);
-	m_RenderOrderDirty = true;
-	return m_Objects.back().get();
-}
-
 REC::GameObject* REC::Scene::CreateGameObject(const GameObjectDescriptor& descriptor)
 {
 	m_Objects.emplace_back(std::make_unique<GameObject>(descriptor));
@@ -89,4 +80,15 @@ void REC::Scene::ReorderRenderOrder()
 {
 	std::sort(m_RenderOrder.begin(), m_RenderOrder.end(),
 		[&](size_t a, size_t b) { return m_RenderLayers[a] < m_RenderLayers[b]; });
+}
+
+bool REC::Scene::Contains(GameObject* object) const
+{
+	for (const auto& obj : m_Objects)
+	{
+		if (obj.get() == object)
+			return true;
+	}
+
+	return false;
 }

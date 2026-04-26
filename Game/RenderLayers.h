@@ -11,9 +11,4 @@ namespace Game
 		Enemies = 3,
 		Player = 4,
 	};
-
-	static uint8_t GetLayer(RenderLayer layer)
-	{
-		return static_cast<uint8_t>(layer);
-	}
 }

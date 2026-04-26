@@ -6,6 +6,7 @@
 #include <Resources/ResourceCreateInfos.h>
 #include <Input/InputBinding.h>
 #include <EngineContext.h>
+#include <IEngine.h>
 
 namespace REC
 {
@@ -18,31 +19,24 @@ namespace REC
 	class EventSystem;
 	class CollisionSystem;
 
-	class Engine final
+	class Engine final : public IEngine
 	{
 	public:
 		explicit Engine(const std::filesystem::path& dataPath);
 		~Engine();
 
-		void Run(const std::function<void(Engine*)>& load);
-		void RunOneFrame();
+		virtual void Run(void(*load)(IEngine*)) override;
 
 		Engine(const Engine& other) = delete;
 		Engine(Engine&& other) = delete;
 		Engine& operator=(const Engine& other) = delete;
 		Engine& operator=(Engine&& other) = delete;
 
-		void SetEngineData(const EngineSettings& data);
-
-		SceneManager* GetSceneManager() const { return m_pSceneManager.get(); }
-		InputSystem* GetInputSystem() const { return m_pInputSystem.get(); }
-		IRenderer* GetRenderer() const;
-		EventSystem* GetEventSystem() const { return m_pEventSystem.get(); }
-		IResourceManager* GetResourceManager() const;
-
-		const EngineContext& GetEngineContext() const { return m_EngineContext; }
+		virtual const EngineContext& GetContext() const override { return m_EngineContext; }
+		virtual void SetEngineSettings(const EngineSettings& data) override;
 
 	private:
+		void RunOneFrame();
 		std::unique_ptr<TimeSystem> m_pTimeSystem;
 		std::unique_ptr<Window> m_pWindow;
 		std::unique_ptr<SceneManager> m_pSceneManager;

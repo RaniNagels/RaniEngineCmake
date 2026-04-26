@@ -19,7 +19,7 @@ namespace REC
 		Scene& operator= (const Scene&) = delete;
 		Scene& operator= (const Scene&&) = delete;
 
-		GameObject* CreateGameObject(float x = 0.f, float y = 0.f, float z = 0.f);
+		//GameObject* CreateGameObject(float x = 0.f, float y = 0.f, float z = 0.f);
 		GameObject* CreateGameObject(const GameObjectDescriptor& descriptor);
 
 		// TODO: maybe have this be set in the GameObject to make it easier for childeren to inherit the layer
@@ -28,6 +28,8 @@ namespace REC
 
 		void Update(float deltaT);
 		void Render() const;
+
+		bool Contains(GameObject* object) const;
 
 	private:
 		void RemoveMarkedObjects();

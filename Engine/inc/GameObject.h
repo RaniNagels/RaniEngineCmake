@@ -6,11 +6,18 @@
 #include <assert.h>
 #include <glm/glm.hpp>
 #include <GameObjectDescriptor.h>
+#include <Components/CollisionComponent.h>
+#include <stdexcept>
 
 namespace REC
 {
+	using ObjectId = unsigned int;
+
 	template <typename C>
-	concept Cpt = std::derived_from<C, Component>;
+	concept Cpt = std::derived_from<C, Component> && !std::derived_from<C, CollisionComponent>;
+
+	template <typename CC>
+	concept CCpt = std::derived_from<CC, CollisionComponent>;
 
 	//https://en.cppreference.com/w/cpp/language/constraints.html
 	// a concept is a named set of requirements for template arguments
@@ -25,9 +32,6 @@ namespace REC
 	class GameObject final
 	{
 	public:
-		explicit GameObject();
-		explicit GameObject(float x, float y, float z = 0);
-		explicit GameObject(glm::vec3 position);
 		explicit GameObject(const GameObjectDescriptor& descriptor);
 		~GameObject();
 
@@ -40,6 +44,8 @@ namespace REC
 		bool IsAboutToBeDestroyed() const { return m_IsAboutToBeDestroyed; }
 		void Update(float deltaT);
 		void Render() const;
+
+		bool Is(ObjectId id) const { if (m_Descriptor.id.has_value()) return m_Descriptor.id.value() == id; else return false; }
 
 		//== SCENE GRAPH ==============================================================================================
 
@@ -73,6 +79,22 @@ namespace REC
 			return compPtr;
 		}
 
+		template <CCpt CC, typename ... Args>
+		CC* AddCollisionComponent(Args&&... args)
+		{
+			// only allow 1 collision component per gameobject
+			if (m_pCollisionComponent != nullptr)
+			{
+				throw std::logic_error("GameObject already has a collision component! Only 1 collision component per GameObject is allowed!");
+			}
+
+			auto collisionComp = std::make_unique<CC>(this, std::forward<Args>(args)...);
+			auto CompPtr = collisionComp.get();
+			m_Components.emplace_back(std::move(collisionComp));
+			m_pCollisionComponent = CompPtr;
+			return CompPtr;
+		}
+
 		template <Cpt C>
 		bool RemoveComponent()
 		{
@@ -102,6 +124,7 @@ namespace REC
 		}
 
 		TransformComponent* GetTransform() const { return m_pTransform; }
+		CollisionComponent* GetCollisionComponent() const { return m_pCollisionComponent; }
 
 		// checks if a gameobject has a component of type C
 		template <Cpt C>
@@ -130,6 +153,7 @@ namespace REC
 		//== DATA MEMBERS =============================================================================================
 		std::vector<std::unique_ptr<Component>> m_Components{};
 		TransformComponent* m_pTransform = nullptr; // store transform pointer seperatly for quick look-ups, vector still owns it
+		CollisionComponent* m_pCollisionComponent = nullptr; // store collision component pointer seperatly for quick look-ups, vector still owns it
 
 		bool m_ShouldCleanUpComponents = false;
 		bool m_IsAboutToBeDestroyed = false;

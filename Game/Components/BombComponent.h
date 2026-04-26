@@ -4,15 +4,22 @@
 namespace REC
 {
 	class GameObject;
+	class AnimatedSpriteComponent;
+	class SpriteRenderComponent;
 }
 
 // TODO: change namespace
 namespace Game
 {
+	struct BombDescriptor
+	{
+		float lifeTime{ 2.f };
+	};
+
 	class BombComponent final : public REC::Component
 	{
 	public:
-		explicit BombComponent(REC::GameObject* owner);
+		explicit BombComponent(REC::GameObject* owner, const BombDescriptor& descriptor);
 		~BombComponent() = default;
 
 		BombComponent(const BombComponent& other) = delete;
@@ -21,10 +28,15 @@ namespace Game
 		BombComponent& operator=(BombComponent&& other) = delete;
 
 		virtual void Update(float deltaT) override;
-		void Detonate();
+		void Detonate(); // can also be called by the player when in possession of a powerup
 
 	private:
-		float m_LifeTime{ 2.f };
+		const BombDescriptor m_Descriptor;
+		REC::AnimatedSpriteComponent* m_pAnimatedSpriteComponent{ nullptr };
+		REC::SpriteRenderComponent* m_pSpriteRenderComponent{ nullptr };
 
+		float m_Timer{0.f};
+		float m_LifeTime{ 2.f };
+		bool m_Exploded{ false };
 	};
 }

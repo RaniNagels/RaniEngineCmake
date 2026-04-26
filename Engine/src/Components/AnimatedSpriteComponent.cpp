@@ -11,20 +11,7 @@ REC::AnimatedSpriteComponent::AnimatedSpriteComponent(GameObject* owner, const A
 	: Component(owner)
 	, m_Descriptor{descriptor}
 {
-	m_AnimationInfo = ResourceManager::GetInstance().GetResourceFromDataFile<AnimationInfo>( m_Descriptor.animationDataFileKey, m_Descriptor.animationKey);
-	
-	if (!GetOwner()->HasComponent<SpriteRenderComponent>())
-		throw std::runtime_error("animated sprite relies on spriteRenderComponent!");
-
-	m_pSpriteRenderComponent = GetOwner()->GetComponent<SpriteRenderComponent>();
-
-	for (auto frame : m_AnimationInfo->frameKeys)
-		m_Frames.emplace_back(m_pSpriteRenderComponent->RequestFrameInfo(frame));
-
-	if (m_Descriptor.startOnStartup)
-		StartAnimation();
-
-	m_FrameDuration = m_AnimationInfo->duration / m_Frames.size();
+	ChangeAnimation(descriptor);
 }
 
 void REC::AnimatedSpriteComponent::Update(float deltaT)
@@ -48,6 +35,27 @@ void REC::AnimatedSpriteComponent::Update(float deltaT)
 			m_Counter -= m_FrameDuration;
 		}
 	}
+}
+
+void REC::AnimatedSpriteComponent::ChangeAnimation(const AnimationDescriptor& descriptor)
+{
+	m_Descriptor = descriptor;
+
+	m_AnimationInfo = ResourceManager::GetInstance().GetResourceFromDataFile<AnimationInfo>(m_Descriptor.animationDataFileKey, m_Descriptor.animationKey);
+
+	if (!GetOwner()->HasComponent<SpriteRenderComponent>())
+		throw std::runtime_error("animated sprite relies on spriteRenderComponent!");
+
+	m_pSpriteRenderComponent = GetOwner()->GetComponent<SpriteRenderComponent>();
+
+	m_Frames.clear();
+	for (auto frame : m_AnimationInfo->frameKeys)
+		m_Frames.emplace_back(m_pSpriteRenderComponent->RequestFrameInfo(frame));
+
+	if (m_Descriptor.startOnStartup)
+		StartAnimation();
+
+	m_FrameDuration = m_AnimationInfo->duration / m_Frames.size();
 }
 
 void REC::AnimatedSpriteComponent::StartAnimation()

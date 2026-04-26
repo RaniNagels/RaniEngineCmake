@@ -6,6 +6,10 @@
 #include <sdbm_hash.h>
 #include "../RenderLayers.h"
 #include <Events/Event.h>
+#include "../Components/BombComponent.h"
+#include "../Components/DebugBoundsRenderComponent.h"
+#include <Components/CollisionComponent.h>
+#include <SceneManager.h>
 
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
@@ -24,14 +28,21 @@ void Game::PlaceBombCommand::Execute(float)
 
 	// TODO: place in grid, not just willy nilly on the GameObject
 	auto PlayerPosition = GetGameObject()->GetTransform()->GetWorldPosition();
-	auto bomb = activeScene->CreateGameObject(PlayerPosition.x, PlayerPosition.y);
-	activeScene->SetRenderLayer(bomb, GetLayer(RenderLayer::Placables));
+
+	REC::GameObjectDescriptor bombDescriptor{};
+	bombDescriptor.startPosX = PlayerPosition.x;
+	bombDescriptor.startPosY = PlayerPosition.y;
+	bombDescriptor.renderLayer = std::to_underlying(Game::RenderLayer::Placables);
+
+	auto bomb = activeScene->CreateGameObject(bombDescriptor);
 
 	REC::SpriteDescriptor bombSpriteDescriptor{};
 	bombSpriteDescriptor.drawHeight = 50;
 	bombSpriteDescriptor.textureKey = "generalSprites";
 	bombSpriteDescriptor.frameDataFileKey = "characterData";
 	bombSpriteDescriptor.frameKey = "bom_0";
+	bombSpriteDescriptor.drawPointX = 0.5f;
+	bombSpriteDescriptor.drawPointY = 0.5f;
 
 	bomb->AddComponent<REC::SpriteRenderComponent>(bombSpriteDescriptor);
 
@@ -41,6 +52,18 @@ void Game::PlaceBombCommand::Execute(float)
 	animation.startOnStartup = true;
 
 	bomb->AddComponent<REC::AnimatedSpriteComponent>(animation);
+
+	Game::BombDescriptor bombCompDesc{};
+	bombCompDesc.lifeTime = 1.3f;
+
+	bomb->AddComponent<Game::BombComponent>(bombCompDesc);
+
+	REC::CollisionDescriptor bombCollisionDesc{};
+	bombCollisionDesc.collisionType = REC::CollisionType::Static;
+	bombCollisionDesc.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the bomb
+
+	bomb->AddCollisionComponent<REC::CollisionComponent>(bombCollisionDesc);
+	//bomb->AddComponent<Game::DebugBoundsRenderComponent>(GetGameObject()->GetTransform(), /*renderer*/, REC::Color{255,0,0});
 
 	m_HasPlacedBombEvent->Broadcast();
 }

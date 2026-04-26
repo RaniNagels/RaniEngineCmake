@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <Events/Event.h>
 
 namespace REC
 {
@@ -25,12 +26,17 @@ namespace REC
 		void ProcessEvents();
 
 		void BroadcastEvent(Event* event);
+		void BroadcastCollisionEvent(const CollisionEvent& event);
 
 		void Subscribe(IListener* subscriber, std::initializer_list<EventId> events);
 		void Unsubscribe(IListener* subscriber, std::initializer_list<EventId> events = {});
 
 	private:
 		std::queue<Event*> m_EventQueue{}; // non-owning
+		std::queue<CollisionEvent> m_CollisionEventQueue{}; // owning (temporary)
 		std::unordered_map<EventId, std::vector<IListener*>> m_EventSubscribers{};
+
+		void ProcessCollisionEvents();
+		void ProcessNormalEvents();
 	};
 }
