@@ -6,6 +6,7 @@
 
 namespace REC
 {
+	class IRenderer;
 	// only active sccene gets rendered AND updated!
 	// TODO: create a reset function to handle switching between scenes more fluently.
 	class Scene final
@@ -27,7 +28,7 @@ namespace REC
 		void RemoveAll();
 
 		void Update(float deltaT);
-		void Render() const;
+		void Render(const IRenderer *const renderer) const;
 
 		bool Contains(GameObject* object) const;
 

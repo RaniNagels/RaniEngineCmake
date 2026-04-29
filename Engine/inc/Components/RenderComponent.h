@@ -3,6 +3,7 @@
 
 namespace REC
 {
+	class IRenderer;
 	// a component class that can render something,
 	// should be used as a base class for all render components
 	// should not be used directly!
@@ -20,7 +21,7 @@ namespace REC
 		RenderComponent& operator=(const RenderComponent& other) = delete;
 		RenderComponent& operator=(RenderComponent&& other) = delete;
 
-		virtual void Render() = 0;
+		virtual void Render(const IRenderer *const renderer) = 0;
 		virtual bool CanRender() const override { return true; }
 
 	};

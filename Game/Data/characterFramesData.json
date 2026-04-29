@@ -397,7 +397,7 @@
         "explosion_03",
         "explosion_04"
       ],
-      "duration": 1.0,
+      "duration": 0.8,
       "loop": false
     }
   }

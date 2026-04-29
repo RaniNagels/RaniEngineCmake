@@ -23,7 +23,7 @@ namespace REC
 		SpriteRenderComponent& operator=(SpriteRenderComponent&& other) = delete;
 
 		virtual void Update(float deltaT) override;
-		virtual void Render() override;
+		virtual void Render(const IRenderer* const renderer) override;
 
 		void SetTexture(Texture2D* texture);
 		Texture2D* RequestTexture(const std::string& textureName);

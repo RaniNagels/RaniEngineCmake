@@ -15,7 +15,7 @@ namespace Game
 	{
 	public:
 		// TODO: find a different way of passing the renderer (a static in the base class?)
-		DebugBoundsRenderComponent(REC::GameObject* owner, REC::IRenderer* renderer, const REC::Color& color = { 255, 255, 255, 255 });
+		DebugBoundsRenderComponent(REC::GameObject* owner, const REC::Color& color = { 255, 255, 255, 255 });
 		~DebugBoundsRenderComponent() = default;
 
 		DebugBoundsRenderComponent(const DebugBoundsRenderComponent&) = delete;
@@ -23,12 +23,11 @@ namespace Game
 		DebugBoundsRenderComponent& operator=(const DebugBoundsRenderComponent&) = delete;
 		DebugBoundsRenderComponent& operator=(DebugBoundsRenderComponent&&) = delete;
 
-		virtual void Render() override;
+		virtual void Render(const REC::IRenderer *const renderer) override;
 		virtual void Update(float) override {};
 
 	private:
 		REC::CollisionComponent* m_pCollisionComponent;
-		REC::IRenderer* m_pRenderer;
 		REC::Color m_Color;
 	};
 }

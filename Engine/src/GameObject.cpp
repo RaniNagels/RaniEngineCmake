@@ -41,14 +41,14 @@ void REC::GameObject::Destroy()
 		child->Destroy();
 }
 
-void REC::GameObject::Render() const
+void REC::GameObject::Render(const IRenderer* const renderer) const
 {
 	for (const auto& component : m_Components)
 	{
 		if (component->CanRender())
 		{
 			// expensive
-			dynamic_cast<RenderComponent*>(component.get())->Render();
+			dynamic_cast<RenderComponent*>(component.get())->Render(renderer);
 		}
 	}
 }

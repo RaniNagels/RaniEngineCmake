@@ -30,6 +30,8 @@ set(SOURCE_FILES
     "src/Resources/ResourceCreateInfos.cpp"
 	"src/Resources/ResourceManager.cpp"
 
+    
+
     "src/Events/EventSystem.cpp"
     "src/Events/Event.cpp"
     "src/Events/EventBroadcaster.cpp"
@@ -119,6 +121,48 @@ if(NOT SDL3_ttf_FOUND)
   endif()
 endif()
 
+# Add SDL3_mixer
+find_package(SDL3_mixer 3.2 CONFIG QUIET)
+if(NOT SDL3_mixer_FOUND)
+  if (WIN32)
+    FetchContent_Declare(
+      SDL3_mixer
+      GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
+      GIT_TAG release-3.2.0
+      GIT_SHALLOW TRUE
+      GIT_PROGRESS TRUE
+      DOWNLOAD_NO_PROGRESS ON
+      DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/downloads
+    )
+    FetchContent_MakeAvailable(SDL3_mixer)
+    #list(PREPEND CMAKE_PREFIX_PATH "${sdl3_mixer_SOURCE_DIR}")
+    #find_package(SDL3_mixer 3.2 CONFIG REQUIRED)
+  else()
+    FetchContent_Declare(
+      SDL3_mixer
+      GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
+      GIT_TAG release-3.2.0
+      GIT_SHALLOW TRUE
+      GIT_PROGRESS TRUE
+    )
+    set(SDL3MIXER_INSTALL OFF)
+    if(EMSCRIPTEN)
+      list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/emscripten")
+      # Use Emscripten-provided codecs where possible
+      set(SDL3MIXER_VENDORED OFF)
+      add_compile_options(
+        -sUSE_VORBIS=1
+        -sUSE_OGG=1
+      )
+      add_link_options(
+        -sUSE_VORBIS=1
+        -sUSE_OGG=1
+      )
+    endif()
+    FetchContent_MakeAvailable(SDL3_mixer)
+  endif()
+endif()
+
 
 FetchContent_Declare(
     json
@@ -141,7 +185,7 @@ target_include_directories(${TARGET_NAME}
 # --- Link Libraries -------------
 target_link_libraries(${TARGET_NAME} 
     PUBLIC glm::glm
-    PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf nlohmann_json::nlohmann_json
+    PRIVATE SDL3::SDL3 SDL3_ttf::SDL3_ttf SDL3_mixer::SDL3_mixer nlohmann_json::nlohmann_json
 )
 if (NOT EMSCRIPTEN)
 	target_link_libraries(${TARGET_NAME} PRIVATE xinput)
@@ -169,6 +213,11 @@ if(WIN32)
     add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
+            $<TARGET_FILE_DIR:${TARGET_NAME}>
+    )
+    add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:SDL3_mixer::SDL3_mixer>
             $<TARGET_FILE_DIR:${TARGET_NAME}>
     )
 endif()

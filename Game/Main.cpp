@@ -172,7 +172,7 @@ static void load(REC::IEngine* engine)
 	auto* go = scene->CreateGameObject(backdropObjectDesc);
 	go->AddComponent<REC::SpriteRenderComponent>(backdrop);
 	auto* playfield = go->AddComponent<Game::GridComponent>(grid);
-	go->AddComponent<Game::DebugGridRenderComponent>(engine->GetContext().renderer, REC::Color{uint8_t(20),uint8_t(30),uint8_t(120), uint8_t(200)});
+	go->AddComponent<Game::DebugGridRenderComponent>(REC::Color{20, 30, 120, 200});
 
 	REC::GameObjectDescriptor instructionObjectDesc{};
 	instructionObjectDesc.startPosX = 20.f;
@@ -311,7 +311,7 @@ static void load(REC::IEngine* engine)
 	collisionDescriptor.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the player
 
 	bomberman.Get()->AddCollisionComponent<Game::BombermanCollisionComponent>(collisionDescriptor);
-	bomberman.Get()->AddComponent<Game::DebugBoundsRenderComponent>(engine->GetContext().renderer, REC::Color{ 255, 0, 0 });
+	bomberman.Get()->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255, 0, 0 });
 
 	uint8_t balloomControllerId{ 0 };
 
@@ -334,7 +334,7 @@ static void load(REC::IEngine* engine)
 	balloom_scoreStatComp->SetConnectedPlayer(balloom.Get());
 
 	balloom.Get()->AddCollisionComponent<REC::CollisionComponent>(collisionDescriptor); // empty collision component. needed to register to the collision system
-	balloom.Get()->AddComponent<Game::DebugBoundsRenderComponent>(engine->GetContext().renderer, REC::Color{ 255, 0, 0 });
+	balloom.Get()->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255, 0, 0 });
 
 	// === INPUT =======================================================================================
 	auto* input = engine->GetContext().inputSystem;

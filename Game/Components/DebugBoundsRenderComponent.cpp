@@ -5,20 +5,16 @@
 #include <IRenderer.h>
 #include <stdexcept>
 
-Game::DebugBoundsRenderComponent::DebugBoundsRenderComponent(REC::GameObject* owner, REC::IRenderer* renderer, const REC::Color& color)
+Game::DebugBoundsRenderComponent::DebugBoundsRenderComponent(REC::GameObject* owner, const REC::Color& color)
 	: REC::RenderComponent(owner)
 	, m_pCollisionComponent(GetOwner()->GetCollisionComponent())
-	, m_pRenderer(renderer)
 	, m_Color(color)
 {
 	if (m_pCollisionComponent == nullptr)
 		throw std::invalid_argument("DebugBoundsRenderComponent requires a valid CollisionComponent on the same GameObject!");
-
-	if (m_pRenderer == nullptr)
-		throw std::invalid_argument("DebugBoundsRenderComponent requires a valid IRenderer pointer!");
 }
 
-void Game::DebugBoundsRenderComponent::Render()
+void Game::DebugBoundsRenderComponent::Render(const REC::IRenderer *const renderer)
 {
 	if (!m_pCollisionComponent) return;
 
@@ -31,6 +27,6 @@ void Game::DebugBoundsRenderComponent::Render()
 			bounds.width,
 			bounds.height
 		};
-		m_pRenderer->RenderRect(m_Color, boundsWithPos, false);
+		renderer->RenderRect(m_Color, boundsWithPos, false);
 	}
 }

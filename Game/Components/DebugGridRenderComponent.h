@@ -18,7 +18,7 @@ namespace Game
 	{
 	public:
 		// TODO: find a different way of passing the renderer (a static in the base class?)
-		explicit DebugGridRenderComponent(REC::GameObject* owner, REC::IRenderer* renderer, const REC::Color& color = { 255, 255, 255, 255 });
+		explicit DebugGridRenderComponent(REC::GameObject* owner, const REC::Color& color = { 255, 255, 255, 255 });
 		virtual ~DebugGridRenderComponent() = default;
 
 		DebugGridRenderComponent(const DebugGridRenderComponent& other) = delete;
@@ -27,11 +27,10 @@ namespace Game
 		DebugGridRenderComponent& operator=(DebugGridRenderComponent&& other) = delete;
 
 		virtual void Update(float deltaT) override;
-		virtual void Render() override;
+		virtual void Render(const REC::IRenderer *const renderer) override;
 
 	private:
 		GridComponent* m_pGridComponent;
-		REC::IRenderer* m_pRenderer;
 		REC::Color m_Color;
 	};
 }

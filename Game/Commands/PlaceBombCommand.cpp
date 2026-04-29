@@ -63,7 +63,7 @@ void Game::PlaceBombCommand::Execute(float)
 	bombCollisionDesc.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the bomb
 
 	bomb->AddCollisionComponent<REC::CollisionComponent>(bombCollisionDesc);
-	//bomb->AddComponent<Game::DebugBoundsRenderComponent>(GetGameObject()->GetTransform(), /*renderer*/, REC::Color{255,0,0});
+	bomb->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{255,0,0});
 
 	m_HasPlacedBombEvent->Broadcast();
 }

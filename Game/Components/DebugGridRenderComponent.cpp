@@ -5,9 +5,8 @@
 #include <stdexcept>
 #include <IRenderer.h>
 
-Game::DebugGridRenderComponent::DebugGridRenderComponent(REC::GameObject* owner, REC::IRenderer* renderer, const REC::Color& color)
+Game::DebugGridRenderComponent::DebugGridRenderComponent(REC::GameObject* owner, const REC::Color& color)
 	: RenderComponent(owner)
-	, m_pRenderer{renderer}
 	, m_Color{ color }
 {
 	if (!GetOwner()->HasComponent<GridComponent>())
@@ -18,12 +17,12 @@ Game::DebugGridRenderComponent::DebugGridRenderComponent(REC::GameObject* owner,
 
 void Game::DebugGridRenderComponent::Update(float) {}
 
-void Game::DebugGridRenderComponent::Render()
+void Game::DebugGridRenderComponent::Render(const REC::IRenderer* const renderer)
 {
 	const std::vector<Game::GridComponent::Cell>& cells = m_pGridComponent->GetCells();
 
 	for (const auto& cell : cells)
 	{
-		m_pRenderer->RenderRect(m_Color, cell.GetRect(), cell.isWall);
+		renderer->RenderRect(m_Color, cell.GetRect(), cell.isWall);
 	}
 }

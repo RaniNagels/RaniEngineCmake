@@ -25,6 +25,7 @@ namespace REC
 
 	class Texture2D;
 	class TransformComponent;
+	class IRenderer;
 
 	// a static gameobject may not descended from a non static gameObject!
 	// children may be non static
@@ -43,7 +44,7 @@ namespace REC
 		void Destroy();
 		bool IsAboutToBeDestroyed() const { return m_IsAboutToBeDestroyed; }
 		void Update(float deltaT);
-		void Render() const;
+		void Render(const IRenderer *const renderer) const;
 
 		bool Is(ObjectId id) const { if (m_Descriptor.id.has_value()) return m_Descriptor.id.value() == id; else return false; }
 

@@ -38,11 +38,9 @@ REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, const Sprit
 
 REC::SpriteRenderComponent::~SpriteRenderComponent() = default;
 
-void REC::SpriteRenderComponent::Update(float)
-{
-}
+void REC::SpriteRenderComponent::Update(float) {}
 
-void REC::SpriteRenderComponent::Render()
+void REC::SpriteRenderComponent::Render(const IRenderer* const renderer)
 {
 	auto* transform = this->GetOwner()->GetTransform();
 
@@ -91,8 +89,9 @@ void REC::SpriteRenderComponent::Render()
 	if (m_Descriptor.drawPointX != 0.f) dst.x -= dst.width * m_Descriptor.drawPointX;
 	if (m_Descriptor.drawPointY != 0.f) dst.y -= dst.height * m_Descriptor.drawPointY;
 
-	Renderer::GetInstance().RenderTexture(*m_pTexture, src, dst);
-	Renderer::GetInstance().RenderCircle({ 255,0,0 }, transform->GetWorldPosition(), 5.f);
+	const Renderer* fullRenderer = static_cast<const Renderer*>(renderer);
+	fullRenderer->RenderTexture(*m_pTexture, src, dst);
+	fullRenderer->RenderCircle({ 255,0,0 }, transform->GetWorldPosition(), 5.f);
 }
 
 void REC::SpriteRenderComponent::SetTexture(Texture2D* texture)

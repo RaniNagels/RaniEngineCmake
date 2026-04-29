@@ -67,12 +67,12 @@ void REC::Scene::Update(float deltaT)
 	}
 }
 
-void REC::Scene::Render() const
+void REC::Scene::Render(const IRenderer *const renderer) const
 {
 	// first render gameObjects on layer 0, then 1 ...
 	for (auto index : m_RenderOrder)
 	{
-		m_Objects[index]->Render();
+		m_Objects[index]->Render(renderer);
 	}
 }
 

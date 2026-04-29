@@ -26,7 +26,7 @@ void REC::Renderer::Render(Scene* scene) const
 	SDL_SetRenderDrawColor(m_pRenderer, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_pRenderer);
 
-	scene->Render();
+	scene->Render(this);
 
 	SDL_RenderPresent(m_pRenderer);
 }
