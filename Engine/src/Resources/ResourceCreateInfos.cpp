@@ -4,6 +4,7 @@
 #include "Resources/ResourceTypes/Texture2D.h"
 #include "Resources/ResourceTypes/Font.h"
 #include "Resources/ResourceTypes/DataFile.h"
+#include "../Sound/SDL_Sound.h"
 
 bool REC::TextureResourceCreateInfo::Create() const
 {
@@ -17,6 +18,14 @@ bool REC::FontResourceCreateInfo::Create() const
 {
 	ResourceManager& RM = ResourceManager::GetInstance();
 	return RM.AddResource(name, std::make_unique<Font>(RM.GetFullPath(filePath), size));
+}
+
+bool REC::SoundResourceCreateInfo::Create() const
+{
+	ResourceManager& RM = ResourceManager::GetInstance();
+	// create SDL_Sound for now
+	// TODO: don't decide the sound type here
+	return RM.AddResource(name, std::make_unique<SDL_Sound>(RM.GetFullPath(filePath)));
 }
 
 bool REC::FileResourceCreateInfo::Create() const

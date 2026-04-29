@@ -15,6 +15,7 @@ void REC::ResourceManager::Init(const std::filesystem::path& dataPath)
 void REC::ResourceManager::Destroy()
 {
 	m_FontResources.clear(); // must be cleared before TTF_Quit();
+	m_SoundResources.clear(); // must be cleared before mixer is destroyed in SDL_SoundSystem
 	TTF_Quit();
 }
 

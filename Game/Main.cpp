@@ -113,6 +113,12 @@ static void load(REC::IEngine* engine)
 	titleScreen.filePath = "NES - Bomberman - Miscellaneous - Title Screen & Text.png";
 	if (!RM->AddResource(titleScreen))
 		throw std::runtime_error("Failed to load title screen texture");
+
+	REC::SoundResourceCreateInfo placeBombSound{};
+	placeBombSound.name = "placeBombSound";
+	placeBombSound.filePath = "Sound/bomb_lay.wav";
+	if (!RM->AddResource(placeBombSound))
+		throw std::runtime_error("Failed to load place bomb sound");
 #pragma endregion Resources
 
 	// === SCENE =======================================================================================

@@ -21,6 +21,8 @@
 #include "TimeSystem.h"
 #include "Window.h"
 #include "CollisionSystem.h"
+#include "ServiceLocator.h"
+#include "Sound/SDL_SoundSystem.h"
 
 #include <thread>
 #include <chrono>
@@ -39,6 +41,7 @@ void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
 #include <Events/EventBroadcaster.h>
+#include <Sound/SDL_SoundSystem.h>
 
 void LoopCallback(void* arg)
 {
@@ -92,12 +95,15 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	m_EngineContext.inputSystem = m_pInputSystem.get();
 	m_EngineContext.renderer = &Renderer::GetInstance();
 	m_EngineContext.resourceManager = &ResourceManager::GetInstance();
+
+	ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>());
 }
 
 REC::Engine::~Engine()
 {
 	Renderer::GetInstance().Destroy();
-	ResourceManager::GetInstance().Destroy();
+	ResourceManager::GetInstance().Destroy(); // must destroy the sound resources before the mixer!!
+	ServiceLocator::GetSoundSystem().Destroy();
 	m_pWindow->Destroy();
 	SDL_Quit();
 }

@@ -5,6 +5,8 @@
 
 namespace REC
 {
+	using SoundID = unsigned int;
+
 	struct ResourceCreateInfo
 	{
 		std::string name = ""; // the internal name for this resource. how will you refer to this resource in Game
@@ -36,11 +38,15 @@ namespace REC
 		uint8_t size = 0;
 	};
 
-	//struct SoundResourceCreateInfo : public ResourceCreateInfo
-	//{
-	//	SoundResourceCreateInfo() = default;
-	//	virtual ~SoundResourceCreateInfo() = default;
-	//};
+	struct SoundResourceCreateInfo : public ResourceCreateInfo
+	{
+		SoundResourceCreateInfo() = default;
+		virtual ~SoundResourceCreateInfo() = default;
+
+		virtual bool Create() const override;
+
+		SoundID id{};
+	};
 
 	// name not required
 	struct FileResourceCreateInfo : public ResourceCreateInfo

@@ -30,7 +30,8 @@ set(SOURCE_FILES
     "src/Resources/ResourceCreateInfos.cpp"
 	"src/Resources/ResourceManager.cpp"
 
-    
+    "src/Sound/SDL_SoundSystem.cpp"
+    "src/Sound/SDL_Sound.cpp"
 
     "src/Events/EventSystem.cpp"
     "src/Events/Event.cpp"

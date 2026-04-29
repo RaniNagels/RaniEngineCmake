@@ -12,6 +12,7 @@
 #include "Resources/ResourceTypes/Font.h"	
 #include "Resources/ResourceTypes/Texture2D.h"
 #include "Resources/ResourceTypes/DataFile.h"
+#include "Resources/ResourceTypes/ISound.h"
 #include "FrameInfo.h"
 #include "AnimationInfo.h"
 #include "TextureFontInfo.h"
@@ -59,6 +60,16 @@ namespace REC
 				m_DataFileResources.insert({ key, std::move(resource) });
 				return true;
 			}
+			else if constexpr (std::derived_from<T, ISound>)
+			{
+				if (m_SoundResources.find(key) != m_SoundResources.end())
+				{
+					assert(false && "Name already exists in Sound Resources");
+					return false;
+				}
+				m_SoundResources.insert({ key, std::move(resource) });
+				return true;
+			}
 
 			// unreachable code?!
 			//assert(false && "Requested resource type is not supported!");
@@ -76,6 +87,10 @@ namespace REC
 			else if constexpr (std::is_same_v<T, Font>)
 			{
 				return GetResourceFromMap<T>(m_FontResources, key);
+			}
+			else if constexpr (std::is_same_v<T, ISound>)
+			{
+				return GetResourceFromMap<T>(m_SoundResources, key);
 			}
 
 			// unreachable code?!
@@ -116,5 +131,6 @@ namespace REC
 		std::unordered_map<std::string, std::unique_ptr<Texture2D>> m_TextureResources{};
 		std::unordered_map<std::string, std::unique_ptr<Font>> m_FontResources{};
 		std::unordered_map<std::string, std::unique_ptr<DataFile>> m_DataFileResources{};
+		std::unordered_map<std::string, std::unique_ptr<ISound>> m_SoundResources{};
 	};
 }

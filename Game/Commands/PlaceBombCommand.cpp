@@ -10,6 +10,7 @@
 #include "../Components/DebugBoundsRenderComponent.h"
 #include <Components/CollisionComponent.h>
 #include <SceneManager.h>
+#include <ServiceLocator.h>
 
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
@@ -64,6 +65,8 @@ void Game::PlaceBombCommand::Execute(float)
 
 	bomb->AddCollisionComponent<REC::CollisionComponent>(bombCollisionDesc);
 	bomb->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{255,0,0});
+
+	REC::ServiceLocator::GetSoundSystem().Play("placeBombSound", 1.f);
 
 	m_HasPlacedBombEvent->Broadcast();
 }
