@@ -119,6 +119,12 @@ static void load(REC::IEngine* engine)
 	placeBombSound.filePath = "Sound/bomb_lay.wav";
 	if (!RM->AddResource(placeBombSound))
 		throw std::runtime_error("Failed to load place bomb sound");
+
+	REC::SoundResourceCreateInfo explosionSound{};
+	explosionSound.name = "explosionSound";
+	explosionSound.filePath = "Sound/bomb_explosion.wav";
+	if (!RM->AddResource(explosionSound))
+		throw std::runtime_error("Failed to load explosion sound");
 #pragma endregion Resources
 
 	// === SCENE =======================================================================================
@@ -197,7 +203,7 @@ static void load(REC::IEngine* engine)
 	instrBombermanDesc.parent = instructions;
 	instrBombermanDesc.startPosY = 28.f;
 	auto* instructionsBomberman = scene->CreateGameObject(instrBombermanDesc);
-	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman", "dogicapixel16");
+	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman, press SPACE to place bomb and hear sound", "dogicapixel16");
 
 	REC::GameObjectDescriptor instrBalloomBombDesc{};
 	instrBalloomBombDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);

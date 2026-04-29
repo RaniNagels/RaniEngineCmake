@@ -3,6 +3,7 @@
 #include <GameObject.h>
 #include <stdexcept>
 #include <Components/SpriteRenderComponent.h>
+#include <ServiceLocator.h>
 
 Game::BombComponent::BombComponent(REC::GameObject* owner, const BombDescriptor& descriptor)
 	: Component(owner)
@@ -48,5 +49,7 @@ void Game::BombComponent::Detonate()
 	m_pAnimatedSpriteComponent->ChangeAnimation(animation);
 	m_pAnimatedSpriteComponent->StartAnimation();
 	m_Exploded = true;
+
+	REC::ServiceLocator::GetSoundSystem().Play("explosionSound", 1.f);
 }
 

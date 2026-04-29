@@ -66,7 +66,7 @@ void Game::PlaceBombCommand::Execute(float)
 	bomb->AddCollisionComponent<REC::CollisionComponent>(bombCollisionDesc);
 	bomb->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{255,0,0});
 
-	REC::ServiceLocator::GetSoundSystem().Play("placeBombSound", 1.f);
+	REC::ServiceLocator::GetSoundSystem().Play("placeBombSound", 0.5f);
 
 	m_HasPlacedBombEvent->Broadcast();
 }
