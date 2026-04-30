@@ -13,9 +13,7 @@ REC::HealthComponent::HealthComponent(GameObject* owner, float maxHealth, float 
 
 REC::HealthComponent::~HealthComponent() = default;
 
-void REC::HealthComponent::Update(float)
-{
-}
+void REC::HealthComponent::Update(float) {}
 
 void REC::HealthComponent::ChangeHealth(float delta)
 {

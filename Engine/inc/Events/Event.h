@@ -54,7 +54,7 @@ namespace REC
 
 		bool IsEvent(EventId event) { return event == m_Id;}
 		EventId GetId() const { return m_Id; }
-		EventArgs *const GetArgs() const { return m_pArgs.get(); }
+		EventArgs* GetArgs() const { return m_pArgs.get(); }
 
 		void Broadcast();
 
@@ -71,9 +71,9 @@ namespace REC
 
 		CollisionEvent(const CollisionEvent& other)
 			: Event(other)
-			, m_Type{ other.m_Type }
 			, m_Object1{ other.m_Object1 }
 			, m_Object2{ other.m_Object2 }
+			, m_Type{ other.m_Type }
 		{
 		}
 		CollisionEvent(CollisionEvent&& other) = delete;
