@@ -42,7 +42,7 @@ REC::Texture2D::Texture2D(const std::string &fullPath, std::optional<REC::Color>
     }
 }
 
-REC::Texture2D::Texture2D(SDL_Texture* texture, std::optional<REC::Color>)
+REC::Texture2D::Texture2D(SDL_Texture* texture)
     : m_texture{ texture }
 {
 	assert(m_texture != nullptr);

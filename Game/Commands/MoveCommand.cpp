@@ -1,6 +1,7 @@
 #include "MoveCommand.h"
 #include <Components/TransformComponent.h>
 #include "../Components/GridComponent.h"
+#include <ServiceLocator.h>
 
 Game::MoveCommand::MoveCommand(REC::GameObject* actor, glm::vec2 direction, float speed, GridComponent* playGroundGrid)
 	: GameObjectInputCommand(actor)
@@ -26,7 +27,13 @@ void Game::MoveCommand::Execute(float deltaTime)
     if (currentCell != newCell)
     {
         if (newCell.IsValid() && !newCell.isWall)
+        {
             GetGameObject()->GetTransform()->AddToLocalPosition(movement);
+			if (m_Direction.x != 0.f)
+			    REC::ServiceLocator::GetSoundSystem().Play("stepHorizontalSound", 0.5f);
+            else if (m_Direction.y != 0.f)
+				REC::ServiceLocator::GetSoundSystem().Play("stepVerticalSound", 0.5f);
+        }
     }
     else
     {

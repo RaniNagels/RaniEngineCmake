@@ -11,7 +11,7 @@ bool REC::TextureResourceCreateInfo::Create() const
 	// code to create happens here
 	// pass the object and key to the resource manager
 	ResourceManager& RM = ResourceManager::GetInstance();
-	return RM.AddResource(name, std::make_unique<Texture2D>(RM.GetFullPath(filePath)));
+	return RM.AddResource(name, std::make_unique<Texture2D>(RM.GetFullPath(filePath), transparentColor));
 }
 
 bool REC::FontResourceCreateInfo::Create() const

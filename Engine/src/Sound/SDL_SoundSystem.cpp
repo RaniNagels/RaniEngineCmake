@@ -12,20 +12,15 @@ class REC::SDL_SoundSystem::Impl final
 public:
 	Impl()
 	{
-		if (!SDL_Init(SDL_INIT_AUDIO))
+		if (!SDL_InitSubSystem(SDL_INIT_AUDIO))
 			throw std::runtime_error(std::string("Failed to initialize SDL audio subsystem: ") + SDL_GetError());
 		
 		if (!MIX_Init())
 			throw std::runtime_error(std::string("Failed to initialize SDL mixer: ") + SDL_GetError());
 
-
 		m_pMixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
-		if (!m_pMixer) {
+		if (!m_pMixer)
 			SDL_Log("Couldn't create mixer on default device: %s", SDL_GetError());
-		}
-		//m_pMixer = MIX_CreateMixer(&m_AudioSpec);
-		//if (!m_pMixer)
-		//	throw std::runtime_error(std::string("Failed to create SDL mixer device: ") + SDL_GetError());
 
 		m_SoundThread = std::jthread(&Impl::ProcessQueue, this);
 	}

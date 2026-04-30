@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <cstdint>
+#include <optional>
 #include <DataLoadTypes.h>
+#include <RECColor.h>
 
 namespace REC
 {
@@ -24,6 +26,7 @@ namespace REC
 	{
 		TextureResourceCreateInfo() = default;
 		virtual ~TextureResourceCreateInfo() = default;
+		std::optional<Color> transparentColor;
 
 		virtual bool Create() const override;
 	};

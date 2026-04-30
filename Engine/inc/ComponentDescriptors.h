@@ -23,9 +23,6 @@ namespace REC
 		std::string frameKey{}; // the key used to store the specific FrameInfo
 		std::string textureKey{};
 
-		bool hasColorTransparency{ false }; // whether or not the texture contains a color that needs to be made transparent
-		Color transparentColor{ 0,0,0 }; // the color that needs to be made transparent in the texture
-
 		float drawPointX{ 0.f }; // the percentagual x coordinate of the texture where the sprite shall be drawn from (0.f = left, 1.f = right)
 		float drawPointY{ 0.f }; // the percentagual y coordinate of the texture where the sprite shall be drawn from (0.f = top, 1.f = bottom)
 

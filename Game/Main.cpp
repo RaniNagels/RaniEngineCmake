@@ -70,6 +70,7 @@ static void load(REC::IEngine* engine)
 	REC::TextureResourceCreateInfo generalSprites{};
 	generalSprites.name = "generalSprites";
 	generalSprites.filePath = "NES - Bomberman - Miscellaneous - General Sprites.png";
+	generalSprites.transparentColor = REC::Color{ 56,135,0 };
 	if (!RM->AddResource(generalSprites))
 		throw std::runtime_error("Failed to load general sprites texture");
 
@@ -125,6 +126,18 @@ static void load(REC::IEngine* engine)
 	explosionSound.filePath = "Sound/bomb_explosion.wav";
 	if (!RM->AddResource(explosionSound))
 		throw std::runtime_error("Failed to load explosion sound");
+
+	REC::SoundResourceCreateInfo stepHorizontalSound{};
+	stepHorizontalSound.name = "stepHorizontalSound";
+	stepHorizontalSound.filePath = "Sound/step_horizontal.wav";
+	if (!RM->AddResource(stepHorizontalSound))
+		throw std::runtime_error("Failed to load step horizontal sound");
+
+	REC::SoundResourceCreateInfo stepVerticalSound{};
+	stepVerticalSound.name = "stepVerticalSound";
+	stepVerticalSound.filePath = "Sound/step_vertical.wav";
+	if (!RM->AddResource(stepVerticalSound))
+		throw std::runtime_error("Failed to load step vertical sound");
 #pragma endregion Resources
 
 	// === SCENE =======================================================================================
@@ -295,8 +308,6 @@ static void load(REC::IEngine* engine)
 	charactersSpriteDescriptors.drawHeight = 50;
 	charactersSpriteDescriptors.frameDataFileKey = "characterData";
 	charactersSpriteDescriptors.textureKey = "generalSprites";
-	charactersSpriteDescriptors.hasColorTransparency = true;
-	charactersSpriteDescriptors.transparentColor = REC::Color{ 56,135,0 };
 	charactersSpriteDescriptors.drawPointX = 0.5f;
 	charactersSpriteDescriptors.drawPointY = 0.5f;
 

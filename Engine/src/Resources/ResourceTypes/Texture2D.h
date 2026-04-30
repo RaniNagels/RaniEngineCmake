@@ -13,7 +13,7 @@ namespace REC
 	class Texture2D final
 	{
 	public:
-		explicit Texture2D(SDL_Texture* texture, std::optional<REC::Color> transparentColor = {});
+		explicit Texture2D(SDL_Texture* texture);
 		explicit Texture2D(const std::string& fullPath, std::optional<REC::Color> transparentColor = {});
 		~Texture2D();
 

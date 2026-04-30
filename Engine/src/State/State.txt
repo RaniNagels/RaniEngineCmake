@@ -1,0 +1,13 @@
+immediatly return the new state upon handling the input
+option one: advantage the state are preallocated
+option two: allocate and return a new state upon handling the input. option 2 is foolprove
+the user interface is also a FSM!
+
+screen tearing
+v-sync: syncs the swapping of front and back buffers to the monitor's refresh rate.
+if the update happens at the wrong time, the screen may display a mix of old and new frames, resulting in tearing.
+
+double buffer: when a state changes in steps, that can be accessed in the middle of these steps, which you want to prevent access to
+27 -> what was my previous frame slap state? example of using the dubble buffer
+I do the same for my input states (keyboard, mouse, gamepad) to check if I pressed, released or held a button this frame
+a late update fixes a few problems, but not all. double buffering is slightly cleaner and more foolproof
