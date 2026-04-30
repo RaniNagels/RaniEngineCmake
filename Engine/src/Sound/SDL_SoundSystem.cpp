@@ -103,7 +103,6 @@ private:
 	};
 	std::queue<SoundEvent> m_SoundQueue{};
 	MIX_Mixer* m_pMixer;
-	SDL_AudioSpec m_AudioSpec{};
 
 	// thread
 	std::jthread m_SoundThread;
