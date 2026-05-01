@@ -1,10 +1,12 @@
 #include <Components/TextRenderComponent.h>
+
 #include <SDL3_ttf/SDL_ttf.h>
-#include "../Renderer.h"
 #include <memory>
 #include <stdexcept>
-#include "../Resources/ResourceManager.h"
-#include "../SDLHelpers.h"
+
+#include "Renderer.h"
+#include "Resources/ResourceManager.h"
+#include "SDLHelpers.h"
 
 REC::TextRenderComponent::TextRenderComponent(GameObject* owner, const std::string& text, Font* font, const Color& color)
 	: SpriteRenderComponent(owner, nullptr)

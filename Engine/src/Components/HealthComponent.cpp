@@ -1,4 +1,5 @@
 #include <Components/HealthComponent.h>
+
 #include <sdbm_hash.h>
 
 REC::HealthComponent::HealthComponent(GameObject* owner, float maxHealth, float currentHealth)

@@ -1,6 +1,7 @@
 #pragma once
-#include "../Resources/ResourceTypes/ISound.h"
 #include <memory>
+
+#include "Resources/ResourceTypes/ISound.h"
 
 struct MIX_Mixer;
 namespace REC

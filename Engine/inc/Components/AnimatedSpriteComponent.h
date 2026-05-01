@@ -1,7 +1,8 @@
 #pragma once
-#include <Components/Component.h>
 #include <vector>
+
 #include <ComponentDescriptors.h>
+#include <Components/Component.h>
 
 namespace REC
 {

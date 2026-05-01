@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdint>
 #include <optional>
+
 #include <DataLoadTypes.h>
 #include <RECColor.h>
 

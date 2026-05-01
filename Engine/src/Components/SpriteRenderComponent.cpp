@@ -1,10 +1,11 @@
 #include <Components/SpriteRenderComponent.h>
+
 #include <Components/TransformComponent.h>
 #include <GameObject.h>
 
-#include "../Resources/ResourceManager.h"
-#include "../Renderer.h"
-#include "../FrameInfo.h"
+#include "Resources/ResourceManager.h"
+#include "Renderer.h"
+#include "FrameInfo.h"
 
 REC::SpriteRenderComponent::SpriteRenderComponent(GameObject* owner, Texture2D* texture, uint16_t width, uint16_t height)
 	: RenderComponent(owner)

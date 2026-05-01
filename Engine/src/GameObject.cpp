@@ -1,5 +1,7 @@
 #include <GameObject.h>
 
+#include <string>
+
 #include "Renderer.h"
 #include "Resources/ResourceManager.h"
 #include "Resources/ResourceTypes/Font.h"
@@ -7,8 +9,6 @@
 
 #include <Components/TransformComponent.h>
 #include <Components/RenderComponent.h>
-
-#include <string>
 
 REC::GameObject::GameObject(const GameObjectDescriptor& descriptor)
 	: m_Descriptor{ descriptor }

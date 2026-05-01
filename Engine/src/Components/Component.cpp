@@ -1,6 +1,8 @@
 #include <Components/Component.h>
-#include <GameObject.h>
+
 #include <stdexcept>
+
+#include <GameObject.h>
 
 REC::Component::Component(GameObject *const owner)
 	: m_pOwner(owner)

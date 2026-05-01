@@ -4,6 +4,12 @@ project(Minigin)
 add_subdirectory(Engine)
 add_subdirectory(Game)
 
+# Ensure C++23 is enabled for Emscripten builds
+if(EMSCRIPTEN)
+    add_compile_options(-std=c++23)
+    add_link_options(-std=c++23)
+endif()
+
 if(CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS MATCHES "NOTFOUND")
   message(WARNING "clang-scan-deps not found, C++ module dependency scanning will be disabled")
   set(CMAKE_CXX_SCAN_FOR_MODULES OFF CACHE BOOL "Disable C++ module scanning" FORCE)

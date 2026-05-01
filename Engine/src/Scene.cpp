@@ -1,5 +1,6 @@
+#include <Scene.h>
+
 #include <algorithm>
-#include "../inc/Scene.h"
 
 REC::GameObject* REC::Scene::CreateGameObject(const GameObjectDescriptor& descriptor)
 {

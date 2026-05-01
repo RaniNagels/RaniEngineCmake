@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <Input/Input.h>
+
 #include <memory>
 
 namespace REC
@@ -26,16 +27,10 @@ namespace REC
 		bool IsRangeActive(Input::Controller::Range range) const;
 		float GetRange(Input::Controller::Range range) const; // between -1 and 1
 
-		uint8_t GetID() const { return m_ID; }
+		uint8_t GetID() const;
 
 	private:
 		class Impl;
 		std::unique_ptr<Impl> m_Impl;
-
-		uint8_t m_ID;
-
-		// unlike keyboard this is a bitmask not an array
-		uint16_t m_ButtonsPressedThisFrame;
-		uint16_t m_ButtonsReleasedThisFrame;
 	};
 }

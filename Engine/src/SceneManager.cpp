@@ -1,6 +1,7 @@
-#include "../inc/SceneManager.h"
-#include "../inc/Scene.h"
-#include "../src/Renderer.h"
+#include <SceneManager.h>
+
+#include <Scene.h>
+#include "Renderer.h"
 
 void REC::SceneManager::Update(float deltaT)
 {

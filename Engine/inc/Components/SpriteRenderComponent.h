@@ -1,8 +1,9 @@
 #pragma once
-#include "RenderComponent.h"
 #include <string>
+
+#include <GeneralStructs.h>
 #include <ComponentDescriptors.h>
-#include "../GeneralStructs.h"
+#include <Components/RenderComponent.h>
 
 namespace REC
 {

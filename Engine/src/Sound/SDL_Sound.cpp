@@ -1,4 +1,5 @@
 #include "SDL_Sound.h"
+
 #include <SDL3_mixer/SDL_mixer.h>
 #include <stdexcept>
 #include <algorithm>

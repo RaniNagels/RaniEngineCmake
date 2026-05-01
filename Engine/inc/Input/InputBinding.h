@@ -1,9 +1,10 @@
 #pragma once
-#include <Commands/ICommand.h>
-#include <Input/InputAction.h>
 #include <vector>
 #include <memory>
 #include <concepts>
+
+#include <Commands/ICommand.h>
+#include <Input/InputAction.h>
 
 namespace REC
 {

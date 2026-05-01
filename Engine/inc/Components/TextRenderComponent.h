@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "SpriteRenderComponent.h"
-#include "../RECColor.h"
+
+#include <RECColor.h>
+#include <Components/SpriteRenderComponent.h>
 
 namespace REC
 {

@@ -2,7 +2,7 @@
 #include <string>
 #include <functional>
 #include <filesystem>
-#include "EngineSettings.h"
+
 #include <Resources/ResourceCreateInfos.h>
 #include <Input/InputBinding.h>
 #include <EngineContext.h>

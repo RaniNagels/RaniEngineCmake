@@ -4,10 +4,10 @@
 #include "Resources/ResourceTypes/Texture2D.h"
 #include "Resources/ResourceTypes/Font.h"
 #include "Resources/ResourceTypes/DataFile.h"
-#include "../Sound/SDL_Sound.h"
+#include "Sound/SDL_Sound.h"
+#include "Sound/SDL_SoundSystem.h"
 
 #include <ServiceLocator.h>
-#include "../Sound/SDL_SoundSystem.h"
 
 bool REC::TextureResourceCreateInfo::Create() const
 {

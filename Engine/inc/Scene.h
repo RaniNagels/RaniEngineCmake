@@ -2,7 +2,8 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "GameObject.h"
+
+#include <GameObject.h>
 
 namespace REC
 {

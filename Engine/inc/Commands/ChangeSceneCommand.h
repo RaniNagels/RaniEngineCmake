@@ -1,7 +1,7 @@
 #pragma once
-#include <Commands/ICommand.h>
 #include <Scene.h>
 #include <SceneManager.h>
+#include <Commands/ICommand.h>
 
 namespace REC
 {

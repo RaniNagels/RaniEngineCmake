@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include "../inc/GeneralStructs.h"
+
+#include <GeneralStructs.h>
 
 namespace REC
 {

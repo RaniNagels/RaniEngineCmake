@@ -1,6 +1,6 @@
 #pragma once
-#include "Input.h"
-#include "ButtonState.h"
+#include <Input/Input.h>
+#include <Input/ButtonState.h>
 
 namespace REC
 {

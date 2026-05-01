@@ -1,6 +1,7 @@
 #pragma once
-#include "Component.h"
 #include <glm/glm.hpp>
+
+#include <Components/Component.h>
 
 namespace REC
 {

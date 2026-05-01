@@ -1,5 +1,6 @@
 #pragma once
-#include "../../../inc/Input/Input.h"
+#include <Input/Input.h>
+
 #include <array>
 
 namespace REC

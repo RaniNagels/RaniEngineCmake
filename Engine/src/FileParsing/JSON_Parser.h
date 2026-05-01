@@ -4,9 +4,9 @@
 #include <string>
 #include <fstream>
 
-#include "../FrameInfo.h"
-#include "../AnimationInfo.h"
-#include "../TextureFontInfo.h"
+#include "FrameInfo.h"
+#include "AnimationInfo.h"
+#include "TextureFontInfo.h"
 
 namespace REC
 {

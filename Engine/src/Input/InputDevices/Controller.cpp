@@ -12,9 +12,10 @@
 class REC::Controller::Impl
 {
 public:
-	Impl()
+	Impl(uint8_t index)
 		: m_PreviousState{}
 		, m_CurrentState{}
+		, m_ID{ index }
 	{
 	}
 
@@ -24,6 +25,8 @@ public:
 		m_CurrentState = XINPUT_STATE();
 	}
 
+	uint8_t GetID() const { return m_ID; }
+
 	void SetCurrentState(const XINPUT_STATE* state) { m_CurrentState = *state; }
 
 	uint16_t GetButtonChanges() const { return m_CurrentState.Gamepad.wButtons ^ m_PreviousState.Gamepad.wButtons; }
@@ -31,24 +34,36 @@ public:
 
 	XINPUT_GAMEPAD GetCurrentGampad() { return m_CurrentState.Gamepad; }
 
+	bool IsDownThisFrame(Input::Controller::Button button) const
+	{
+		return (GetButtonChanges() & button) && (GetCurrentButtons() & button);
+	}
+
+	bool IsUpThisFrame(Input::Controller::Button button) const
+	{
+		return (GetButtonChanges() & button) && !(GetCurrentButtons() & button);
+	}
+
 private:
 	XINPUT_STATE m_PreviousState;
 	XINPUT_STATE m_CurrentState;
+
+	uint8_t m_ID;
 };
 #else
 // TODO: SDL implementation
 class REC::Controller::Impl
 {
 public:
-	Impl() {}
+	Impl(uint8_t index) : m_ID(index) {}
+
+private:
+	uint8_t m_ID;
 };
 #endif
 
 REC::Controller::Controller(uint8_t index)
-	: m_Impl{std::make_unique<Impl>()}
-	, m_ID{ index }
-	, m_ButtonsPressedThisFrame{ 0 }
-	, m_ButtonsReleasedThisFrame{ 0 }
+	: m_Impl{std::make_unique<Impl>(index)}
 {
 }
 
@@ -65,10 +80,6 @@ void REC::Controller::UpdateState([[maybe_unused]] void* state)
 {
 #if defined(_WIN32)
 	m_Impl->SetCurrentState(static_cast<XINPUT_STATE*>(state));
-
-	int buttonChanges = m_Impl->GetButtonChanges();
-	m_ButtonsPressedThisFrame = buttonChanges & m_Impl->GetCurrentButtons();
-	m_ButtonsReleasedThisFrame = buttonChanges & (~m_Impl->GetCurrentButtons());
 #endif
 }
 
@@ -83,12 +94,12 @@ bool REC::Controller::IsPressed([[maybe_unused]] Input::Controller::Button butto
 
 bool REC::Controller::IsDownThisFrame(Input::Controller::Button button) const
 {
-	return m_ButtonsPressedThisFrame & button;
+	return m_Impl->IsDownThisFrame(button);
 }
 
 bool REC::Controller::IsUpThisFrame(Input::Controller::Button button) const
 {
-	return m_ButtonsReleasedThisFrame & button;
+	return m_Impl->IsUpThisFrame(button);
 }
 
 bool REC::Controller::IsRangeActive([[maybe_unused]] Input::Controller::Range range) const
@@ -165,4 +176,9 @@ float REC::Controller::GetRange([[maybe_unused]] Input::Controller::Range range)
 #else
 	return 1.f;
 #endif
+}
+
+uint8_t REC::Controller::GetID() const
+{
+	return m_Impl->GetID();
 }

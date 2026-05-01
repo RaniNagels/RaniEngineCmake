@@ -1,7 +1,6 @@
 #pragma once
 #include <Commands/ICommand.h>
 
-
 // TODO: change game namespace
 namespace Game
 {

@@ -1,7 +1,8 @@
 #pragma once
-#include <Components/Component.h>
-#include <Events/Event.h>
 #include <memory>
+
+#include <Events/Event.h>
+#include <Components/Component.h>
 #include <Components/IListener.h>
 
 namespace REC

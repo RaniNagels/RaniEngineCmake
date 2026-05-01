@@ -1,7 +1,8 @@
 #pragma once
+#include <memory>
+
 #include <Components/Component.h>
 #include <Events/Event.h>
-#include <memory>
 
 namespace REC
 {

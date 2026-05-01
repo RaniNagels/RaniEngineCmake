@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+
 #include <ISoundSystem.h>
 
 namespace REC

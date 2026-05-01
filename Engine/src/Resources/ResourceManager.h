@@ -2,17 +2,18 @@
 #include <filesystem>
 #include <string>
 #include <memory>
-#include "Singleton.h"
-#include <Resources/IResourceManager.h>
-
 #include <unordered_map>
 #include <stdexcept>
 #include <assert.h>
+
+#include <Singleton.h>
+#include <Resources/IResourceManager.h>
 
 #include "Resources/ResourceTypes/Font.h"	
 #include "Resources/ResourceTypes/Texture2D.h"
 #include "Resources/ResourceTypes/DataFile.h"
 #include "Resources/ResourceTypes/ISound.h"
+
 #include "FrameInfo.h"
 #include "AnimationInfo.h"
 #include "TextureFontInfo.h"

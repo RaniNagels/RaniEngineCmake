@@ -1,8 +1,8 @@
 #include <Events/Event.h>
+
 #include <Components/IListener.h>
 #include <Events/EventBroadcaster.h>
 #include <sdbm_hash.h>
-
 
 REC::Event::Event(EventId id, const EventArgs& args)
 	: m_Id{id}

@@ -1,7 +1,9 @@
 #include <Events/EventBroadcaster.h>
+
 #include <Events/EventSystem.h>
 #include <Components/IListener.h>
-#include "../CollisionSystem.h"
+
+#include "CollisionSystem.h"
 
 void REC::EventBroadcaster::Broadcast(Event* event)
 {

@@ -1,13 +1,14 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "Components/Component.h"
 #include <vector>
 #include <assert.h>
 #include <glm/glm.hpp>
-#include <GameObjectDescriptor.h>
-#include <Components/CollisionComponent.h>
 #include <stdexcept>
+
+#include <Components/Component.h>
+#include <Components/CollisionComponent.h>
+#include <GameObjectDescriptor.h>
 
 namespace REC
 {

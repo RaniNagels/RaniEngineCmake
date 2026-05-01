@@ -1,7 +1,9 @@
-#include <SDL3/SDL.h>
 #include "Texture2D.h"
-#include "Renderer.h"
+
+#include <SDL3/SDL.h>
 #include <stdexcept>
+
+#include "Renderer.h"
 
 REC::Texture2D::~Texture2D()
 {

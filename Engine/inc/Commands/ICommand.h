@@ -1,8 +1,9 @@
 #pragma once
 #include <cstdint>
+#include <algorithm>
+
 #include <GameObject.h>
 #include <EngineContext.h>
-#include <algorithm>
 
 namespace REC
 {

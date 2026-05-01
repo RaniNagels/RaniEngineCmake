@@ -1,4 +1,5 @@
 #include "DataFile.h"
+
 #include <Resources/ResourceCreateInfos.h>
 
 REC::DataFile::DataFile(const std::string& filePath)

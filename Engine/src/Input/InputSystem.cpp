@@ -1,5 +1,7 @@
-#include "../../inc/Input/InputSystem.h"
+#include <Input/InputSystem.h>
+
 #include <SDL3/SDL.h>
+#include <cmath>
 
 #include "InputDevices/Keyboard.h"
 #include "InputDevices/Controller.h"
@@ -10,7 +12,6 @@
 #include <Xinput.h>
 #endif
 
-#include <cmath>
 #include <EngineContext.h>
 
 class REC::InputSystem::Impl

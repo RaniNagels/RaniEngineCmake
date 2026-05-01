@@ -1,6 +1,7 @@
 #include <Components/CollisionComponent.h>
-#include <Events/EventBroadcaster.h>
+
 #include <GameObject.h>
+#include <Events/EventBroadcaster.h>
 #include <Components/TransformComponent.h>
 
 REC::CollisionComponent::CollisionComponent(GameObject* owner, const CollisionDescriptor& descriptor)

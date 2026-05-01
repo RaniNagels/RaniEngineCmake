@@ -1,5 +1,5 @@
-#include "../../inc/Components/TransformComponent.h"
-#include "../../inc/GameObject.h"
+#include <Components/TransformComponent.h>
+#include <GameObject.h>
 
 REC::TransformComponent::TransformComponent(GameObject* owner)
 	: Component(owner)

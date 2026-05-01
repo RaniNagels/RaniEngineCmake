@@ -1,7 +1,8 @@
 #pragma once
-#include "Component.h"
-#include "../RECColor.h"
 #include <string>
+
+#include <Components/Component.h>
+#include <RECColor.h>
 
 namespace REC
 {

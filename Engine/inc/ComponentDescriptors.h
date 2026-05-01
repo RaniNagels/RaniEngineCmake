@@ -1,8 +1,9 @@
 #pragma once
 #include <cstdint>
 #include <string>
-#include <RECColor.h>
 #include <memory>
+
+#include <RECColor.h>
 #include <GeneralStructs.h>
 
 namespace REC

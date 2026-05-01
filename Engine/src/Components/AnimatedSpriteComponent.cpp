@@ -1,6 +1,6 @@
 #include <Components/AnimatedSpriteComponent.h>
 
-#include "../Resources/ResourceManager.h"
+#include "Resources/ResourceManager.h"
 #include "AnimationInfo.h"
 #include "FrameInfo.h"
 

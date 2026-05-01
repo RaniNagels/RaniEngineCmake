@@ -1,7 +1,9 @@
-#include "../../inc/Components/RotatorComponent.h"
+#include <Components/RotatorComponent.h>
+
 #include <glm/fwd.hpp>
-#include "../../inc/GameObject.h"
-#include "../../inc/Components/TransformComponent.h"
+
+#include <GameObject.h>
+#include <Components/TransformComponent.h>
 
 REC::RotatorComponent::RotatorComponent(GameObject* owner, float speed)
 	: Component(owner)

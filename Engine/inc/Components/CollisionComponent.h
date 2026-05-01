@@ -1,9 +1,10 @@
 #pragma once
+#include <vector>
+
+#include <GeneralStructs.h>
+#include <ComponentDescriptors.h>
 #include <Components/IListener.h>
 #include <Components/Component.h>
-#include <GeneralStructs.h>
-#include <vector>
-#include <ComponentDescriptors.h>
 
 namespace REC
 {

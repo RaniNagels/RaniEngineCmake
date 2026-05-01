@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
-#include "../../FileParsing/JSON_Parser.h"
 #include <fstream>
+
+#include "FileParsing/JSON_Parser.h"
+
 #include <DataLoadTypes.h>
 
 namespace REC

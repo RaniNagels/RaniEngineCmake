@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
-#include <ISoundSystem.h>
 #include <stdexcept>
+
+#include <ISoundSystem.h>
 
 namespace REC
 {

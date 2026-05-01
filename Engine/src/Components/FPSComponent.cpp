@@ -1,12 +1,13 @@
 #include <Components/FPSComponent.h>
-#include <Components/TextRenderComponent.h>
-#include <GameObject.h>
-
-#include "../Resources/ResourceManager.h"
-#include "../Resources/ResourceTypes/Font.h"
 
 #include <chrono>
 #include <iomanip>
+
+#include <Components/TextRenderComponent.h>
+#include <GameObject.h>
+
+#include "Resources/ResourceManager.h"
+#include "Resources/ResourceTypes/Font.h"
 
 REC::FPSComponent::FPSComponent(GameObject* owner, Font* font, const Color& color)
 	: Component(owner)

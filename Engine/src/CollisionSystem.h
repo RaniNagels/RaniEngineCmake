@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
+
 #include <Events/Event.h>
 #include <GeneralStructs.h>
 
@@ -27,7 +28,6 @@ namespace REC
 
 	private:
 		void SendCollisionEvent(CollisionComponent* comp1, CollisionComponent* comp2, CollisionEventType type);
-		bool CheckCollision(CollisionComponent* comp1, CollisionComponent* comp2);
 		std::optional<std::pair<const Rect&, const Rect&>> FindCollision(CollisionComponent* comp1, CollisionComponent* comp2);
 
 		std::vector<CollisionComponent*> m_CollidableObjects{};

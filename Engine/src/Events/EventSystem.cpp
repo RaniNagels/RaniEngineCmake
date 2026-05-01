@@ -1,8 +1,9 @@
 #include <Events/EventSystem.h>
+
 #include <Events/Event.h>
-#include <Components/IListener.h>
 #include <sdbm_hash.h>
 #include <GameObject.h>
+#include <Components/IListener.h>
 #include <Components/CollisionComponent.h>
 
 void REC::EventSystem::ProcessEvents()

@@ -55,3 +55,11 @@ I use a lot of Vulkan terminology:
 
 * Manager -> Contains and owns a lot of data (like ResourceManager)
 * System -> Focus on implementation/functionality not data (like InputSystem), can still contain/own some data
+
+## Engine Structure
+### includes
+<> => indicates public headers
+"" => indicates private headers
+relative paths are avoided in includes, unless the private header is in the same folder as the current private file
+"" does not necessarily mean that the path is relative, but it does mean that this header is private!
+<> only refers to public headers, and will use absolute paths exclusivly.

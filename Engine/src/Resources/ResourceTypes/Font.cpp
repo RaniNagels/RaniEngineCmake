@@ -1,6 +1,7 @@
+#include "Font.h"
+
 #include <stdexcept>
 #include <SDL3_ttf/SDL_ttf.h>
-#include "Font.h"
 
 REC::Font::Font(const std::string& fullPath, float size) : m_font(nullptr)
 {

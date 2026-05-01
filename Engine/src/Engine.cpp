@@ -1,6 +1,8 @@
 ﻿#include <stdexcept>
 #include <sstream>
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 #if WIN32
 #define WIN32_LEAN_AND_MEAN 
@@ -8,24 +10,22 @@
 #endif
 
 #include <SDL3/SDL.h>
-//#include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
+
 #include "Engine.h"
+#include "TimeSystem.h"
+#include "Window.h"
+#include "Renderer.h"
+#include "CollisionSystem.h"
+#include "Resources/ResourceManager.h"
+#include "Sound/SDL_SoundSystem.h"
+
+#include <ServiceLocator.h>
 #include <Input/InputSystem.h>
 #include <SceneManager.h>
 #include <Events/EventSystem.h>
 #include <Events/EventBroadcaster.h>
-#include <IRenderer.h>
-#include "Renderer.h"
-#include "Resources/ResourceManager.h"
-#include "TimeSystem.h"
-#include "Window.h"
-#include "CollisionSystem.h"
-#include "ServiceLocator.h"
-#include "Sound/SDL_SoundSystem.h"
 
-#include <thread>
-#include <chrono>
 
 void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 {

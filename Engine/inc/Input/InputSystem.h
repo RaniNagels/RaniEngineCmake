@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 
-#include "InputBinding.h"
+#include <Input/InputBinding.h>
 
 namespace REC
 {

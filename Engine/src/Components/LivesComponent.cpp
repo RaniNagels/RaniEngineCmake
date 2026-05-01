@@ -1,4 +1,5 @@
 #include <Components/LivesComponent.h>
+
 #include <Components/HealthComponent.h>
 #include <GameObject.h>
 #include <sdbm_hash.h>

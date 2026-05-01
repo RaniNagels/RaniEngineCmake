@@ -1,8 +1,9 @@
 ﻿#pragma once
 #include <glm/vec2.hpp>
 #include <string>
-#include <RECColor.h>
 #include <optional>
+
+#include <RECColor.h>
 
 struct SDL_Texture;
 namespace REC

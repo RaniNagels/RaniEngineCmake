@@ -1,10 +1,11 @@
 #pragma once
 #include <cstdint>
+#include <memory>
+#include <optional>
+
 #include <GeneralStructs.h>
 #include <ComponentDescriptors.h>
-#include <memory>
 #include <GameObject.h>
-#include <optional>
 
 namespace REC
 {

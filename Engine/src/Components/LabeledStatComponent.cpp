@@ -1,4 +1,5 @@
 #include <Components/LabeledStatComponent.h>
+
 #include <Components/TextRenderComponent.h>
 #include <GameObject.h>
 

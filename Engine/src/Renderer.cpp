@@ -1,7 +1,9 @@
-﻿#include <stdexcept>
+﻿#include "Renderer.h"
+
+#include <stdexcept>
 #include <cstring>
 #include <iostream>
-#include "Renderer.h"
+
 #include <SceneManager.h>
 #include <Scene.h>
 #include "Resources/ResourceTypes/Texture2D.h"

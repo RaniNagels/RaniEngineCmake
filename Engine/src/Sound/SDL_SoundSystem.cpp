@@ -1,10 +1,12 @@
 #include "SDL_SoundSystem.h"
+
 #include <queue>
-#include "../Resources/ResourceTypes/ISound.h"
 #include <SDL3_mixer/SDL_mixer.h>
-#include "../Resources/ResourceManager.h"
 #include <thread>
 #include <mutex>
+
+#include "Resources/ResourceTypes/ISound.h"
+#include "Resources/ResourceManager.h"
 #include "SDL_Sound.h"
 
 class REC::SDL_SoundSystem::Impl final
