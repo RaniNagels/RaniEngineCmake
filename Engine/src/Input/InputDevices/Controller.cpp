@@ -56,7 +56,7 @@ class REC::Controller::Impl
 {
 public:
 	Impl(uint8_t index) : m_ID(index) {}
-
+	uint8_t GetID() const { return m_ID; }
 private:
 	uint8_t m_ID;
 };
@@ -92,14 +92,22 @@ bool REC::Controller::IsPressed([[maybe_unused]] Input::Controller::Button butto
 #endif
 }
 
-bool REC::Controller::IsDownThisFrame(Input::Controller::Button button) const
+bool REC::Controller::IsDownThisFrame([[maybe_unused]] Input::Controller::Button button) const
 {
+#if defined(_WIN32)
 	return m_Impl->IsDownThisFrame(button);
+#else
+	return false;
+#endif
 }
 
-bool REC::Controller::IsUpThisFrame(Input::Controller::Button button) const
+bool REC::Controller::IsUpThisFrame([[maybe_unused]] Input::Controller::Button button) const
 {
+#if defined(_WIN32)
 	return m_Impl->IsUpThisFrame(button);
+#else
+return false;
+#endif
 }
 
 bool REC::Controller::IsRangeActive([[maybe_unused]] Input::Controller::Range range) const
