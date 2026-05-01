@@ -74,12 +74,12 @@ static void load(REC::IEngine* engine)
 	if (!RM->AddResource(generalSprites))
 		throw std::runtime_error("Failed to load general sprites texture");
 
-	REC::FontResourceCreateInfo font{};
-	font.name = "lingua36";
-	font.filePath = "Lingua.otf";
-	font.size = uint8_t(36);
-	if (!RM->AddResource(font))
-		throw std::runtime_error("Failed to load font");
+	//REC::FontResourceCreateInfo font{};
+	//font.name = "lingua36";
+	//font.filePath = "Lingua.otf";
+	//font.size = uint8_t(36);
+	//if (!RM->AddResource(font))
+	//	throw std::runtime_error("Failed to load font");
 
 	REC::FontResourceCreateInfo debugFont{};
 	debugFont.name = "dogicapixel16";
@@ -189,6 +189,7 @@ static void load(REC::IEngine* engine)
 	backdrop.textureKey = "background";
 
 	REC::GameObjectDescriptor backdropObjectDesc{};
+	backdropObjectDesc.id = REC::make_sdbm_hash("Grid");
 	backdropObjectDesc.startPosX = 0.f;
 	backdropObjectDesc.startPosY = 80.f;
 	backdropObjectDesc.renderLayer = std::to_underlying(Game::RenderLayer::Background); // C++23 feature

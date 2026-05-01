@@ -35,12 +35,13 @@ public:
 
 	// TODO: revise
 	//        volume, loops
-	void Play(float volume, int ) const
+	void Play(float volume, int loops) const
 	{
 		if (!m_pTrack || !m_pAudio)
 			throw std::runtime_error("Audio not loaded or mixer not set.");
 
 		MIX_SetTrackAudio(m_pTrack, m_pAudio);
+		MIX_SetTrackLoops(m_pTrack, loops);
 		MIX_SetTrackGain(m_pTrack, volume);
 		if (!MIX_PlayTrack(m_pTrack, 0))
 			throw std::runtime_error(std::string("Failed to play audio: ") + SDL_GetError());

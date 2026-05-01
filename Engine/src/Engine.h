@@ -26,6 +26,7 @@ namespace REC
 		~Engine();
 
 		virtual void Run(void(*load)(IEngine*)) override;
+		void RunOneFrame(); // must be public for emscripten
 
 		Engine(const Engine& other) = delete;
 		Engine(Engine&& other) = delete;
@@ -36,7 +37,6 @@ namespace REC
 		virtual void SetEngineSettings(const EngineSettings& data) override;
 
 	private:
-		void RunOneFrame();
 		std::unique_ptr<TimeSystem> m_pTimeSystem;
 		std::unique_ptr<Window> m_pWindow;
 		std::unique_ptr<SceneManager> m_pSceneManager;

@@ -6,6 +6,9 @@
 #include "Resources/ResourceTypes/DataFile.h"
 #include "../Sound/SDL_Sound.h"
 
+#include <ServiceLocator.h>
+#include "../Sound/SDL_SoundSystem.h"
+
 bool REC::TextureResourceCreateInfo::Create() const
 {
 	// code to create happens here
@@ -23,9 +26,10 @@ bool REC::FontResourceCreateInfo::Create() const
 bool REC::SoundResourceCreateInfo::Create() const
 {
 	ResourceManager& RM = ResourceManager::GetInstance();
-	// create SDL_Sound for now
-	// TODO: don't decide the sound type here
-	return RM.AddResource(name, std::make_unique<SDL_Sound>(RM.GetFullPath(filePath)));
+	// the type of sounds get decided here based on the SoundSystem registered to the service locator.
+	if (dynamic_cast<SDL_SoundSystem*>(&ServiceLocator::GetSoundSystem()) != nullptr)
+		return RM.AddResource(name, std::make_unique<SDL_Sound>(RM.GetFullPath(filePath)));
+	return false; // sound system not supported
 }
 
 bool REC::FileResourceCreateInfo::Create() const

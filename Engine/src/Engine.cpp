@@ -40,8 +40,6 @@ void LogSDLVersion(const std::string& message, int major, int minor, int patch)
 
 #ifdef __EMSCRIPTEN__
 #include "emscripten.h"
-#include <Events/EventBroadcaster.h>
-#include <Sound/SDL_SoundSystem.h>
 
 void LoopCallback(void* arg)
 {

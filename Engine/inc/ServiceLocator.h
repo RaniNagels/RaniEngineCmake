@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <ISoundSystem.h>
+#include <stdexcept>
 
 namespace REC
 {
@@ -13,7 +14,12 @@ namespace REC
 				throw std::runtime_error("Sound system not registered in service locator.");
 			return *m_pSoundSystem; 
 		}
-		static void RegisterSoundSystem(std::unique_ptr<ISoundSystem> pSoundSystem) { m_pSoundSystem = std::move(pSoundSystem); }
+		static void RegisterSoundSystem(std::unique_ptr<ISoundSystem> pSoundSystem) 
+		{ 
+			if (m_pSoundSystem != nullptr)
+				throw std::runtime_error("Cannot Register more than one SoundSystem");
+			m_pSoundSystem = std::move(pSoundSystem); 
+		}
 	private:
 		inline static std::unique_ptr<ISoundSystem> m_pSoundSystem = nullptr;
 	};
