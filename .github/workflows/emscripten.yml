@@ -63,7 +63,7 @@ jobs:
       - name: Build
         run: |
           cd build-web
-          cmake --build . --config Release
+          cmake --build . --verbose . --config Release
 
       - name: Debug build output
         run: |
