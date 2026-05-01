@@ -47,6 +47,7 @@ jobs:
       - name: Verify Emscripten
         run: |
           emcc --version
+          em++ --version
           cmake --version
 
       - name: Configure (CMake)

@@ -1,12 +1,6 @@
 cmake_minimum_required(VERSION 4.1)
 project(Minigin)
 
-# Ensure C++23 is enabled for Emscripten builds
-if(EMSCRIPTEN)
-    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-std=c++23>)
-    add_link_options(-std=c++23)
-endif()
-
 add_subdirectory(Engine)
 add_subdirectory(Game)
 
