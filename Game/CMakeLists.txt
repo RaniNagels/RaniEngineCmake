@@ -29,6 +29,9 @@ set(SOURCE_FILES
 add_executable(${TARGET_NAME} ${TARGET_PARAM} ${SOURCE_FILES})
 message(STATUS "Game Executable Created")
 
+# --- Set C++23 for Game executable
+target_compile_features(${TARGET_NAME} PUBLIC cxx_std_23)
+
 # --- Link Libraries -------------
 target_link_libraries(${TARGET_NAME} PRIVATE 
 	REC

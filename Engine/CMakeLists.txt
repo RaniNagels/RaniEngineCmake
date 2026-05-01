@@ -192,7 +192,7 @@ if (NOT EMSCRIPTEN)
 	target_link_libraries(${TARGET_NAME} PRIVATE xinput)
 endif()
 
-# --- Set C++20 for library and all dependents -------------
+# --- Set C++23 for library and all dependents -------------
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_23)
 message(STATUS "Set Language to C++ 23")
 
