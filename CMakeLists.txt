@@ -3,7 +3,7 @@ project(Minigin)
 
 # Ensure C++23 is enabled for Emscripten builds
 if(EMSCRIPTEN)
-    add_compile_options(-std=c++23)
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-std=c++23>)
     add_link_options(-std=c++23)
 endif()
 
