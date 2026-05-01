@@ -10,6 +10,7 @@
 #include <Input/InputSystem.h>
 #include <Events/EventSystem.h>
 #include <Resources/IResourceManager.h>
+#include <Util.h>
 
 #include <ComponentDescriptors.h>
 
@@ -38,7 +39,6 @@
 
 #include "RenderLayers.h"
 #include "Player.h"
-#include <utility>
 #include <memory>
 #include <iostream>
 #include "Components/BombermanCollisionComponent.h"
@@ -155,7 +155,7 @@ static void load(REC::IEngine* engine)
 	REC::GameObjectDescriptor startScreenBackdropDesc{};
 	startScreenBackdropDesc.startPosX = 125.f;
 	startScreenBackdropDesc.startPosY = 0.f;
-	startScreenBackdropDesc.renderLayer = std::to_underlying(Game::RenderLayer::Background); // C++23 feature
+	startScreenBackdropDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background); // C++23 feature
 	
 	auto* stsc = startScreen->CreateGameObject(startScreenBackdropDesc);
 	stsc->AddComponent<REC::SpriteRenderComponent>(startScreenBackdrop);
@@ -168,7 +168,7 @@ static void load(REC::IEngine* engine)
 	REC::GameObjectDescriptor startScreenInstructionDesc{};
 	startScreenInstructionDesc.startPosX = 75.f;
 	startScreenInstructionDesc.startPosY = 320.f;
-	startScreenInstructionDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui); // C++23 feature
+	startScreenInstructionDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui); // C++23 feature
 
 	auto* stscInstruction = startScreen->CreateGameObject(startScreenInstructionDesc);
 	stscInstruction->AddComponent<REC::TextRenderComponent>(startScreenTextInstructionDesc);
@@ -192,7 +192,7 @@ static void load(REC::IEngine* engine)
 	backdropObjectDesc.id = REC::make_sdbm_hash("Grid");
 	backdropObjectDesc.startPosX = 0.f;
 	backdropObjectDesc.startPosY = 80.f;
-	backdropObjectDesc.renderLayer = std::to_underlying(Game::RenderLayer::Background); // C++23 feature
+	backdropObjectDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background); // C++23 feature
 	//backdropObjectDesc.bounds = REC::Rect{ 0.f, 0.f, float(grid.cellWidth) * float(grid.cols), float(grid.cellHeight) * float(grid.rows) };
 
 	auto* go = scene->CreateGameObject(backdropObjectDesc);
@@ -203,24 +203,24 @@ static void load(REC::IEngine* engine)
 	REC::GameObjectDescriptor instructionObjectDesc{};
 	instructionObjectDesc.startPosX = 20.f;
 	instructionObjectDesc.startPosY = 20.f;
-	instructionObjectDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	instructionObjectDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	auto* instructions = scene->CreateGameObject(instructionObjectDesc);
 	
 	REC::GameObjectDescriptor instrBalloomDesc{};
-	instrBalloomDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	instrBalloomDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	instrBalloomDesc.parent = instructions;
 	auto* instructionsBalloom = scene->CreateGameObject(instrBalloomDesc);
 	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel16");
 	
 	REC::GameObjectDescriptor instrBombermanDesc{};
-	instrBombermanDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	instrBombermanDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	instrBombermanDesc.parent = instructions;
 	instrBombermanDesc.startPosY = 28.f;
 	auto* instructionsBomberman = scene->CreateGameObject(instrBombermanDesc);
 	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman, press SPACE to place bomb and hear sound", "dogicapixel16");
 
 	REC::GameObjectDescriptor instrBalloomBombDesc{};
-	instrBalloomBombDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	instrBalloomBombDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	instrBalloomBombDesc.parent = instructions;
 	instrBalloomBombDesc.startPosX = 30.f;
 	instrBalloomBombDesc.startPosY = 110.f;
@@ -228,7 +228,7 @@ static void load(REC::IEngine* engine)
 	intstructionsBalloomBomb->AddComponent<REC::TextRenderComponent>("BALLOOM: Press A to place bomb, place 2 bombs and kill bomberman", "dogicapixel16");
 
 	REC::GameObjectDescriptor instrBombermanBombDesc{};
-	instrBombermanBombDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	instrBombermanBombDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	instrBombermanBombDesc.parent = instructions;
 	instrBombermanBombDesc.startPosX = 30.f;
 	instrBombermanBombDesc.startPosY = 130.f;
@@ -238,7 +238,7 @@ static void load(REC::IEngine* engine)
 	REC::GameObjectDescriptor UIdesc{};
 	UIdesc.startPosX = 20.f;
 	UIdesc.startPosY = 680.f;
-	UIdesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	UIdesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	auto UI = scene->CreateGameObject(UIdesc);
 
 	REC::LabeledStatDescriptor livesStatDesciptor{};
@@ -254,7 +254,7 @@ static void load(REC::IEngine* engine)
 	bombermanIcon.frameKey = "bomberman_walk_front_0";
 
 	REC::GameObjectDescriptor bombermanUILivesDesc{};
-	bombermanUILivesDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	bombermanUILivesDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	bombermanUILivesDesc.parent = UI;
 	auto bombermanUILives = scene->CreateGameObject(bombermanUILivesDesc);
 	auto bomberman_livesStatComp = bombermanUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
@@ -267,7 +267,7 @@ static void load(REC::IEngine* engine)
 	balloomIcon.frameKey = "balloom_look_right_0";
 
 	REC::GameObjectDescriptor balloomUILivesDesc{};
-	balloomUILivesDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	balloomUILivesDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	balloomUILivesDesc.parent = UI;
 	balloomUILivesDesc.startPosX = 0.f;
 	balloomUILivesDesc.startPosY = 30.f;
@@ -284,7 +284,7 @@ static void load(REC::IEngine* engine)
 	REC::GameObjectDescriptor bombermanUIScoreDesc{};
 	bombermanUIScoreDesc.startPosX = 350.f;
 	bombermanUIScoreDesc.startPosY = 0.f;
-	bombermanUIScoreDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	bombermanUIScoreDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	bombermanUIScoreDesc.parent = UI;
 	auto bombermanUIScore = scene->CreateGameObject(bombermanUIScoreDesc);
 	auto bomberman_scoreStatComp = bombermanUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
@@ -292,7 +292,7 @@ static void load(REC::IEngine* engine)
 	REC::GameObjectDescriptor balloomUIScoreDesc{};
 	balloomUIScoreDesc.startPosX = 350.f;
 	balloomUIScoreDesc.startPosY = 30.f;
-	balloomUIScoreDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	balloomUIScoreDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	balloomUIScoreDesc.parent = UI;
 	auto balloomUIScore = scene->CreateGameObject(balloomUIScoreDesc);
 	auto balloom_scoreStatComp = balloomUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
@@ -300,7 +300,7 @@ static void load(REC::IEngine* engine)
 	REC::GameObjectDescriptor fpsDesc{};
 	fpsDesc.startPosX = 880.f;
 	fpsDesc.startPosY = 20.f;
-	fpsDesc.renderLayer = std::to_underlying(Game::RenderLayer::Ui);
+	fpsDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
 	auto fps = scene->CreateGameObject(fpsDesc); 
 	fps->AddComponent<REC::FPSComponent>("dogicapixel20");
 
@@ -323,7 +323,7 @@ static void load(REC::IEngine* engine)
 	bombermanDescriptor.animDesc = bombermanWalkAnimDesc;
 	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
 	bombermanDescriptor.maxHealth = 100.f;
-	bombermanDescriptor.renderLayer = std::to_underlying(Game::RenderLayer::Player);
+	bombermanDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Player);
 	bombermanDescriptor.startPosition = { 230.f, 230.f };
 
 	Game::Player bomberman{ scene, bombermanDescriptor };
@@ -350,7 +350,7 @@ static void load(REC::IEngine* engine)
 	balloomDescriptor.animDesc = balloomAnimDesc;
 	balloomDescriptor.spriteDesc = charactersSpriteDescriptors;
 	balloomDescriptor.maxHealth = 100.f;
-	balloomDescriptor.renderLayer = std::to_underlying(Game::RenderLayer::Enemies);
+	balloomDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Enemies);
 	balloomDescriptor.startPosition = { 350.f, 250.f };
 
 	Game::Player balloom{ scene, balloomDescriptor };

@@ -1,10 +1,12 @@
 #pragma once
-#include <ComponentDescriptors.h>
 #include <glm/glm.hpp>
+#include <memory>
+
+#include <ComponentDescriptors.h>
 #include <Input/Input.h>
 #include <Input/InputAction.h>
 #include <Input/InputBinding.h>
-#include <memory>
+#include <Util.h>
 
 namespace REC
 {
@@ -92,11 +94,11 @@ namespace Game
 		template <ActionType AT>
 		void AddInputActions(PlayerInputActions<AT>& inputActions) // inputActions cannot be const due to the move
 		{
-			if (inputActions.up.get() != nullptr)			m_InputBindings[std::to_underlying(InputBindingIndex::Up)]->AddInputAction(std::move(inputActions.up));
-			if (inputActions.down.get() != nullptr)			m_InputBindings[std::to_underlying(InputBindingIndex::Down)]->AddInputAction(std::move(inputActions.down));
-			if (inputActions.left.get() != nullptr)			m_InputBindings[std::to_underlying(InputBindingIndex::Left)]->AddInputAction(std::move(inputActions.left));
-			if (inputActions.right.get() != nullptr)		m_InputBindings[std::to_underlying(InputBindingIndex::Right)]->AddInputAction(std::move(inputActions.right));
-			if (inputActions.placeBomb.get() != nullptr)	m_InputBindings[std::to_underlying(InputBindingIndex::PlaceBomb)]->AddInputAction(std::move(inputActions.placeBomb));
+			if (inputActions.up.get() != nullptr)			m_InputBindings[Util::to_underlying(InputBindingIndex::Up)]->AddInputAction(std::move(inputActions.up));
+			if (inputActions.down.get() != nullptr)			m_InputBindings[Util::to_underlying(InputBindingIndex::Down)]->AddInputAction(std::move(inputActions.down));
+			if (inputActions.left.get() != nullptr)			m_InputBindings[Util::to_underlying(InputBindingIndex::Left)]->AddInputAction(std::move(inputActions.left));
+			if (inputActions.right.get() != nullptr)		m_InputBindings[Util::to_underlying(InputBindingIndex::Right)]->AddInputAction(std::move(inputActions.right));
+			if (inputActions.placeBomb.get() != nullptr)	m_InputBindings[Util::to_underlying(InputBindingIndex::PlaceBomb)]->AddInputAction(std::move(inputActions.placeBomb));
 		}
 
 	private:

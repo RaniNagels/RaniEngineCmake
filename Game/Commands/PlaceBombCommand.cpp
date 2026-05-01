@@ -1,16 +1,19 @@
 #include "PlaceBombCommand.h"
+
 #include <GameObject.h>
 #include <Components/TransformComponent.h>
 #include <Components/SpriteRenderComponent.h>
 #include <Components/AnimatedSpriteComponent.h>
-#include <sdbm_hash.h>
-#include "../RenderLayers.h"
-#include <Events/Event.h>
-#include "../Components/BombComponent.h"
-#include "../Components/DebugBoundsRenderComponent.h"
 #include <Components/CollisionComponent.h>
+#include <sdbm_hash.h>
+#include <Events/Event.h>
 #include <SceneManager.h>
 #include <ServiceLocator.h>
+#include <Util.h>
+
+#include "../RenderLayers.h"
+#include "../Components/BombComponent.h"
+#include "../Components/DebugBoundsRenderComponent.h"
 
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
@@ -33,7 +36,7 @@ void Game::PlaceBombCommand::Execute(float)
 	REC::GameObjectDescriptor bombDescriptor{};
 	bombDescriptor.startPosX = PlayerPosition.x;
 	bombDescriptor.startPosY = PlayerPosition.y;
-	bombDescriptor.renderLayer = std::to_underlying(Game::RenderLayer::Placables);
+	bombDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Placables);
 
 	auto bomb = activeScene->CreateGameObject(bombDescriptor);
 

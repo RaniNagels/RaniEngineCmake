@@ -29,8 +29,11 @@ set(SOURCE_FILES
 add_executable(${TARGET_NAME} ${TARGET_PARAM} ${SOURCE_FILES})
 message(STATUS "Game Executable Created")
 
-# --- Set C++23 for Game executable
+# --- Set C++23 for Game executable --------------
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_23)
+
+# --- Set Default Startup Project -------------
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${TARGET_NAME})
 
 # --- Link Libraries -------------
 target_link_libraries(${TARGET_NAME} PRIVATE 

@@ -41,12 +41,12 @@ Game::Player::~Player() = default;
 
 void Game::Player::CreateInputBindings(REC::InputSystem* inputsystem, REC::SceneManager* sceneManager, float movementSpeed, GridComponent* playfield)
 {
-	for (int i{}; i < std::to_underlying(InputBindingIndex::Count); ++i)
+	for (int i{}; i < Util::to_underlying(InputBindingIndex::Count); ++i)
 		m_InputBindings.push_back(inputsystem->CreateInputBinding());
 	
-	m_InputBindings[std::to_underlying(InputBindingIndex::Up)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 0, -1 }, movementSpeed, playfield);
-	m_InputBindings[std::to_underlying(InputBindingIndex::Down)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 0, 1 }, movementSpeed, playfield);
-	m_InputBindings[std::to_underlying(InputBindingIndex::Left)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ -1, 0 }, movementSpeed, playfield);
-	m_InputBindings[std::to_underlying(InputBindingIndex::Right)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 1, 0 }, movementSpeed, playfield); 
-	m_Commands.placeBombCmd = m_InputBindings[std::to_underlying(InputBindingIndex::PlaceBomb)]->AddCommand<Game::PlaceBombCommand>(m_pGameObject, sceneManager);
+	m_InputBindings[Util::to_underlying(InputBindingIndex::Up)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 0, -1 }, movementSpeed, playfield);
+	m_InputBindings[Util::to_underlying(InputBindingIndex::Down)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 0, 1 }, movementSpeed, playfield);
+	m_InputBindings[Util::to_underlying(InputBindingIndex::Left)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ -1, 0 }, movementSpeed, playfield);
+	m_InputBindings[Util::to_underlying(InputBindingIndex::Right)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 1, 0 }, movementSpeed, playfield); 
+	m_Commands.placeBombCmd = m_InputBindings[Util::to_underlying(InputBindingIndex::PlaceBomb)]->AddCommand<Game::PlaceBombCommand>(m_pGameObject, sceneManager);
 }
