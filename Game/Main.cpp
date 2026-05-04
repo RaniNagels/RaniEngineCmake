@@ -436,4 +436,10 @@ AABB Collision: check if the bounding boxes of 2 objects overlap. only works for
 
 => TODO: Collision System class. each GameObject has an input struct where the user can say if it has collision and if yes, static. (static is default true)
 => TODO: Collision System creates and sends events. (OnEntry (once), OnExit (once), Overlap (persitent) )
+
+
+-- A* pathfinding
+NPC's: will use A* pathfinding. 
+=> Grid will need connections + weights? 
+=> Grid will need to know which cells are walls or blocked!
 */
