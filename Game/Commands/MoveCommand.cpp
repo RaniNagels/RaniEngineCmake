@@ -8,9 +8,18 @@ Game::MoveCommand::MoveCommand(REC::GameObject* actor, glm::vec2 direction, floa
 	, m_Direction{direction}
 	, m_Speed{speed}
 	, m_pPlayGroundGrid{ playGroundGrid }
+	, m_pMoveEvent{ std::make_unique<REC::Event>(REC::make_sdbm_hash("MoveEvent"), MoveEventArgs()) }
 {
     m_Direction.x = std::clamp(m_Direction.x, -1.f, 1.f);
     m_Direction.y = std::clamp(m_Direction.y, -1.f, 1.f);
+
+    auto* args = dynamic_cast<MoveEventArgs*>(m_pMoveEvent->GetArgs());
+    if (args)
+    {
+        args->direction = m_Direction;
+		args->speed = m_Speed;
+		args->actor = GetGameObject();
+    }
 }
 
 void Game::MoveCommand::Execute(float deltaTime)
@@ -39,5 +48,5 @@ void Game::MoveCommand::Execute(float deltaTime)
     {
         GetGameObject()->GetTransform()->AddToLocalPosition(movement);
     }
-
+    m_pMoveEvent->Broadcast();
 }

@@ -14,6 +14,7 @@ set(SOURCE_FILES
 	"src/Components/TextRenderComponent.cpp"
 	"src/Components/TransformComponent.cpp"
     "src/Components/CollisionComponent.cpp"
+    "src/Components/StateComponent.cpp"
     
     "src/Input/InputBinding.cpp"
 	"src/Input/InputSystem.cpp"

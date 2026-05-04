@@ -11,6 +11,9 @@ REC::AnimatedSpriteComponent::AnimatedSpriteComponent(GameObject* owner, const A
 	: Component(owner)
 	, m_Descriptor{descriptor}
 {
+	m_pSpriteRenderComponent = GetOwner()->GetComponent<SpriteRenderComponent>();
+	if (m_pSpriteRenderComponent == nullptr)
+		throw std::runtime_error("animated sprite relies on spriteRenderComponent!");
 	ChangeAnimation(descriptor);
 }
 
@@ -43,11 +46,6 @@ void REC::AnimatedSpriteComponent::ChangeAnimation(const AnimationDescriptor& de
 
 	m_AnimationInfo = ResourceManager::GetInstance().GetResourceFromDataFile<AnimationInfo>(m_Descriptor.animationDataFileKey, m_Descriptor.animationKey);
 
-	if (!GetOwner()->HasComponent<SpriteRenderComponent>())
-		throw std::runtime_error("animated sprite relies on spriteRenderComponent!");
-
-	m_pSpriteRenderComponent = GetOwner()->GetComponent<SpriteRenderComponent>();
-
 	m_Frames.clear();
 	for (auto frame : m_AnimationInfo->frameKeys)
 		m_Frames.emplace_back(m_pSpriteRenderComponent->RequestFrameInfo(frame));
@@ -69,6 +67,12 @@ void REC::AnimatedSpriteComponent::StartAnimation()
 void REC::AnimatedSpriteComponent::StopAnimation()
 {
 	m_Animating = false;
+}
+
+void REC::AnimatedSpriteComponent::ResetAnimation()
+{
+	m_CurrentFrame = 0;
+	m_pSpriteRenderComponent->SetFrame(m_Frames[m_CurrentFrame]);
 }
 
 bool REC::AnimatedSpriteComponent::IsAnimating()

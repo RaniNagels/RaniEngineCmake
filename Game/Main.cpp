@@ -23,11 +23,14 @@
 #include <Components/RotatorComponent.h>
 #include <Components/HealthComponent.h>
 #include <Components/LivesComponent.h>
+#include <Components/StateComponent.h>
 
 #include <Commands/ChangeSceneCommand.h>
 
 #include <filesystem>
 #include <sdbm_hash.h>
+#include <memory>
+#include <iostream>
 
 #include "Commands/MoveCommand.h"
 #include "Commands/PlaceBombCommand.h"
@@ -36,13 +39,13 @@
 #include "Components/UIScoreComponent.h"
 #include "Components/GridComponent.h"
 #include "Components/DebugGridRenderComponent.h"
+#include "Components/DebugBoundsRenderComponent.h"
+#include "Components/BombermanCollisionComponent.h"
 
 #include "RenderLayers.h"
 #include "Player.h"
-#include <memory>
-#include <iostream>
-#include "Components/BombermanCollisionComponent.h"
-#include "Components/DebugBoundsRenderComponent.h"
+
+#include "States/BombermanStates.h"
 
 namespace fs = std::filesystem;
 
@@ -335,6 +338,7 @@ static void load(REC::IEngine* engine)
 	collisionDescriptor.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the player
 
 	bomberman.Get()->AddCollisionComponent<Game::BombermanCollisionComponent>(collisionDescriptor);
+	bomberman.Get()->AddComponent<REC::StateComponent>(std::make_unique<Game::BombermanIdleState>(bomberman.Get()));
 	bomberman.Get()->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255, 0, 0 });
 
 	uint8_t balloomControllerId{ 0 };

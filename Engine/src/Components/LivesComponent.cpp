@@ -14,7 +14,7 @@ REC::LivesComponent::LivesComponent(GameObject* owner, int totalLives)
 	args.sender = GetOwner();
 	m_LostLiveEvent = std::make_unique<Event>(make_sdbm_hash("LostLiveEvent"), args);
 
-	SubscribeToEvent({ make_sdbm_hash("HasZeroHealthEvent") });
+	SubscribeToEvent({ REC_EVENT_HAS_ZERO_HEALTH });
 }
 
 REC::LivesComponent::~LivesComponent() = default;

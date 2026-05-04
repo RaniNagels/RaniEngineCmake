@@ -23,6 +23,7 @@ namespace REC
 		virtual void Notify(Event* event) override;
 
 		void ResetLives() { m_CurrentAmountOfLives = MAX_LIVES; }
+		bool HasLivesLeft() const { return m_CurrentAmountOfLives > 0; }
 
 	private:
 		const int MAX_LIVES;

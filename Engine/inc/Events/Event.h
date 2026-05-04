@@ -2,6 +2,10 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
+#include <sdbm_hash.h>
+
+#define REC_EVENT_HAS_ZERO_HEALTH REC::make_sdbm_hash("HasZeroHealthEvent")
+#define REC_EVENT_LOST_LIVE REC::make_sdbm_hash("LostLiveEvent")
 
 namespace REC
 {

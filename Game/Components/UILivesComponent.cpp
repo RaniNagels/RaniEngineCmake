@@ -5,12 +5,12 @@
 Game::UILivesComponent::UILivesComponent(REC::GameObject* owner, const REC::LabeledStatDescriptor& descriptor)
 	: LabeledStatComponent(owner, descriptor)
 {
-	SubscribeToEvent({ REC::make_sdbm_hash("LostLiveEvent") });
+	SubscribeToEvent({ REC_EVENT_LOST_LIVE });
 }
 
 void Game::UILivesComponent::Notify(REC::Event* event)
 {
-	if (event->IsEvent(REC::make_sdbm_hash("LostLiveEvent")))
+	if (event->IsEvent(REC_EVENT_LOST_LIVE))
 	{
 		auto* eventArgs = dynamic_cast<REC::GameObjectEventArgs*>(event->GetArgs());
 		if (eventArgs != nullptr && eventArgs->sender == m_pConnectedPlayer)

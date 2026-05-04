@@ -28,6 +28,7 @@ namespace REC
 		void ChangeAnimation(const AnimationDescriptor& descriptor);
 		void StartAnimation();
 		void StopAnimation();
+		void ResetAnimation();
 		bool IsAnimating();
 
 	private:

@@ -1,0 +1,24 @@
+#include <Components/StateComponent.h>
+
+REC::StateComponent::StateComponent(GameObject* owner, std::unique_ptr<REC::IState>&& initialState)
+	: Component(owner)
+	, m_pCurrentState(std::move(initialState))
+{
+	m_pCurrentState->Enter();
+}
+
+void REC::StateComponent::Update(float deltaTime)
+{
+	if (auto result = m_pCurrentState->Update(deltaTime))
+	{
+		if (result.has_value())
+			ChangeState(std::move(result.value()));
+	}
+}
+
+void REC::StateComponent::ChangeState(std::unique_ptr<IState>&& newState)
+{
+	m_pCurrentState->Exit();
+	m_pCurrentState = std::move(newState);
+	m_pCurrentState->Enter();
+}

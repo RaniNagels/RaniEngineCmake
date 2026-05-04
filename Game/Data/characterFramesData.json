@@ -329,8 +329,9 @@
     },
     "bomberman_walk_right": {
       "frames": [
-        "bomberman_walk_right_0",
         "bomberman_walk_right_1",
+        "bomberman_walk_right_2",
+        "bomberman_walk_right_0",
         "bomberman_walk_right_2"
       ],
       "duration": 1.0,
@@ -381,6 +382,16 @@
       "loop": false
     },
     "balloom_look_left": {
+      "frames": [
+        "balloom_look_left_0",
+        "balloom_look_left_1",
+        "balloom_look_left_2",
+        "balloom_look_left_1"
+      ],
+      "duration": 1.0,
+      "loop": true
+    },
+    "balloom_look_right": {
       "frames": [
         "balloom_look_right_0",
         "balloom_look_right_1",
