@@ -9,49 +9,50 @@
 
 void REC::PhysicsSystem::Update(float)
 {
-	size_t index{};
-	for (auto* physicsObject : m_PhysicsObjects)
+	for (auto* physicsObject : m_RigidBodies)
 	{
 		if (physicsObject == nullptr) continue;
-		auto* rigidBody = physicsObject->GetComponent<RigidBodyComponent>();
-		auto* collisionBody = physicsObject->GetCollisionComponent();
 
-		if (rigidBody == nullptr || collisionBody == nullptr)
-		{
-			assert(false && "Physics objects must have a rigid body and a collision component!");
-			continue;
-		}
-
-		if (collisionBody->IsStatic()) continue;
-
-		glm::vec2 velocity = rigidBody->GetVelocity();// *deltaTime;
+		glm::vec2 velocity = physicsObject->GetVelocity();// *deltaTime;
 		if (velocity == glm::vec2{ 0.f, 0.f }) continue;
 
-		ResolveMovement(physicsObject, index, velocity);
-		rigidBody->ResetVelocity();
-
-		index++;
+		ResolveMovement(physicsObject->GetOwner(), velocity);
+		physicsObject->ResetVelocity();
 	}
 }
 
 // happens in the constructor of the rigid body component
-void REC::PhysicsSystem::AddPhysicsObject(GameObject* physicsObject)
+void REC::PhysicsSystem::AddPhysicsObject(RigidBodyComponent* physicsObject)
 {
 	if (physicsObject == nullptr) return;
-
-	if (std::find(m_PhysicsObjects.begin(), m_PhysicsObjects.end(), physicsObject) == m_PhysicsObjects.end())
-		m_PhysicsObjects.emplace_back(physicsObject);
+	if (physicsObject->GetOwner()->GetCollisionComponent()->IsStatic())
+	{
+		 if (std::find(m_StaticRigidBodies.begin(), m_StaticRigidBodies.end(), physicsObject) == m_StaticRigidBodies.end())
+			 m_StaticRigidBodies.emplace_back(physicsObject);
+	}
+	else
+	{
+		if (std::find(m_RigidBodies.begin(), m_RigidBodies.end(), physicsObject) == m_RigidBodies.end())
+			m_RigidBodies.emplace_back(physicsObject);
+	}
 }
 
-void REC::PhysicsSystem::RemovePhysicsObject(GameObject* physicsObject)
+void REC::PhysicsSystem::RemovePhysicsObject(RigidBodyComponent* physicsObject)
 {
 	if (physicsObject == nullptr) return;
-
-	if (const auto it = std::find(m_PhysicsObjects.begin(), m_PhysicsObjects.end(), physicsObject); it != m_PhysicsObjects.end())
-		m_PhysicsObjects.erase(it);
+	if (physicsObject->GetOwner()->GetCollisionComponent()->IsStatic())
+	{
+		if (const auto it = std::find(m_StaticRigidBodies.begin(), m_StaticRigidBodies.end(), physicsObject); it != m_StaticRigidBodies.end())
+			m_StaticRigidBodies.erase(it);
+	}
+	else
+	{
+		if (const auto it = std::find(m_RigidBodies.begin(), m_RigidBodies.end(), physicsObject); it != m_RigidBodies.end())
+			m_RigidBodies.erase(it);
+	}
 }
 
-void REC::PhysicsSystem::ResolveMovement(GameObject* obj, size_t index, const glm::vec2& movement)
+void REC::PhysicsSystem::ResolveMovement(GameObject* obj, const glm::vec2& movement)
 {
 	auto* transform = obj->GetTransform();
 
@@ -60,10 +61,10 @@ void REC::PhysicsSystem::ResolveMovement(GameObject* obj, size_t index, const gl
 	auto* collisionComp = obj->GetCollisionComponent();
 	
 	bool foundCollision = false;
-	for (size_t i{index+1}; i < m_PhysicsObjects.size(); ++i)
+	for (size_t i{}; i < m_StaticRigidBodies.size(); ++i)
 	{
 		// only check static vs non-static collisions, not dynamic vs dynamic
-		auto* otherCollisionComp = m_PhysicsObjects[i]->GetCollisionComponent();
+		auto* otherCollisionComp = m_StaticRigidBodies[i]->GetOwner()->GetCollisionComponent();
 		if (otherCollisionComp->IsStatic())
 		{
 			if (m_pCollisionSystem->WillCollide(collisionComp, otherCollisionComp, movement, {}))
@@ -81,7 +82,7 @@ void REC::PhysicsSystem::ResolveMovement(GameObject* obj, size_t index, const gl
 					for (float movedDistance = stepSize; movedDistance < movementLength; movedDistance += stepSize)
 					{
 						glm::vec2 testMovement = direction * movedDistance;
-						if (m_pCollisionSystem->WillCollide(collisionComp, m_PhysicsObjects[i]->GetCollisionComponent(), testMovement, {}))
+						if (m_pCollisionSystem->WillCollide(collisionComp, otherCollisionComp, testMovement, {}))
 							break;
 						validMovement += testMovement;
 					}

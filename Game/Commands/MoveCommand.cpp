@@ -29,22 +29,7 @@ void Game::MoveCommand::Execute(float deltaTime)
     glm::vec3 movement{ m_Direction, 0.f };
     movement *= m_Speed * deltaTime * GetStrength();
 
-    // TODO
-	//GetGameObject()->Move(movement.x, movement.y);
-
-    glm::vec3 currentPosition = GetGameObject()->GetTransform()->GetWorldPosition();
-    auto currentCell = m_pPlayGroundGrid->GetCell(currentPosition);
-
-    glm::vec3 newPos = currentPosition + movement;
-    auto newCell = m_pPlayGroundGrid->GetCell(newPos);
-
-    if (currentCell != newCell)
-    {
-        if (newCell.IsValid() && !newCell.isWall)
-			GetGameObject()->Move(movement.x, movement.y);
-    }
-    else
-		GetGameObject()->Move(movement.x, movement.y);
+	GetGameObject()->Move(movement.x, movement.y);
 
     m_pMoveEvent->Broadcast();
 }

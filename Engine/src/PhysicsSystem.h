@@ -6,6 +6,7 @@ namespace REC
 {
 	class GameObject;
 	class CollisionSystem;
+	class RigidBodyComponent;
 
 	// RigidBodyComponents get resolved in this system
 	// will only resolve movement for static vs non-static objects, not dynamic vs dynamic!!
@@ -22,13 +23,14 @@ namespace REC
 
 		void Update(float deltaTime);
 
-		void AddPhysicsObject(GameObject* physicsObject);
-		void RemovePhysicsObject(GameObject* physicsObject);
+		void AddPhysicsObject(RigidBodyComponent* physicsObject);
+		void RemovePhysicsObject(RigidBodyComponent* physicsObject);
 
 	private:
-		std::vector<GameObject*> m_PhysicsObjects{}; // must contain a rigidBoyComponent
+		std::vector<RigidBodyComponent*> m_RigidBodies{}; 
+		std::vector<RigidBodyComponent*> m_StaticRigidBodies{};
 
-		void ResolveMovement(GameObject* obj, size_t index, const glm::vec2& movement);
+		void ResolveMovement(GameObject* obj, const glm::vec2& movement);
 		CollisionSystem* m_pCollisionSystem{ nullptr };
 	};
 }

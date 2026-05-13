@@ -12,7 +12,7 @@ Game::GridComponent::GridComponent(REC::GameObject* owner, const GridDescriptor&
 	uint32_t amountOfCells{ uint32_t(desc.cols) * uint32_t(desc.rows) };
 	m_Cells.resize(amountOfCells);
 
-	auto worldPos = GetOwner()->GetTransform()->GetWorldPosition();
+	//auto localPos = GetOwner()->GetTransform()->GetLocalPosition();
 
 	for (uint8_t r{}; r < desc.rows; ++r)
 	{
@@ -23,7 +23,7 @@ Game::GridComponent::GridComponent(REC::GameObject* owner, const GridDescriptor&
 			m_Cells[index].height = desc.cellHeight;
 			m_Cells[index].row = r;
 			m_Cells[index].col = c;
-			m_Cells[index].origin = { (worldPos.x + (c * desc.cellWidth)), (worldPos.y + (r * desc.cellHeight)) };
+			m_Cells[index].origin = { (c * desc.cellWidth), (r * desc.cellHeight) };
 			if (r == 0 || r == desc.rows - 1 || c == 0 || c == desc.cols - 1 || (r %2 == 0 && c % 2 == 0))
 				m_Cells[index].isWall = true;
 		}
@@ -41,10 +41,26 @@ const Game::GridComponent::Cell& Game::GridComponent::GetCell(const glm::vec2& p
 {
 	for (const auto& cell : m_Cells)
 	{
-		if (cell.IsInCell(pos))
+		auto worldPos = GetOwner()->GetTransform()->GetWorldPosition();
+		glm::vec2 worldPos2D{ worldPos.x, worldPos.y };
+		glm::vec2 relativePos = pos - (cell.origin + worldPos2D);
+		if (cell.IsInCell(relativePos))
 			return cell;
 	}
 	return s_InvalidCell;
+}
+
+std::vector<REC::CollisionBound> Game::GridComponent::GetWallCollisionBounds()
+{
+	std::vector<REC::CollisionBound> bounds{};
+
+	for (const auto& cell : m_Cells)
+	{
+		if (cell.isWall)
+			bounds.emplace_back(cell.GetRect(), false);
+	}
+
+	return bounds;
 }
 
 uint32_t Game::GridComponent::GetIndex(Cell* cell)

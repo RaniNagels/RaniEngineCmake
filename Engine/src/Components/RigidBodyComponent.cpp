@@ -10,7 +10,7 @@ REC::PhysicsSystem* REC::RigidBodyComponent::s_PhysicsSystem = nullptr;
 REC::RigidBodyComponent::RigidBodyComponent(GameObject* owner)
 	: Component(owner)
 {
-	s_PhysicsSystem->AddPhysicsObject(GetOwner());
+	s_PhysicsSystem->AddPhysicsObject(this);
 	m_IsStatic = GetOwner()->GetCollisionComponent()->IsStatic();
 }
 
@@ -20,7 +20,7 @@ void REC::RigidBodyComponent::Destroy()
 {
 	Component::Destroy();
 	if (s_PhysicsSystem)
-		s_PhysicsSystem->RemovePhysicsObject(GetOwner());
+		s_PhysicsSystem->RemovePhysicsObject(this);
 }
 
 void REC::RigidBodyComponent::SetVelocity(const glm::vec2& velocity)

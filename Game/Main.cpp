@@ -79,13 +79,6 @@ static void load(REC::IEngine* engine)
 	if (!RM->AddResource(generalSprites))
 		throw std::runtime_error("Failed to load general sprites texture");
 
-	//REC::FontResourceCreateInfo font{};
-	//font.name = "lingua36";
-	//font.filePath = "Lingua.otf";
-	//font.size = uint8_t(36);
-	//if (!RM->AddResource(font))
-	//	throw std::runtime_error("Failed to load font");
-
 	REC::FontResourceCreateInfo debugFont{};
 	debugFont.name = "dogicapixel16";
 	debugFont.filePath = "dogicapixel.otf";
@@ -181,14 +174,15 @@ static void load(REC::IEngine* engine)
 
 	auto* scene = SM->CreateScene();
 
-	Game::GridDescriptor grid{};
-	grid.cellHeight = uint8_t(45); //51
-	grid.cellWidth = uint8_t(45);  //51
-	grid.rows = uint8_t(13);
-	grid.cols = uint8_t(31);
+	// ---- grid and walls --------------------------------------------------------------------------------
+	Game::GridDescriptor gridDesc{};
+	gridDesc.cellHeight = uint8_t(45); //51
+	gridDesc.cellWidth = uint8_t(45);  //51
+	gridDesc.rows = uint8_t(13);
+	gridDesc.cols = uint8_t(31);
 
 	REC::SpriteDescriptor backdrop{};
-	backdrop.drawHeight = uint16_t(grid.cellHeight)*uint16_t(grid.rows);
+	backdrop.drawHeight = uint16_t(gridDesc.cellHeight)*uint16_t(gridDesc.rows);
 	backdrop.frameDataFileKey = "characterData";
 	backdrop.frameKey = "background";
 	backdrop.textureKey = "background";
@@ -197,14 +191,28 @@ static void load(REC::IEngine* engine)
 	backdropObjectDesc.id = Game::ObjectIds::Grid;
 	backdropObjectDesc.startPosX = 0.f;
 	backdropObjectDesc.startPosY = 80.f;
-	backdropObjectDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background); // C++23 feature
-	//backdropObjectDesc.bounds = REC::Rect{ 0.f, 0.f, float(grid.cellWidth) * float(grid.cols), float(grid.cellHeight) * float(grid.rows) };
+	backdropObjectDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background);
 
-	auto* go = scene->CreateGameObject(backdropObjectDesc);
-	go->AddComponent<REC::SpriteRenderComponent>(backdrop);
-	auto* playfield = go->AddComponent<Game::GridComponent>(grid);
-	go->AddComponent<Game::DebugGridRenderComponent>(REC::Color{20, 30, 120, 200});
+	auto* go_grid = scene->CreateGameObject(backdropObjectDesc);
+	go_grid->AddComponent<REC::SpriteRenderComponent>(backdrop);
+	auto* playfield = go_grid->AddComponent<Game::GridComponent>(gridDesc);
+	go_grid->AddComponent<Game::DebugGridRenderComponent>(REC::Color{20, 30, 120, 200});
 
+	REC::GameObjectDescriptor WallCollisionGODesc{};
+	WallCollisionGODesc.id = Game::ObjectIds::Grid;
+	WallCollisionGODesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background);
+	WallCollisionGODesc.parent = go_grid;
+
+	REC::CollisionDescriptor wallCollisionDesc{};
+	wallCollisionDesc.collisionType = REC::CollisionType::Static;
+	wallCollisionDesc.bounds = playfield->GetWallCollisionBounds();
+
+	auto* wall_grid = scene->CreateGameObject(WallCollisionGODesc);
+	wall_grid->AddCollisionComponent<REC::CollisionComponent>(wallCollisionDesc);
+	wall_grid->AddComponent<REC::RigidBodyComponent>();
+	wall_grid->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255,50,0 });
+
+	// ---- instructions -------------------------------------------------------------------------
 	REC::GameObjectDescriptor instructionObjectDesc{};
 	instructionObjectDesc.startPosX = 20.f;
 	instructionObjectDesc.startPosY = 20.f;
@@ -330,7 +338,7 @@ static void load(REC::IEngine* engine)
 	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
 	bombermanDescriptor.maxHealth = 100.f;
 	bombermanDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Player);
-	bombermanDescriptor.startPosition = { 230.f, 230.f };
+	bombermanDescriptor.startPosition = { 250.f, 230.f };
 
 	Game::Player bomberman{ scene, bombermanDescriptor };
 	bomberman_livesStatComp->SetConnectedPlayer(bomberman.Get());
@@ -359,7 +367,7 @@ static void load(REC::IEngine* engine)
 	balloomDescriptor.spriteDesc = charactersSpriteDescriptors;
 	balloomDescriptor.maxHealth = 100.f;
 	balloomDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Enemies);
-	balloomDescriptor.startPosition = { 350.f, 250.f };
+	balloomDescriptor.startPosition = { 330.f, 240.f };
 
 	Game::Player balloom{ scene, balloomDescriptor };
 	balloom_livesStatComp->SetConnectedPlayer(balloom.Get());

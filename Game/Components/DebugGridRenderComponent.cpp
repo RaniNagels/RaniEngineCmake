@@ -19,10 +19,14 @@ void Game::DebugGridRenderComponent::Update(float) {}
 
 void Game::DebugGridRenderComponent::Render(const REC::IRenderer* const renderer)
 {
-	const std::vector<Game::GridComponent::Cell>& cells = m_pGridComponent->GetCells();
+	const std::vector<Game::GridComponent::Cell>& cells = m_pGridComponent->GetCells(); // they are in localPosition!
 
+	auto worldPos = GetOwner()->GetTransform()->GetWorldPosition();
 	for (const auto& cell : cells)
 	{
-		renderer->RenderRect(m_Color, cell.GetRect(), cell.isWall);
+		REC::Rect cellRect = cell.GetRect();
+		cellRect.x += worldPos.x;
+		cellRect.y += worldPos.y;
+		renderer->RenderRect(m_Color, cellRect, cell.isWall);
 	}
 }

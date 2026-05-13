@@ -32,7 +32,7 @@ namespace Game
 
 		struct Cell
 		{
-			glm::vec2 origin{};
+			glm::vec2 origin{}; // must be local!
 
 			uint8_t width{};
 			uint8_t height{};
@@ -72,6 +72,8 @@ namespace Game
 		const std::vector<Cell>& GetCells() const { return m_Cells; }
 		const Cell& GetCell(uint8_t row, uint8_t col);
 		const Cell& GetCell(const glm::vec2& pos);
+
+		std::vector<REC::CollisionBound> GetWallCollisionBounds();
 
 	private:
 
