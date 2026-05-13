@@ -65,7 +65,8 @@ void Game::PlaceBombCommand::Execute(float)
 
 	REC::CollisionDescriptor bombCollisionDesc{};
 	bombCollisionDesc.collisionType = REC::CollisionType::Static;
-	bombCollisionDesc.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the bomb
+	//bombCollisionDesc.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the bomb
+	// no bounds yet, only on detonation the bounds are needed and added
 
 	bomb->AddCollisionComponent<REC::CollisionComponent>(bombCollisionDesc);
 	bomb->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{255,0,0});

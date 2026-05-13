@@ -44,6 +44,8 @@ namespace REC
 			return triggerBounds;
 		}
 
+		std::vector<CollisionBound>& GetModifiableBounds() { return m_Bounds; }
+
 		bool IsStatic() const;
 
 	private:

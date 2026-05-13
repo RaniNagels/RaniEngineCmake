@@ -27,7 +27,7 @@ namespace REC
 		void Unsubscribe(CollisionComponent* subscriber);
 
 		bool HasCollidedWithStatic(CollisionComponent* comp1);
-		bool WillCollideWithStatic(CollisionComponent* comp1, const glm::vec2& movement);
+		bool WillCollide(CollisionComponent* comp1, CollisionComponent* comp2, const glm::vec2& movement1, const glm::vec2& movement2);
 
 	private:
 		void SendCollisionEvent(CollisionComponent* comp1, CollisionComponent* comp2, CollisionEventType type);

@@ -45,6 +45,10 @@ void Game::BombComponent::Detonate()
 	animation.animationDataFileKey = "characterData";
 	animation.animationKey = "explosion";
 
+	auto& bounds = GetOwner()->GetCollisionComponent()->GetModifiableBounds();
+	bounds.push_back(REC::CollisionBound{ REC::Rect{ -125.f, -25.f, 250.f, 50.f }, true });
+	bounds.push_back(REC::CollisionBound{ REC::Rect{ -25.f, -125.f, 50.f, 250.f }, true });
+
 	m_pSpriteRenderComponent->ChangeHeight(250); // TODO: no magic numbers!
 	m_pAnimatedSpriteComponent->ChangeAnimation(animation);
 	m_pAnimatedSpriteComponent->StartAnimation();

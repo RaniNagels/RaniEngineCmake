@@ -5,6 +5,7 @@
 #include <sdbm_hash.h>
 
 #include "GridComponent.h"
+#include "../Ids.h"
 
 #include <iostream>
 
@@ -15,11 +16,11 @@ Game::BombermanCollisionComponent::BombermanCollisionComponent(REC::GameObject* 
 
 void Game::BombermanCollisionComponent::OnCollision(const REC::GameObject* const other)
 {
-	if (other->Is(REC::make_sdbm_hash("Balloom")))
+	if (other->Is(Game::ObjectIds::Balloom))
 	{
 		std::cout << "Bomberman collided with a Balloom!" << std::endl;
 	}
-	else if (other->Is(REC::make_sdbm_hash("Grid")))
+	else if (other->Is(Game::ObjectIds::Grid))
 	{
 		//auto* transform = GetOwner()->GetTransform();
 		//auto* grid = other->GetComponent<GridComponent>();
@@ -30,6 +31,10 @@ void Game::BombermanCollisionComponent::OnCollision(const REC::GameObject* const
 		//		
 		//	}
 		//}
+	}
+	else if (other->Is(Game::ObjectIds::Bom))
+	{
+		std::cout << "Bomberman collided with a Bomb!" << std::endl;
 	}
 }
 

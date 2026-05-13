@@ -67,15 +67,9 @@ bool REC::CollisionSystem::HasCollidedWithStatic(CollisionComponent* comp1)
 	return false;
 }
 
-bool REC::CollisionSystem::WillCollideWithStatic(CollisionComponent* comp1, const glm::vec2& movement)
+bool REC::CollisionSystem::WillCollide(CollisionComponent* comp1, CollisionComponent* comp2, const glm::vec2& movement1, const glm::vec2& movement2)
 {
-	for (const auto& staticComp : m_StaticCollidableObjects)
-	{
-		if (FindCollision(comp1, staticComp, movement).has_value())
-			return true;
-	}
-
-	return false;
+	return FindCollision(comp1, comp2, movement1, movement2).has_value();
 }
 
 void REC::CollisionSystem::SendCollisionEvent(CollisionComponent* comp1, CollisionComponent* comp2, CollisionEventType type)

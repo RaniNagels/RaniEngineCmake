@@ -9,6 +9,7 @@
 
 void REC::PhysicsSystem::Update(float)
 {
+	size_t index{};
 	for (auto* physicsObject : m_PhysicsObjects)
 	{
 		if (physicsObject == nullptr) continue;
@@ -24,21 +25,19 @@ void REC::PhysicsSystem::Update(float)
 		if (collisionBody->IsStatic()) continue;
 
 		glm::vec2 velocity = rigidBody->GetVelocity();// *deltaTime;
-		ResolveMovement(physicsObject, velocity);
+		if (velocity == glm::vec2{ 0.f, 0.f }) continue;
+
+		ResolveMovement(physicsObject, index, velocity);
 		rigidBody->ResetVelocity();
+
+		index++;
 	}
 }
 
+// happens in the constructor of the rigid body component
 void REC::PhysicsSystem::AddPhysicsObject(GameObject* physicsObject)
 {
 	if (physicsObject == nullptr) return;
-
-	//auto* rigidBody = physicsObject->GetComponent<RigidBodyComponent>();
-	//if (rigidBody == nullptr)
-	//{
-	//	assert(false && "Cannot add a physics object without a rigid body component to the physics system!");
-	//	return;
-	//}
 
 	if (std::find(m_PhysicsObjects.begin(), m_PhysicsObjects.end(), physicsObject) == m_PhysicsObjects.end())
 		m_PhysicsObjects.emplace_back(physicsObject);
@@ -52,35 +51,46 @@ void REC::PhysicsSystem::RemovePhysicsObject(GameObject* physicsObject)
 		m_PhysicsObjects.erase(it);
 }
 
-void REC::PhysicsSystem::ResolveMovement(GameObject* obj, const glm::vec2& movement)
+void REC::PhysicsSystem::ResolveMovement(GameObject* obj, size_t index, const glm::vec2& movement)
 {
 	auto* transform = obj->GetTransform();
-	if (movement == glm::vec2{ 0.f, 0.f }) return;
 
 	// check for collisions at the new position
 	// if there is a collision, move to the position right before the collision
 	auto* collisionComp = obj->GetCollisionComponent();
 	
-	if (m_pCollisionSystem->WillCollideWithStatic(collisionComp, movement))
+	bool foundCollision = false;
+	for (size_t i{index+1}; i < m_PhysicsObjects.size(); ++i)
 	{
-		// collision: move to the position right before the collision
-		constexpr float stepSize = 1.f;
-		glm::vec2 direction = glm::normalize(movement);
-		float movementLength = glm::length(movement);
-
-		glm::vec2 validMovement{};
-
-		// move in small steps until we find the position right before the collision
-		for (float movedDistance = stepSize; movedDistance < movementLength; movedDistance += stepSize)
+		// only check static vs non-static collisions, not dynamic vs dynamic
+		auto* otherCollisionComp = m_PhysicsObjects[i]->GetCollisionComponent();
+		if (otherCollisionComp->IsStatic())
 		{
-			glm::vec2 testMovement = direction * movedDistance;
-			if (m_pCollisionSystem->WillCollideWithStatic(collisionComp, testMovement))
-				break;
+			if (m_pCollisionSystem->WillCollide(collisionComp, otherCollisionComp, movement, {}))
+			{
+				// collision: move to the position right before the collision
+				foundCollision = true;
+				if (movement.x != 0.f)
+				{
+					constexpr float stepSize = 1.f;
+					glm::vec2 direction = glm::normalize(glm::vec2{ movement.x, 0.f });
+					float movementLength = std::abs(movement.x);
+					glm::vec2 validMovement{};
 
-			validMovement += testMovement;
+					// move in small steps until we find the position right before the collision
+					for (float movedDistance = stepSize; movedDistance < movementLength; movedDistance += stepSize)
+					{
+						glm::vec2 testMovement = direction * movedDistance;
+						if (m_pCollisionSystem->WillCollide(collisionComp, m_PhysicsObjects[i]->GetCollisionComponent(), testMovement, {}))
+							break;
+						validMovement += testMovement;
+					}
+					transform->AddToLocalPosition(validMovement.x, 0.f);
+				}
+			}
 		}
-		transform->AddToLocalPosition(validMovement.x, validMovement.y);
 	}
-	else // no collision
+
+	if (!foundCollision)
 		transform->AddToLocalPosition(movement.x, movement.y);
 }

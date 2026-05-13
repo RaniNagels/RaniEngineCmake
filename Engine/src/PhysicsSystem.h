@@ -28,7 +28,7 @@ namespace REC
 	private:
 		std::vector<GameObject*> m_PhysicsObjects{}; // must contain a rigidBoyComponent
 
-		void ResolveMovement(GameObject* obj, const glm::vec2& movement);
+		void ResolveMovement(GameObject* obj, size_t index, const glm::vec2& movement);
 		CollisionSystem* m_pCollisionSystem{ nullptr };
 	};
 }
