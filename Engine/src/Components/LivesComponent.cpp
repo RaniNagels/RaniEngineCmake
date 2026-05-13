@@ -2,7 +2,6 @@
 
 #include <Components/HealthComponent.h>
 #include <GameObject.h>
-#include <sdbm_hash.h>
 
 REC::LivesComponent::LivesComponent(GameObject* owner, int totalLives)
 	: Component(owner)
@@ -12,9 +11,9 @@ REC::LivesComponent::LivesComponent(GameObject* owner, int totalLives)
 {
 	GameObjectEventArgs args{};
 	args.sender = GetOwner();
-	m_LostLiveEvent = std::make_unique<Event>(make_sdbm_hash("LostLiveEvent"), args);
+	m_LostLiveEvent = std::make_unique<Event>(REC::EventIds::LostLive, args);
 
-	SubscribeToEvent({ REC_EVENT_HAS_ZERO_HEALTH });
+	SubscribeToEvent({ REC::EventIds::HasZeroHealth });
 }
 
 REC::LivesComponent::~LivesComponent() = default;
@@ -23,7 +22,7 @@ void REC::LivesComponent::Update(float) {}
 
 void REC::LivesComponent::Notify(Event* event)
 {
-	if (event->IsEvent(make_sdbm_hash("HasZeroHealthEvent")))
+	if (event->IsEvent(REC::EventIds::HasZeroHealth))
 	{
 		auto* eventArgs = dynamic_cast<GameObjectEventArgs*>(event->GetArgs());
 		if (eventArgs != nullptr && eventArgs->sender == GetOwner())

@@ -5,8 +5,6 @@
 
 namespace REC
 {
-	// this component stores the transform of a gameobject but does not modify it!
-	// acts as a glorified struct, purely for organizing purposes.
 	class TransformComponent final : public Component
 	{
 	public:
@@ -40,6 +38,6 @@ namespace REC
 
 		glm::vec3 m_WorldPosition{};
 		bool m_NeedsUpdate{ true };
-		bool m_IsMoveable{ true }; // if true, may not move, under no cercumstance. if parent moves -> error, if current object moves -> error. non static children may move
+		bool m_IsMoveable{ true };
 	};
 }

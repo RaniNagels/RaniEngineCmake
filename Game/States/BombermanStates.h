@@ -75,7 +75,7 @@ namespace Game
 
 	private:
 		std::string GetAnimationKey(glm::vec2 dir) const;
-		void ChangeAnimation();
+		void ChangeAnimation(const std::string& key);
 
 		bool m_HasBeenNotified{ false };
 		bool m_ChangedDirection{ false };

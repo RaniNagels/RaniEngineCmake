@@ -80,7 +80,7 @@ namespace REC
 
 	struct CollisionDescriptor final : ComponentDescriptor
 	{
-		std::vector<Rect> bounds{}; // a vector allows for multiple collisionboxes per object allowing for more complex shapes
+		std::vector<CollisionBound> bounds{}; // a vector allows for multiple collisionboxes per object allowing for more complex shapes
 		CollisionType collisionType;
 		// relative to the position of the gameobject, not absolute
 

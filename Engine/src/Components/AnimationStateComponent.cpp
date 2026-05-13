@@ -1,13 +1,13 @@
-#include <Components/StateComponent.h>
+#include <Components/AnimationStateComponent.h>
 
-REC::StateComponent::StateComponent(GameObject* owner, std::unique_ptr<REC::IState>&& initialState)
+REC::AnimationStateComponent::AnimationStateComponent(GameObject* owner, std::unique_ptr<REC::IState>&& initialState)
 	: Component(owner)
 	, m_pCurrentState(std::move(initialState))
 {
 	m_pCurrentState->Enter();
 }
 
-void REC::StateComponent::Update(float deltaTime)
+void REC::AnimationStateComponent::Update(float deltaTime)
 {
 	if (auto result = m_pCurrentState->Update(deltaTime))
 	{
@@ -16,7 +16,7 @@ void REC::StateComponent::Update(float deltaTime)
 	}
 }
 
-void REC::StateComponent::ChangeState(std::unique_ptr<IState>&& newState)
+void REC::AnimationStateComponent::ChangeState(std::unique_ptr<IState>&& newState)
 {
 	m_pCurrentState->Exit();
 	m_pCurrentState = std::move(newState);

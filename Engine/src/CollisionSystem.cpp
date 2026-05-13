@@ -56,6 +56,28 @@ void REC::CollisionSystem::Unsubscribe(CollisionComponent* subscriber)
 		m_CollidableObjects.erase(std::remove(m_CollidableObjects.begin(), m_CollidableObjects.end(), subscriber), m_CollidableObjects.end());
 }
 
+bool REC::CollisionSystem::HasCollidedWithStatic(CollisionComponent* comp1)
+{
+	for (const auto& staticComp : m_StaticCollidableObjects)
+	{
+		if (FindCollision(comp1, staticComp).has_value())
+			return true;
+	}
+	
+	return false;
+}
+
+bool REC::CollisionSystem::WillCollideWithStatic(CollisionComponent* comp1, const glm::vec2& movement)
+{
+	for (const auto& staticComp : m_StaticCollidableObjects)
+	{
+		if (FindCollision(comp1, staticComp, movement).has_value())
+			return true;
+	}
+
+	return false;
+}
+
 void REC::CollisionSystem::SendCollisionEvent(CollisionComponent* comp1, CollisionComponent* comp2, CollisionEventType type)
 {
 	CollisionEvent collisionEvent(type, {});
@@ -63,21 +85,21 @@ void REC::CollisionSystem::SendCollisionEvent(CollisionComponent* comp1, Collisi
 	EventBroadcaster::Broadcast(collisionEvent);
 }
 
-std::optional<std::pair<const REC::Rect&, const REC::Rect&>> REC::CollisionSystem::FindCollision(CollisionComponent* comp1, CollisionComponent* comp2)
+std::optional<std::pair<const REC::Rect&, const REC::Rect&>> REC::CollisionSystem::FindCollision(CollisionComponent* comp1, CollisionComponent* comp2, const glm::vec2& offset1, const glm::vec2& offset2)
 {
-	auto worldPos1 = comp1->GetOwner()->GetTransform()->GetWorldPosition();
-	auto worldPos2 = comp2->GetOwner()->GetTransform()->GetWorldPosition();
+	auto worldPos1 = comp1->GetOwner()->GetTransform()->GetWorldPosition() + glm::vec3(offset1, 0.f);
+	auto worldPos2 = comp2->GetOwner()->GetTransform()->GetWorldPosition() + glm::vec3(offset2, 0.f);
 
 	for (const auto& bound1 : comp1->GetBounds())
 	{
 		for (const auto& bound2 : comp2->GetBounds())
 		{
-			if (worldPos1.x + bound1.x < worldPos2.x + bound2.x + bound2.width &&
-				worldPos1.x + bound1.x + bound1.width > worldPos2.x + bound2.x &&
-				worldPos1.y + bound1.y < worldPos2.y + bound2.y + bound2.height &&
-				worldPos1.y + bound1.y + bound1.height > worldPos2.y + bound2.y)
+			if (worldPos1.x + bound1.rect.x < worldPos2.x + bound2.rect.x + bound2.rect.width &&
+				worldPos1.x + bound1.rect.x + bound1.rect.width > worldPos2.x + bound2.rect.x &&
+				worldPos1.y + bound1.rect.y < worldPos2.y + bound2.rect.y + bound2.rect.height &&
+				worldPos1.y + bound1.rect.y + bound1.rect.height > worldPos2.y + bound2.rect.y)
 			{
-				return std::pair<const Rect&, const Rect&>(bound1, bound2);
+				return std::pair<const Rect&, const Rect&>(bound1.rect, bound2.rect);
 			}
 		}
 	}

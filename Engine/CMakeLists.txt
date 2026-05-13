@@ -14,7 +14,8 @@ set(SOURCE_FILES
 	"src/Components/TextRenderComponent.cpp"
 	"src/Components/TransformComponent.cpp"
     "src/Components/CollisionComponent.cpp"
-    "src/Components/StateComponent.cpp"
+    "src/Components/AnimationStateComponent.cpp"
+    "src/Components/RigidBodyComponent.cpp"
     
     "src/Input/InputBinding.cpp"
 	"src/Input/InputSystem.cpp"
@@ -46,7 +47,8 @@ set(SOURCE_FILES
 	"src/TimeSystem.cpp"
 	"src/Window.cpp"
     "src/CollisionSystem.cpp"
-    
+    "src/ServiceLocator.cpp"
+    "src/PhysicsSystem.cpp"
 )
 
 # --- Include Libraries -------------

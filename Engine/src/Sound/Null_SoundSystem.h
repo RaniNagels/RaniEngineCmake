@@ -3,12 +3,14 @@
 
 namespace REC
 {
-	// not used, SDL_SoundSystem is the default sound system, given upon initialization of the engine
 	class Null_SoundSystem final : public ISoundSystem
 	{
 	public:
 		Null_SoundSystem() = default;
 		virtual ~Null_SoundSystem() = default;
-		virtual void Play(SoundID, float) override {}
+
+		virtual void Destroy() override {}
+		virtual void Play(const std::string&, float) override {}
+		virtual bool IsPlaying(const std::string&) const override { return false; }
 	};
 }

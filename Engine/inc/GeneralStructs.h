@@ -72,4 +72,20 @@ namespace REC
 			else return false;
 		}
 	};
+
+	struct CollisionBound final
+	{
+		Rect rect{};
+		bool isTrigger{ false }; // if true, this bound interact with the collision system, 
+								 // if false, this will interact with the physics system
+
+		explicit CollisionBound() = default;
+		explicit CollisionBound(const Rect& rect, bool isTrigger = true)
+			: rect{rect}
+			, isTrigger{isTrigger}
+		{ }
+
+		bool IsValid() const { return rect.IsValid(); }
+		bool Overlaps(const CollisionBound& other) const { return rect.Overlaps(other.rect); }
+	};
 }

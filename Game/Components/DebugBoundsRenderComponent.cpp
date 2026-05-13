@@ -22,10 +22,10 @@ void Game::DebugBoundsRenderComponent::Render(const REC::IRenderer *const render
 	for (const auto& bounds : m_pCollisionComponent->GetBounds())
 	{
 		REC::Rect boundsWithPos{
-			pos.x + bounds.x,
-			pos.y + bounds.y,
-			bounds.width,
-			bounds.height
+			pos.x + bounds.rect.x,
+			pos.y + bounds.rect.y,
+			bounds.rect.width,
+			bounds.rect.height
 		};
 		renderer->RenderRect(m_Color, boundsWithPos, false);
 	}

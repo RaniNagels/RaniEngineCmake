@@ -53,6 +53,14 @@ public:
 		return m_pTrack != nullptr;
 	}
 
+	bool IsPlaying() const
+	{
+		if (!m_pTrack)
+			return false;
+		
+		return MIX_TrackPlaying(m_pTrack);
+	}
+
 private:
 	const std::string m_FilePath;
 	MIX_Audio* m_pAudio{ nullptr };
@@ -87,4 +95,9 @@ void REC::SDL_Sound::Play(float volume, int loops) const
 bool REC::SDL_Sound::IsLoaded() const
 {
 	return m_pImpl->IsLoaded();
+}
+
+bool REC::SDL_Sound::IsPlaying() const
+{
+	return m_pImpl->IsPlaying();
 }

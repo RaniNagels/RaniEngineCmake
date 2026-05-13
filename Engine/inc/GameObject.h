@@ -48,6 +48,9 @@ namespace REC
 		void Render(const IRenderer *const renderer) const;
 
 		bool Is(ObjectId id) const { if (m_Descriptor.id.has_value()) return m_Descriptor.id.value() == id; else return false; }
+		bool IsChildOf(ObjectId id) const { return m_pParent != nullptr && (m_pParent->Is(id) || m_pParent->IsChildOf(id)); }
+		void Move(float x, float y); // delta movement
+		void MoveTo(float x, float y); // absolute position
 
 		//== SCENE GRAPH ==============================================================================================
 
@@ -126,7 +129,7 @@ namespace REC
 		}
 
 		TransformComponent* GetTransform() const { return m_pTransform; }
-		CollisionComponent* GetCollisionComponent() const { return m_pCollisionComponent; }
+		CollisionComponent* GetCollisionComponent() const;
 
 		// checks if a gameobject has a component of type C
 		template <Cpt C>

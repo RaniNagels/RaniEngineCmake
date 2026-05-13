@@ -67,6 +67,8 @@ public:
 			else
 				throw std::runtime_error("Failed to load sound: " + id);
 		}
+		// check if the sound is already playing
+		
 
 		{
 			std::lock_guard lock(m_QueueMutex);
@@ -74,6 +76,16 @@ public:
 		}
 		m_Condition.notify_one();
 	}
+
+	bool IsPlaying(const std::string& id) const
+	{
+		ResourceManager& rm = ResourceManager::GetInstance();
+		ISound* sound = rm.GetResource<ISound>(id);
+		if (!sound)
+			throw std::runtime_error("Sound not found: " + id);
+		return sound->IsPlaying();
+	}
+
 private:
 	void ProcessQueue()
 	{
@@ -128,4 +140,9 @@ void REC::SDL_SoundSystem::Destroy()
 void REC::SDL_SoundSystem::Play(const std::string& id, float volume)
 {
 	m_pImpl->Play(id, volume);
+}
+
+bool REC::SDL_SoundSystem::IsPlaying(const std::string& id) const
+{
+	return m_pImpl->IsPlaying(id);
 }

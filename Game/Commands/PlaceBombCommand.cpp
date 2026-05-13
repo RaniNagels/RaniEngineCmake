@@ -5,7 +5,6 @@
 #include <Components/SpriteRenderComponent.h>
 #include <Components/AnimatedSpriteComponent.h>
 #include <Components/CollisionComponent.h>
-#include <sdbm_hash.h>
 #include <Events/Event.h>
 #include <SceneManager.h>
 #include <ServiceLocator.h>
@@ -14,6 +13,7 @@
 #include "../RenderLayers.h"
 #include "../Components/BombComponent.h"
 #include "../Components/DebugBoundsRenderComponent.h"
+#include "../Ids.h"
 
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
@@ -21,7 +21,7 @@ Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManag
 {
 	REC::GameObjectEventArgs args{};
 	args.sender = GetGameObject();
-	m_HasPlacedBombEvent = std::make_unique<REC::Event>(REC::make_sdbm_hash("HasPlacedBombEvent"), args);
+	m_HasPlacedBombEvent = std::make_unique<REC::Event>(Game::EventIds::HasPlaceBombEvent, args);
 }
 
 Game::PlaceBombCommand::~PlaceBombCommand() = default;
@@ -34,6 +34,7 @@ void Game::PlaceBombCommand::Execute(float)
 	auto PlayerPosition = GetGameObject()->GetTransform()->GetWorldPosition();
 
 	REC::GameObjectDescriptor bombDescriptor{};
+	bombDescriptor.id = Game::ObjectIds::Bom;
 	bombDescriptor.startPosX = PlayerPosition.x;
 	bombDescriptor.startPosY = PlayerPosition.y;
 	bombDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Placables);

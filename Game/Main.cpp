@@ -23,7 +23,7 @@
 #include <Components/RotatorComponent.h>
 #include <Components/HealthComponent.h>
 #include <Components/LivesComponent.h>
-#include <Components/StateComponent.h>
+#include <Components/AnimationStateComponent.h>
 
 #include <Commands/ChangeSceneCommand.h>
 
@@ -46,6 +46,8 @@
 #include "Player.h"
 
 #include "States/BombermanStates.h"
+#include "Ids.h"
+#include <Components/RigidBodyComponent.h>
 
 namespace fs = std::filesystem;
 
@@ -192,7 +194,7 @@ static void load(REC::IEngine* engine)
 	backdrop.textureKey = "background";
 
 	REC::GameObjectDescriptor backdropObjectDesc{};
-	backdropObjectDesc.id = REC::make_sdbm_hash("Grid");
+	backdropObjectDesc.id = Game::ObjectIds::Grid;
 	backdropObjectDesc.startPosX = 0.f;
 	backdropObjectDesc.startPosY = 80.f;
 	backdropObjectDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background); // C++23 feature
@@ -301,6 +303,7 @@ static void load(REC::IEngine* engine)
 	auto balloom_scoreStatComp = balloomUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
 
 	REC::GameObjectDescriptor fpsDesc{};
+	fpsDesc.id = REC::make_sdbm_hash("FPSCounter");
 	fpsDesc.startPosX = 880.f;
 	fpsDesc.startPosY = 20.f;
 	fpsDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
@@ -321,7 +324,7 @@ static void load(REC::IEngine* engine)
 	bombermanWalkAnimDesc.startOnStartup = true;
 
 	Game::PlayerDescriptor bombermanDescriptor{};
-	bombermanDescriptor.name = REC::make_sdbm_hash("Bomberman");
+	bombermanDescriptor.name = Game::ObjectIds::Bomberman;
 	bombermanDescriptor.amountOfLives = 3;
 	bombermanDescriptor.animDesc = bombermanWalkAnimDesc;
 	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
@@ -335,10 +338,11 @@ static void load(REC::IEngine* engine)
 
 	REC::CollisionDescriptor collisionDescriptor{};
 	collisionDescriptor.collisionType = REC::CollisionType::Dynamic;
-	collisionDescriptor.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the player
+	collisionDescriptor.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ -20.f, -20.f, 40.f, 40.f}, true }); // centered on the player
 
 	bomberman.Get()->AddCollisionComponent<Game::BombermanCollisionComponent>(collisionDescriptor);
-	bomberman.Get()->AddComponent<REC::StateComponent>(std::make_unique<Game::BombermanIdleState>(bomberman.Get()));
+	bomberman.Get()->AddComponent<REC::RigidBodyComponent>();
+	bomberman.Get()->AddComponent<REC::AnimationStateComponent>(std::make_unique<Game::BombermanIdleState>(bomberman.Get()));
 	bomberman.Get()->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255, 0, 0 });
 
 	uint8_t balloomControllerId{ 0 };
@@ -349,7 +353,7 @@ static void load(REC::IEngine* engine)
 	balloomAnimDesc.startOnStartup = true;
 
 	Game::PlayerDescriptor balloomDescriptor{};
-	balloomDescriptor.name = REC::make_sdbm_hash("Balloom");
+	balloomDescriptor.name = Game::ObjectIds::Balloom;
 	balloomDescriptor.amountOfLives = 3;
 	balloomDescriptor.animDesc = balloomAnimDesc;
 	balloomDescriptor.spriteDesc = charactersSpriteDescriptors;
@@ -362,6 +366,7 @@ static void load(REC::IEngine* engine)
 	balloom_scoreStatComp->SetConnectedPlayer(balloom.Get());
 
 	balloom.Get()->AddCollisionComponent<REC::CollisionComponent>(collisionDescriptor); // empty collision component. needed to register to the collision system
+	balloom.Get()->AddComponent<REC::RigidBodyComponent>();
 	balloom.Get()->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255, 0, 0 });
 
 	// === INPUT =======================================================================================

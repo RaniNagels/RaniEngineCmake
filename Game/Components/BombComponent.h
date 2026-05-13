@@ -29,6 +29,7 @@ namespace Game
 
 		virtual void Update(float deltaT) override;
 		void Detonate(); // can also be called by the player when in possession of a powerup
+		void Reset(); // for reuse of bomb objects in allocator pools
 
 	private:
 		const BombDescriptor m_Descriptor;
@@ -36,7 +37,7 @@ namespace Game
 		REC::SpriteRenderComponent* m_pSpriteRenderComponent{ nullptr };
 
 		float m_Timer{0.f};
-		float m_LifeTime{ 2.f };
+		const float m_LifeTime{ 2.f };
 		bool m_Exploded{ false };
 	};
 }

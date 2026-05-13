@@ -14,9 +14,10 @@
 
 #include "Engine.h"
 #include "TimeSystem.h"
+#include "CollisionSystem.h"
+#include "PhysicsSystem.h"
 #include "Window.h"
 #include "Renderer.h"
-#include "CollisionSystem.h"
 #include "Resources/ResourceManager.h"
 #include "Sound/SDL_SoundSystem.h"
 
@@ -25,6 +26,8 @@
 #include <SceneManager.h>
 #include <Events/EventSystem.h>
 #include <Events/EventBroadcaster.h>
+
+#include <Components/RigidBodyComponent.h>
 
 
 void LogSDLVersion(const std::string& message, int major, int minor, int patch)
@@ -85,6 +88,7 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	m_pInputSystem = std::make_unique<InputSystem>();
 	m_pEventSystem = std::make_unique<EventSystem>();
 	m_pCollisionSystem = std::make_unique<CollisionSystem>();
+	m_pPhysicsSystem = std::make_unique<PhysicsSystem>(m_pCollisionSystem.get());
 	EventBroadcaster::SetEventSystem(m_pEventSystem.get());
 	EventBroadcaster::SetCollisionSystem(m_pCollisionSystem.get());
 
@@ -95,6 +99,8 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	m_EngineContext.resourceManager = &ResourceManager::GetInstance();
 
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>());
+
+	RigidBodyComponent::SetPhysicsSystem(m_pPhysicsSystem.get());
 }
 
 REC::Engine::~Engine()
@@ -127,6 +133,7 @@ void REC::Engine::RunOneFrame()
 
 	m_pInputSystem->ProcessInput(m_pTimeSystem->GetDeltaTime());
 	m_pSceneManager->Update(m_pTimeSystem->GetDeltaTime());
+	m_pPhysicsSystem->Update(m_pTimeSystem->GetDeltaTime());
 	m_pCollisionSystem->CheckCollisions(m_pSceneManager->GetActiveScene());
 	m_pEventSystem->ProcessEvents();
 	m_pSceneManager->Render();

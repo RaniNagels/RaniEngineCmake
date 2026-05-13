@@ -9,6 +9,7 @@
 
 #include <Components/TransformComponent.h>
 #include <Components/RenderComponent.h>
+#include <Components/RigidBodyComponent.h>
 
 REC::GameObject::GameObject(const GameObjectDescriptor& descriptor)
 	: m_Descriptor{ descriptor }
@@ -53,6 +54,24 @@ void REC::GameObject::Render(const IRenderer* const renderer) const
 	}
 }
 
+void REC::GameObject::Move(float x, float y)
+{
+	if (HasComponent<RigidBodyComponent>())
+	{
+		RigidBodyComponent* rigidBody = GetComponent<RigidBodyComponent>();
+		rigidBody->AddToVelocity({ x, y });
+	}
+	else 
+	{
+		GetTransform()->AddToLocalPosition(x, y);
+	}
+}
+
+void REC::GameObject::MoveTo(float x, float y)
+{
+	GetTransform()->SetLocalPosition(x, y);
+}
+
 void REC::GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 {
 	// check new parent (validity)
@@ -80,6 +99,13 @@ void REC::GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
 
 	// add itself as a child to the given parent
 	if (m_pParent) m_pParent->AddChild(this);
+}
+
+REC::CollisionComponent* REC::GameObject::GetCollisionComponent() const
+{
+	if (m_pCollisionComponent != nullptr)
+		return m_pCollisionComponent;
+	throw std::runtime_error("GameObject does not have a collision component!");
 }
 
 void REC::GameObject::CleanUpComponents()

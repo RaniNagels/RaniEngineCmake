@@ -24,6 +24,7 @@ namespace Game
 		void SetConnectedPlayer(REC::GameObject* player) { m_pConnectedPlayer = player; }
 
 		virtual void Notify(REC::Event* event) override;
+		virtual void Destroy() override;
 
 	private:
 		REC::GameObject* m_pConnectedPlayer{};

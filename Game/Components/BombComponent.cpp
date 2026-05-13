@@ -53,3 +53,9 @@ void Game::BombComponent::Detonate()
 	REC::ServiceLocator::GetSoundSystem().Play("explosionSound", 1.f);
 }
 
+void Game::BombComponent::Reset()
+{
+	m_Timer = 0.f;
+	m_Exploded = false;
+}
+

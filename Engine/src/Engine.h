@@ -18,6 +18,7 @@ namespace REC
 	class IRenderer;
 	class EventSystem;
 	class CollisionSystem;
+	class PhysicsSystem;
 
 	class Engine final : public IEngine
 	{
@@ -43,6 +44,7 @@ namespace REC
 		std::unique_ptr<InputSystem> m_pInputSystem;
 		std::unique_ptr<EventSystem> m_pEventSystem;
 		std::unique_ptr<CollisionSystem> m_pCollisionSystem;
+		std::unique_ptr<PhysicsSystem> m_pPhysicsSystem;
 
 		EngineContext m_EngineContext{};
 	};

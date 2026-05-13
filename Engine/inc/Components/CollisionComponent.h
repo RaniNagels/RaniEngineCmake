@@ -13,6 +13,7 @@ namespace REC
 
 	// a base Collision component that contains data for for the collision to work 
 	// as well as a listener for collision events involving itself
+	// != rigid body. rigid body resolves collision
 	class CollisionComponent : public Component, public ICollisionListener
 	{
 	public:
@@ -31,12 +32,22 @@ namespace REC
 		virtual void Destroy() override;
 		virtual void Update(float) override {};
 
-		const std::vector<Rect>& GetBounds() const { return m_Bounds; }
+		const std::vector<CollisionBound>& GetBounds() const { return m_Bounds; }
+		const std::vector<CollisionBound>& GetTriggerBounds() const
+		{
+			std::vector<CollisionBound> triggerBounds{};
+			for (const auto& bound : m_Bounds)
+			{
+				if (bound.isTrigger)
+					triggerBounds.emplace_back(bound);
+			}
+			return triggerBounds;
+		}
 
 		bool IsStatic() const;
 
 	private:
-		std::vector<Rect> m_Bounds{}; // a vector allows for multiple collisionboxes per object allowing for more complex shapes
+		std::vector<CollisionBound> m_Bounds{}; // a vector allows for multiple collisionboxes per object allowing for more complex shapes
 		const CollisionDescriptor m_Descriptor;
 	};
 }

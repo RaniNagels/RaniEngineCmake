@@ -4,14 +4,18 @@
 #include <stdexcept>
 #include <sdbm_hash.h>
 
-#define REC_EVENT_HAS_ZERO_HEALTH REC::make_sdbm_hash("HasZeroHealthEvent")
-#define REC_EVENT_LOST_LIVE REC::make_sdbm_hash("LostLiveEvent")
-
 namespace REC
 {
 	using EventId = unsigned int;
 	class IListener;
 	class GameObject;
+
+	namespace EventIds
+	{
+		// add engine events... (for easy game access)
+		constexpr EventId HasZeroHealth = REC::make_sdbm_hash("HasZeroHealthEvent");
+		constexpr EventId LostLive = REC::make_sdbm_hash("LostLiveEvent");
+	}
 
 	// can be derived from to add more info about the event
 	struct EventArgs

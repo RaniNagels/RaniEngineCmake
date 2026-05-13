@@ -26,9 +26,12 @@ namespace REC
 		void Subscribe(CollisionComponent* subscriber);
 		void Unsubscribe(CollisionComponent* subscriber);
 
+		bool HasCollidedWithStatic(CollisionComponent* comp1);
+		bool WillCollideWithStatic(CollisionComponent* comp1, const glm::vec2& movement);
+
 	private:
 		void SendCollisionEvent(CollisionComponent* comp1, CollisionComponent* comp2, CollisionEventType type);
-		std::optional<std::pair<const Rect&, const Rect&>> FindCollision(CollisionComponent* comp1, CollisionComponent* comp2);
+		std::optional<std::pair<const Rect&, const Rect&>> FindCollision(CollisionComponent* comp1, CollisionComponent* comp2, const glm::vec2& offset1 = {}, const glm::vec2& offset2 = {});
 
 		std::vector<CollisionComponent*> m_CollidableObjects{};
 		std::vector<CollisionComponent*> m_StaticCollidableObjects{};

@@ -6,6 +6,7 @@
 #include <Components/LivesComponent.h>
 
 #include "../Commands/MoveCommand.h"
+#include <ServiceLocator.h>
 
 // ----- DEAD -------------------------------------------------------------------------
 Game::BombermanDeadState::BombermanDeadState(REC::GameObject* owner)
@@ -104,7 +105,7 @@ void Game::BombermanWalkingState::Notify(REC::Event* event)
 
 void Game::BombermanWalkingState::Enter()
 {
-	ChangeAnimation();
+	ChangeAnimation(m_AnimationKey);
 	SubscribeToEvent({ REC::make_sdbm_hash("MoveEvent") });
 }
 
@@ -119,9 +120,15 @@ std::optional<std::unique_ptr<REC::IState>> Game::BombermanWalkingState::Update(
 	if (m_ChangedDirection)
 	{
 		m_ChangedDirection = false;
-		m_AnimationKey = GetAnimationKey(m_Direction);
-		ChangeAnimation();
+		ChangeAnimation(GetAnimationKey(m_Direction));
 	}
+
+	auto& SS = REC::ServiceLocator::GetSoundSystem();
+
+	if (m_Direction.x != 0 && !SS.IsPlaying("stepHorizontalSound"))
+		SS.Play("stepHorizontalSound", 0.5f);
+	else if (m_Direction.y != 0 && !SS.IsPlaying("stepVerticalSound"))
+		SS.Play("stepVerticalSound", 0.5f);
 
 	m_HasBeenNotified = false;
 	return {};
@@ -148,11 +155,12 @@ std::string Game::BombermanWalkingState::GetAnimationKey(glm::vec2 dir) const
 		throw std::runtime_error("Direction cannot be (0,0) for BombermanWalkingState!");
 }
 
-void Game::BombermanWalkingState::ChangeAnimation()
+void Game::BombermanWalkingState::ChangeAnimation(const std::string& key)
 {
+	m_AnimationKey = key;
 	REC::AnimationDescriptor animation{};
 	animation.animationDataFileKey = "characterData";
-	animation.animationKey = m_AnimationKey;
+	animation.animationKey = key;
 	animation.startOnStartup = true;
 
 	m_pAnimatedSpriteComponent->ChangeAnimation(animation);

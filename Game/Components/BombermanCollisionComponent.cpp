@@ -1,8 +1,11 @@
 #include "BombermanCollisionComponent.h"
+
 #include <GameObject.h>
-#include "GridComponent.h"
 #include <GeneralStructs.h>
 #include <sdbm_hash.h>
+
+#include "GridComponent.h"
+
 #include <iostream>
 
 Game::BombermanCollisionComponent::BombermanCollisionComponent(REC::GameObject* owner, const REC::CollisionDescriptor& descriptor)
@@ -18,7 +21,7 @@ void Game::BombermanCollisionComponent::OnCollision(const REC::GameObject* const
 	}
 	else if (other->Is(REC::make_sdbm_hash("Grid")))
 	{
-		std::cout << "";
+		//auto* transform = GetOwner()->GetTransform();
 		//auto* grid = other->GetComponent<GridComponent>();
 		//if (grid != nullptr)
 		//{
