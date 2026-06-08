@@ -22,7 +22,8 @@ namespace REC
 		void Update(float deltaT);
 		void Render();
 
-		Scene* CreateScene();
+		// will return an empty scene with this id! if the id was already used, the scene will be emptied and returned!
+		Scene* CreateScene(SceneId id);
 		Scene* GetActiveScene() const { return m_pActiveScene; }
 		void SetActiveScene(Scene* scene);
 

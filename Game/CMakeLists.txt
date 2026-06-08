@@ -22,8 +22,11 @@ set(SOURCE_FILES
     "Components/UIScoreComponent.cpp"
     "Components/BombermanCollisionComponent.cpp"
     "Components/DebugBoundsRenderComponent.cpp"
+    "Components/PickUpComponent.cpp"
 
     "States/BombermanStates.cpp"
+    "States/BalloomStates.cpp"
+    "States/GameStates.cpp"
 )
 
 

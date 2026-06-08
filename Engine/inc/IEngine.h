@@ -3,6 +3,7 @@
 
 #include <EngineContext.h>
 #include <EngineSettings.h>
+#include <State/GameState.h>
 
 namespace REC
 {
@@ -15,6 +16,7 @@ namespace REC
 
 		virtual const EngineContext& GetContext() const = 0;
 		virtual void SetEngineSettings(const EngineSettings& data) = 0;
+		virtual void SetGameState(std::unique_ptr<GameState>&& state) = 0;
 	};
 
 	extern "C"

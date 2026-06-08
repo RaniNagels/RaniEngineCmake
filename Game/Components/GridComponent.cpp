@@ -50,6 +50,13 @@ const Game::GridComponent::Cell& Game::GridComponent::GetCell(const glm::vec2& p
 	return s_InvalidCell;
 }
 
+glm::vec2 Game::GridComponent::GetAbsoluteCellPosition(const Cell& cell)
+{
+	glm::vec2 worldPos = GetOwner()->GetTransform()->GetWorldPosition();
+	glm::vec2 absolutePos = cell.origin + worldPos;
+	return absolutePos;
+}
+
 std::vector<REC::CollisionBound> Game::GridComponent::GetWallCollisionBounds()
 {
 	std::vector<REC::CollisionBound> bounds{};

@@ -20,21 +20,13 @@ void Game::BombermanCollisionComponent::OnCollision(const REC::GameObject* const
 	{
 		std::cout << "Bomberman collided with a Balloom!" << std::endl;
 	}
-	else if (other->Is(Game::ObjectIds::Grid))
-	{
-		//auto* transform = GetOwner()->GetTransform();
-		//auto* grid = other->GetComponent<GridComponent>();
-		//if (grid != nullptr)
-		//{
-		//	for (const auto& cell : grid->GetCells())
-		//	{
-		//		
-		//	}
-		//}
-	}
 	else if (other->Is(Game::ObjectIds::Bom))
 	{
 		std::cout << "Bomberman collided with a Bomb!" << std::endl;
+	}
+	else if (other->Is(Game::ObjectIds::PickUp))
+	{
+		std::cout << "Bomberman collided with a PickUp!" << std::endl;
 	}
 }
 

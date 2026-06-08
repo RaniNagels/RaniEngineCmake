@@ -13,9 +13,18 @@ void REC::SceneManager::Render()
 	Renderer::GetInstance().Render(m_pActiveScene);
 }
 
-REC::Scene* REC::SceneManager::CreateScene()
+REC::Scene* REC::SceneManager::CreateScene(SceneId id)
 {
-	m_pScenes.emplace_back(new Scene());
+	for (const auto& scene : m_pScenes)
+	{
+		if (scene->Is(id))
+		{
+			scene->RemoveAll();
+			return scene.get();
+		}
+	}
+
+	m_pScenes.emplace_back(new Scene(id));
 
 	if (m_pActiveScene == nullptr) 
 		m_pActiveScene = m_pScenes.back().get();

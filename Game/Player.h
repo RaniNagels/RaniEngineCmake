@@ -90,6 +90,7 @@ namespace Game
 		REC::GameObject* Get() const { return m_pGameObject; }
 
 		void CreateInputBindings(REC::InputSystem* inputsystem, REC::SceneManager* sceneManager, float movementSpeed, GridComponent* playfield);
+		void RemoveInputBindings(REC::InputSystem* inputSystem);
 
 		template <ActionType AT>
 		void AddInputActions(PlayerInputActions<AT>& inputActions) // inputActions cannot be const due to the move

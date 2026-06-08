@@ -72,6 +72,9 @@ namespace Game
 		const std::vector<Cell>& GetCells() const { return m_Cells; }
 		const Cell& GetCell(uint8_t row, uint8_t col);
 		const Cell& GetCell(const glm::vec2& pos);
+		glm::vec2 GetAbsoluteCellPosition(const Cell& cell); // returns the world position!, the cell only contains the local position in relation of the grid
+		glm::vec2 GetAbsoluteCellPosition(uint8_t row, uint8_t col) { return GetAbsoluteCellPosition(GetCell(row, col)); }
+		glm::vec2 GetAbsoluteCellPosition(const glm::vec2& pos) { return GetAbsoluteCellPosition(GetCell(pos)); }
 
 		std::vector<REC::CollisionBound> GetWallCollisionBounds();
 

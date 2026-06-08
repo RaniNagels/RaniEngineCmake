@@ -50,3 +50,9 @@ void Game::Player::CreateInputBindings(REC::InputSystem* inputsystem, REC::Scene
 	m_InputBindings[Util::to_underlying(InputBindingIndex::Right)]->AddCommand<Game::MoveCommand>(m_pGameObject, glm::vec2{ 1, 0 }, movementSpeed, playfield); 
 	m_Commands.placeBombCmd = m_InputBindings[Util::to_underlying(InputBindingIndex::PlaceBomb)]->AddCommand<Game::PlaceBombCommand>(m_pGameObject, sceneManager);
 }
+
+void Game::Player::RemoveInputBindings(REC::InputSystem* inputSystem)
+{
+	for (const auto& inputBinding : m_InputBindings)
+		inputSystem->RemoveInputBinding(inputBinding);
+}

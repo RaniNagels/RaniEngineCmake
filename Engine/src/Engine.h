@@ -36,6 +36,7 @@ namespace REC
 
 		virtual const EngineContext& GetContext() const override { return m_EngineContext; }
 		virtual void SetEngineSettings(const EngineSettings& data) override;
+		virtual void SetGameState(std::unique_ptr<GameState>&& state) override;
 
 	private:
 		std::unique_ptr<TimeSystem> m_pTimeSystem;
@@ -47,5 +48,8 @@ namespace REC
 		std::unique_ptr<PhysicsSystem> m_pPhysicsSystem;
 
 		EngineContext m_EngineContext{};
+
+		void ProcessGameState();
+		std::unique_ptr<GameState> m_pCurrentGameState{ nullptr };
 	};
 }

@@ -101,6 +101,8 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 	ServiceLocator::RegisterSoundSystem(std::make_unique<SDL_SoundSystem>());
 
 	RigidBodyComponent::SetPhysicsSystem(m_pPhysicsSystem.get());
+
+	m_pCurrentGameState = std::make_unique<EmptyState>(m_EngineContext);
 }
 
 REC::Engine::~Engine()
@@ -116,6 +118,7 @@ void REC::Engine::Run(void(*load)(IEngine*))
 {
 	if (load) load(this);
 	m_pWindow->DisplayWindow();
+	m_pCurrentGameState->Enter();
 
 #ifndef __EMSCRIPTEN__
 	while (!m_pInputSystem->ShouldQuit())
@@ -125,6 +128,8 @@ void REC::Engine::Run(void(*load)(IEngine*))
 #else
 	emscripten_set_main_loop_arg(&LoopCallback, this, 0, true);
 #endif
+
+	m_pCurrentGameState->Exit();
 }
 
 void REC::Engine::RunOneFrame()
@@ -136,6 +141,7 @@ void REC::Engine::RunOneFrame()
 	m_pPhysicsSystem->Update(m_pTimeSystem->GetDeltaTime());
 	m_pCollisionSystem->CheckCollisions(m_pSceneManager->GetActiveScene());
 	m_pEventSystem->ProcessEvents();
+	ProcessGameState();
 	m_pSceneManager->Render();
 
 	std::this_thread::sleep_for(m_pTimeSystem->GetSleepTime());
@@ -146,6 +152,26 @@ void REC::Engine::SetEngineSettings(const EngineSettings& data)
 	m_pTimeSystem->SetFrameRate(data.frameRate);
 	m_pWindow->SetSize(data.windowWidth, data.windowHeight);
 	m_pWindow->SetTitle(data.windowTitle);
+}
+
+void REC::Engine::SetGameState(std::unique_ptr<GameState>&& state)
+{
+	m_pCurrentGameState = std::move(state);
+}
+
+void REC::Engine::ProcessGameState()
+{
+	for (auto* event : m_pCurrentGameState->GetNotifiedEvents())
+	{
+		auto newState = m_pCurrentGameState->OnEvent(event);
+		if (newState.has_value())
+		{
+			m_pCurrentGameState->Exit();
+			m_pCurrentGameState = std::move(newState.value());
+			m_pCurrentGameState->Enter();
+			break;
+		}
+	}
 }
 
 

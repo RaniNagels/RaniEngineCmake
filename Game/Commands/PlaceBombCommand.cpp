@@ -13,6 +13,7 @@
 #include "../RenderLayers.h"
 #include "../Components/BombComponent.h"
 #include "../Components/DebugBoundsRenderComponent.h"
+#include "../Components/GridComponent.h"
 #include "../Ids.h"
 
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
@@ -31,7 +32,11 @@ void Game::PlaceBombCommand::Execute(float)
 	auto activeScene = m_pSceneManager->GetActiveScene();
 
 	// TODO: place in grid, not just willy nilly on the GameObject
+	REC::GameObject* go = activeScene->GetGameObject(Game::ObjectIds::Grid);
+	auto* grid = go->GetComponent<Game::GridComponent>();
+
 	auto PlayerPosition = GetGameObject()->GetTransform()->GetWorldPosition();
+	auto bombPosition = grid->GetAbsoluteCellPosition(PlayerPosition); // returns the top left corner
 
 	REC::GameObjectDescriptor bombDescriptor{};
 	bombDescriptor.id = Game::ObjectIds::Bom;
@@ -46,8 +51,8 @@ void Game::PlaceBombCommand::Execute(float)
 	bombSpriteDescriptor.textureKey = "generalSprites";
 	bombSpriteDescriptor.frameDataFileKey = "characterData";
 	bombSpriteDescriptor.frameKey = "bom_0";
-	bombSpriteDescriptor.drawPointX = 0.5f;
-	bombSpriteDescriptor.drawPointY = 0.5f;
+	bombSpriteDescriptor.drawPointX = 0.f;
+	bombSpriteDescriptor.drawPointY = 0.f;
 
 	bomb->AddComponent<REC::SpriteRenderComponent>(bombSpriteDescriptor);
 

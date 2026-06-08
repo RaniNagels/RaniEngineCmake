@@ -1,5 +1,6 @@
 #include <Input/InputBinding.h>
 #include <Commands/ICommand.h>
+#include <Events/Event.h>
 
 std::vector<REC::IInputAction*> REC::InputBinding::GetInputActions(InputActionType type) const
 {
@@ -22,5 +23,10 @@ void REC::InputBinding::Execute(float deltaTime, float inputStrenght) const
 		}
 
 		command->Execute(deltaTime);
+	}
+
+	for (auto& event : m_EventCommands)
+	{
+		event->Broadcast();
 	}
 }

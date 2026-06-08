@@ -5,6 +5,7 @@
 
 #include <Commands/ICommand.h>
 #include <Input/InputAction.h>
+#include <Events/Event.h>
 
 namespace REC
 {
@@ -13,6 +14,9 @@ namespace REC
 
 	template <typename A>
 	concept Action = std::derived_from<A, IInputAction>;
+
+	template <typename E>
+	concept EventCommand = std::derived_from<E, Event>;
 
 	class InputBinding final
 	{
@@ -32,6 +36,13 @@ namespace REC
 			return static_cast<C*>(m_Commands.back().get());
 		}
 
+		template <EventCommand E>
+		E* AddEvent(EventId id)
+		{
+			m_EventCommands.emplace_back(std::make_unique<E>(id, EventArgs()));
+			return static_cast<E*>(m_EventCommands.back().get());
+		}
+
 		template <Action A, typename... Args>
 		void AddInputAction(Args&&... args)
 		{
@@ -46,11 +57,12 @@ namespace REC
 
 		std::vector<IInputAction*> GetInputActions(InputActionType type) const;
 
-		// will execute all commands
+		// will execute all commands and trigger all events
 		void Execute(float deltaTime, float inputStrength = 1.f) const;
 
 	private:
 		std::vector<std::unique_ptr<IInputAction>> m_Actions{};
 		std::vector<std::unique_ptr<ICommand>> m_Commands{};
+		std::vector<std::unique_ptr<Event>> m_EventCommands{};
 	};
 }

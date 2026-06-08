@@ -9,6 +9,7 @@
 #include "Resources/ResourceManager.h"
 #include "SDL_Sound.h"
 
+// TODO: don't use threading in emscripten
 class REC::SDL_SoundSystem::Impl final
 {
 public:
@@ -24,7 +25,10 @@ public:
 		if (!m_pMixer)
 			SDL_Log("Couldn't create mixer on default device: %s", SDL_GetError());
 
+#ifndef __EMSCRIPTEN__
 		m_SoundThread = std::jthread(&Impl::ProcessQueue, this);
+#endif 
+
 	}
 	~Impl()
 	{
@@ -34,12 +38,17 @@ public:
 	void Destroy()
 	{
 		{
+#ifndef __EMSCRIPTEN__
 			std::lock_guard lock(m_QueueMutex);
+#endif
 			m_Running = false;
 		}
 
+#ifndef __EMSCRIPTEN__
 		m_Condition.notify_one();
 		m_SoundThread.join();
+#endif
+
 
 		if (m_pMixer)
 		{

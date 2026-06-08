@@ -11,6 +11,27 @@ REC::GameObject* REC::Scene::CreateGameObject(const GameObjectDescriptor& descri
 	return m_Objects.back().get();
 }
 
+REC::GameObject* REC::Scene::GetGameObject(ObjectId id) const
+{
+	for (const auto& object : m_Objects)
+	{
+		if (object->Is(id))
+			return object.get();
+	}
+	return nullptr;
+}
+
+std::vector<REC::GameObject*> REC::Scene::GetGameObjects(ObjectId id) const
+{
+	std::vector<GameObject*> objects{};
+	for (const auto& object : m_Objects)
+	{
+		if (object->Is(id))
+			objects.emplace_back(object.get());
+	}
+	return objects;
+}
+
 void REC::Scene::SetRenderLayer(GameObject* object, uint8_t layer)
 {
 	for (size_t i{}; i < m_Objects.size(); ++i)

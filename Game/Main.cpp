@@ -6,48 +6,15 @@
 
 #include <IEngine.h>
 #include <EngineSettings.h>
-#include <SceneManager.h>
-#include <Input/InputSystem.h>
-#include <Events/EventSystem.h>
 #include <Resources/IResourceManager.h>
-#include <Util.h>
-
-#include <ComponentDescriptors.h>
-
-#include <Components/TransformComponent.h>
-#include <Components/AnimatedSpriteComponent.h>
-#include <Components/SpriteRenderComponent.h>
-#include <Components/LabeledStatComponent.h>
-#include <Components/TextRenderComponent.h>
-#include <Components/FPSComponent.h>
-#include <Components/RotatorComponent.h>
-#include <Components/HealthComponent.h>
-#include <Components/LivesComponent.h>
-#include <Components/AnimationStateComponent.h>
-
-#include <Commands/ChangeSceneCommand.h>
 
 #include <filesystem>
 #include <sdbm_hash.h>
 #include <memory>
 #include <iostream>
 
-#include "Commands/MoveCommand.h"
-#include "Commands/PlaceBombCommand.h"
-
-#include "Components/UILivesComponent.h"
-#include "Components/UIScoreComponent.h"
-#include "Components/GridComponent.h"
-#include "Components/DebugGridRenderComponent.h"
-#include "Components/DebugBoundsRenderComponent.h"
-#include "Components/BombermanCollisionComponent.h"
-
-#include "RenderLayers.h"
-#include "Player.h"
-
-#include "States/BombermanStates.h"
 #include "Ids.h"
-#include <Components/RigidBodyComponent.h>
+#include "States/GameStates.h"
 
 namespace fs = std::filesystem;
 
@@ -60,6 +27,7 @@ static void load(REC::IEngine* engine)
 	engineData.windowWidth = uint16_t(1000);
 	engineData.windowHeight = uint16_t(750);
 	engine->SetEngineSettings(engineData);
+	engine->SetGameState(std::make_unique<Game::MainMenuState>(engine->GetContext()));
 
 	// === RESOURCES ===================================================================================
 #pragma region Resources
@@ -137,279 +105,6 @@ static void load(REC::IEngine* engine)
 	if (!RM->AddResource(stepVerticalSound))
 		throw std::runtime_error("Failed to load step vertical sound");
 #pragma endregion Resources
-
-	// === SCENE =======================================================================================
-	auto* SM = engine->GetContext().sceneManager;
-
-#pragma region StartScreen
-	auto* startScreen = SM->CreateScene();
-	
-	REC::SpriteDescriptor startScreenBackdrop{};
-	startScreenBackdrop.drawHeight = 750;
-	startScreenBackdrop.textureKey = "titleScreen";
-	startScreenBackdrop.frameDataFileKey = "startScreenData";
-	startScreenBackdrop.frameKey = "start_up_screen_1987";
-
-	REC::GameObjectDescriptor startScreenBackdropDesc{};
-	startScreenBackdropDesc.startPosX = 125.f;
-	startScreenBackdropDesc.startPosY = 0.f;
-	startScreenBackdropDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background); // C++23 feature
-	
-	auto* stsc = startScreen->CreateGameObject(startScreenBackdropDesc);
-	stsc->AddComponent<REC::SpriteRenderComponent>(startScreenBackdrop);
-
-	REC::TextDescriptor startScreenTextInstructionDesc{};
-	startScreenTextInstructionDesc.color = REC::Color{ 0,255,255 };
-	startScreenTextInstructionDesc.fontKey = "dogicapixel20";
-	startScreenTextInstructionDesc.text = "Press '5' to start";
-
-	REC::GameObjectDescriptor startScreenInstructionDesc{};
-	startScreenInstructionDesc.startPosX = 75.f;
-	startScreenInstructionDesc.startPosY = 320.f;
-	startScreenInstructionDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui); // C++23 feature
-
-	auto* stscInstruction = startScreen->CreateGameObject(startScreenInstructionDesc);
-	stscInstruction->AddComponent<REC::TextRenderComponent>(startScreenTextInstructionDesc);
-#pragma endregion StartScreen
-
-	auto* scene = SM->CreateScene();
-
-	// ---- grid and walls --------------------------------------------------------------------------------
-	Game::GridDescriptor gridDesc{};
-	gridDesc.cellHeight = uint8_t(45); //51
-	gridDesc.cellWidth = uint8_t(45);  //51
-	gridDesc.rows = uint8_t(13);
-	gridDesc.cols = uint8_t(31);
-
-	REC::SpriteDescriptor backdrop{};
-	backdrop.drawHeight = uint16_t(gridDesc.cellHeight)*uint16_t(gridDesc.rows);
-	backdrop.frameDataFileKey = "characterData";
-	backdrop.frameKey = "background";
-	backdrop.textureKey = "background";
-
-	REC::GameObjectDescriptor backdropObjectDesc{};
-	backdropObjectDesc.id = Game::ObjectIds::Grid;
-	backdropObjectDesc.startPosX = 0.f;
-	backdropObjectDesc.startPosY = 80.f;
-	backdropObjectDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background);
-
-	auto* go_grid = scene->CreateGameObject(backdropObjectDesc);
-	go_grid->AddComponent<REC::SpriteRenderComponent>(backdrop);
-	auto* playfield = go_grid->AddComponent<Game::GridComponent>(gridDesc);
-	go_grid->AddComponent<Game::DebugGridRenderComponent>(REC::Color{20, 30, 120, 200});
-
-	REC::GameObjectDescriptor WallCollisionGODesc{};
-	WallCollisionGODesc.id = Game::ObjectIds::Grid;
-	WallCollisionGODesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background);
-	WallCollisionGODesc.parent = go_grid;
-
-	REC::CollisionDescriptor wallCollisionDesc{};
-	wallCollisionDesc.collisionType = REC::CollisionType::Static;
-	wallCollisionDesc.bounds = playfield->GetWallCollisionBounds();
-
-	auto* wall_grid = scene->CreateGameObject(WallCollisionGODesc);
-	wall_grid->AddCollisionComponent<REC::CollisionComponent>(wallCollisionDesc);
-	wall_grid->AddComponent<REC::RigidBodyComponent>();
-	wall_grid->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255,50,0 });
-
-	// ---- instructions -------------------------------------------------------------------------
-	REC::GameObjectDescriptor instructionObjectDesc{};
-	instructionObjectDesc.startPosX = 20.f;
-	instructionObjectDesc.startPosY = 20.f;
-	instructionObjectDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	auto* instructions = scene->CreateGameObject(instructionObjectDesc);
-	
-	REC::GameObjectDescriptor instrBalloomDesc{};
-	instrBalloomDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	instrBalloomDesc.parent = instructions;
-	auto* instructionsBalloom = scene->CreateGameObject(instrBalloomDesc);
-	instructionsBalloom->AddComponent<REC::TextRenderComponent>("Use the D-Pad or left Thumb Stick to move Balloom", "dogicapixel16");
-	
-	REC::GameObjectDescriptor instrBombermanDesc{};
-	instrBombermanDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	instrBombermanDesc.parent = instructions;
-	instrBombermanDesc.startPosY = 28.f;
-	auto* instructionsBomberman = scene->CreateGameObject(instrBombermanDesc);
-	instructionsBomberman->AddComponent<REC::TextRenderComponent>("Use WASD to move Bomberman, press SPACE to place bomb and hear sound", "dogicapixel16");
-
-	REC::GameObjectDescriptor instrBalloomBombDesc{};
-	instrBalloomBombDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	instrBalloomBombDesc.parent = instructions;
-	instrBalloomBombDesc.startPosX = 30.f;
-	instrBalloomBombDesc.startPosY = 110.f;
-	auto intstructionsBalloomBomb = scene->CreateGameObject(instrBalloomBombDesc);
-	intstructionsBalloomBomb->AddComponent<REC::TextRenderComponent>("BALLOOM: Press A to place bomb, place 2 bombs and kill bomberman", "dogicapixel16");
-
-	REC::GameObjectDescriptor instrBombermanBombDesc{};
-	instrBombermanBombDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	instrBombermanBombDesc.parent = instructions;
-	instrBombermanBombDesc.startPosX = 30.f;
-	instrBombermanBombDesc.startPosY = 130.f;
-	auto intstructionsbombermanBomb = scene->CreateGameObject(instrBombermanBombDesc);
-	intstructionsbombermanBomb->AddComponent<REC::TextRenderComponent>("BOMBERMAN: Press 'space' to place bomb, place 2 bombs and kill balloom", "dogicapixel16");
-
-	REC::GameObjectDescriptor UIdesc{};
-	UIdesc.startPosX = 20.f;
-	UIdesc.startPosY = 680.f;
-	UIdesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	auto UI = scene->CreateGameObject(UIdesc);
-
-	REC::LabeledStatDescriptor livesStatDesciptor{};
-	livesStatDesciptor.fontkey = "dogicapixel16";
-	livesStatDesciptor.label = "   Remaining Lives";
-	livesStatDesciptor.initialValue = 3;
-	livesStatDesciptor.color = REC::Color{ 255,255,255 };
-
-	REC::SpriteDescriptor bombermanIcon{};
-	bombermanIcon.drawHeight = 20;
-	bombermanIcon.textureKey = "generalSprites";
-	bombermanIcon.frameDataFileKey = "characterData";
-	bombermanIcon.frameKey = "bomberman_walk_front_0";
-
-	REC::GameObjectDescriptor bombermanUILivesDesc{};
-	bombermanUILivesDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	bombermanUILivesDesc.parent = UI;
-	auto bombermanUILives = scene->CreateGameObject(bombermanUILivesDesc);
-	auto bomberman_livesStatComp = bombermanUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
-	bombermanUILives->AddComponent<REC::SpriteRenderComponent>(bombermanIcon);
-
-	REC::SpriteDescriptor balloomIcon{};
-	balloomIcon.drawHeight = 20;
-	balloomIcon.textureKey = "generalSprites";
-	balloomIcon.frameDataFileKey = "characterData";
-	balloomIcon.frameKey = "balloom_look_right_0";
-
-	REC::GameObjectDescriptor balloomUILivesDesc{};
-	balloomUILivesDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	balloomUILivesDesc.parent = UI;
-	balloomUILivesDesc.startPosX = 0.f;
-	balloomUILivesDesc.startPosY = 30.f;
-	auto balloomUILives = scene->CreateGameObject(balloomUILivesDesc);
-	auto balloom_livesStatComp = balloomUILives->AddComponent<Game::UILivesComponent>(livesStatDesciptor);
-	balloomUILives->AddComponent<REC::SpriteRenderComponent>(balloomIcon);
-
-	REC::LabeledStatDescriptor scoreStatDesciptor{};
-	scoreStatDesciptor.fontkey = "dogicapixel16";
-	scoreStatDesciptor.label = "Score";
-	scoreStatDesciptor.initialValue = 0;
-	scoreStatDesciptor.color = REC::Color{ 255,255,255 };
-
-	REC::GameObjectDescriptor bombermanUIScoreDesc{};
-	bombermanUIScoreDesc.startPosX = 350.f;
-	bombermanUIScoreDesc.startPosY = 0.f;
-	bombermanUIScoreDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	bombermanUIScoreDesc.parent = UI;
-	auto bombermanUIScore = scene->CreateGameObject(bombermanUIScoreDesc);
-	auto bomberman_scoreStatComp = bombermanUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
-
-	REC::GameObjectDescriptor balloomUIScoreDesc{};
-	balloomUIScoreDesc.startPosX = 350.f;
-	balloomUIScoreDesc.startPosY = 30.f;
-	balloomUIScoreDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	balloomUIScoreDesc.parent = UI;
-	auto balloomUIScore = scene->CreateGameObject(balloomUIScoreDesc);
-	auto balloom_scoreStatComp = balloomUIScore->AddComponent<Game::UIScoreComponent>(scoreStatDesciptor);
-
-	REC::GameObjectDescriptor fpsDesc{};
-	fpsDesc.id = REC::make_sdbm_hash("FPSCounter");
-	fpsDesc.startPosX = 880.f;
-	fpsDesc.startPosY = 20.f;
-	fpsDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui);
-	auto fps = scene->CreateGameObject(fpsDesc); 
-	fps->AddComponent<REC::FPSComponent>("dogicapixel20");
-
-	// Create a player class in game that does this instead, to avoid repetition
-	REC::SpriteDescriptor charactersSpriteDescriptors{};
-	charactersSpriteDescriptors.drawHeight = 50;
-	charactersSpriteDescriptors.frameDataFileKey = "characterData";
-	charactersSpriteDescriptors.textureKey = "generalSprites";
-	charactersSpriteDescriptors.drawPointX = 0.5f;
-	charactersSpriteDescriptors.drawPointY = 0.5f;
-
-	REC::AnimationDescriptor bombermanWalkAnimDesc{};
-	bombermanWalkAnimDesc.animationDataFileKey = "characterData";
-	bombermanWalkAnimDesc.animationKey = "bomberman_walk_left";
-	bombermanWalkAnimDesc.startOnStartup = true;
-
-	Game::PlayerDescriptor bombermanDescriptor{};
-	bombermanDescriptor.name = Game::ObjectIds::Bomberman;
-	bombermanDescriptor.amountOfLives = 3;
-	bombermanDescriptor.animDesc = bombermanWalkAnimDesc;
-	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
-	bombermanDescriptor.maxHealth = 100.f;
-	bombermanDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Player);
-	bombermanDescriptor.startPosition = { 250.f, 230.f };
-
-	Game::Player bomberman{ scene, bombermanDescriptor };
-	bomberman_livesStatComp->SetConnectedPlayer(bomberman.Get());
-	bomberman_scoreStatComp->SetConnectedPlayer(bomberman.Get());
-
-	REC::CollisionDescriptor collisionDescriptor{};
-	collisionDescriptor.collisionType = REC::CollisionType::Dynamic;
-	collisionDescriptor.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ -20.f, -20.f, 40.f, 40.f}, true }); // centered on the player
-
-	bomberman.Get()->AddCollisionComponent<Game::BombermanCollisionComponent>(collisionDescriptor);
-	bomberman.Get()->AddComponent<REC::RigidBodyComponent>();
-	bomberman.Get()->AddComponent<REC::AnimationStateComponent>(std::make_unique<Game::BombermanIdleState>(bomberman.Get()));
-	bomberman.Get()->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255, 0, 0 });
-
-	uint8_t balloomControllerId{ 0 };
-
-	REC::AnimationDescriptor balloomAnimDesc{};
-	balloomAnimDesc.animationDataFileKey = "characterData";
-	balloomAnimDesc.animationKey = "balloom_look_left";
-	balloomAnimDesc.startOnStartup = true;
-
-	Game::PlayerDescriptor balloomDescriptor{};
-	balloomDescriptor.name = Game::ObjectIds::Balloom;
-	balloomDescriptor.amountOfLives = 3;
-	balloomDescriptor.animDesc = balloomAnimDesc;
-	balloomDescriptor.spriteDesc = charactersSpriteDescriptors;
-	balloomDescriptor.maxHealth = 100.f;
-	balloomDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Enemies);
-	balloomDescriptor.startPosition = { 330.f, 240.f };
-
-	Game::Player balloom{ scene, balloomDescriptor };
-	balloom_livesStatComp->SetConnectedPlayer(balloom.Get());
-	balloom_scoreStatComp->SetConnectedPlayer(balloom.Get());
-
-	balloom.Get()->AddCollisionComponent<REC::CollisionComponent>(collisionDescriptor); // empty collision component. needed to register to the collision system
-	balloom.Get()->AddComponent<REC::RigidBodyComponent>();
-	balloom.Get()->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255, 0, 0 });
-
-	// === INPUT =======================================================================================
-	auto* input = engine->GetContext().inputSystem;
-	input->SetNumberOfActiveControllers(1);
-
-	using namespace REC::Input;
-
-	bomberman.CreateInputBindings(input, SM, 100.f, playfield);
-	Game::PlayerInputActions<REC::KeyboardButtonAction> bombermanInputActions{};
-	bombermanInputActions.right		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_D,		REC::ButtonState::Pressed);
-	bombermanInputActions.left		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_A,		REC::ButtonState::Pressed);
-	bombermanInputActions.up		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_W,		REC::ButtonState::Pressed);
-	bombermanInputActions.down		= std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_S,		REC::ButtonState::Pressed);
-	bombermanInputActions.placeBomb = std::make_unique<REC::KeyboardButtonAction>(Keyboard::Button::Keyboard_Space, REC::ButtonState::Up);
-	bomberman.AddInputActions(bombermanInputActions);
-
-	balloom.CreateInputBindings(input, SM, 150.f, playfield);
-	Game::PlayerInputActions<REC::ControllerButtonAction> balloomInputActions_btn{};
-	balloomInputActions_btn.right		= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Right, REC::ButtonState::Pressed,  balloomControllerId);
-	balloomInputActions_btn.left		= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Left,	REC::ButtonState::Pressed,  balloomControllerId);
-	balloomInputActions_btn.up			= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Up,	REC::ButtonState::Pressed,  balloomControllerId);
-	balloomInputActions_btn.down		= std::make_unique<REC::ControllerButtonAction>(Controller::Button::GamePad_DPad_Down,	REC::ButtonState::Pressed,  balloomControllerId);
-	balloomInputActions_btn.placeBomb	= std::make_unique<REC::ControllerButtonAction>(Controller::Button::Gamepad_A,			REC::ButtonState::Up,		balloomControllerId);
-	balloom.AddInputActions(balloomInputActions_btn);
-
-	Game::PlayerInputActions<REC::ControllerRangeAction> balloomInputActions_rng{};
-	balloomInputActions_rng.right = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_X, balloomControllerId);
-	balloomInputActions_rng.up    = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_Y, balloomControllerId);
-	balloom.AddInputActions(balloomInputActions_rng);
-
-	auto* changeScene = input->CreateInputBinding();
-	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_5, REC::ButtonState::Up);
-	changeScene->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keypad_5, REC::ButtonState::Up);
-	changeScene->AddCommand<REC::ChangeSceneCommand>(engine->GetContext(), scene, startScreen);
 }
 
 int main(int, char*[]) 
@@ -422,18 +117,15 @@ int main(int, char*[])
 		data_location = "../Data/";
 #endif
 
-	// TODO: smart pointer (lots of memory errors with smart pointer)
-	REC::IEngine* engine = nullptr;
+	std::unique_ptr<REC::IEngine, void(*)(REC::IEngine*)> engine{ REC::CreateEngine(data_location), REC::DestroyEngine };
 	try
 	{
-		engine = REC::CreateEngine(data_location);
 		engine->Run(load);
 	}
 	catch (const std::exception& e)
 	{
 		std::cout << "Caught exception: " << e.what() << std::endl;
 	}
-	REC::DestroyEngine(engine);
 
     return 0;
 }

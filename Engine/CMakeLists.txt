@@ -139,8 +139,6 @@ if(NOT SDL3_mixer_FOUND)
       DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/downloads
     )
     FetchContent_MakeAvailable(SDL3_mixer)
-    #list(PREPEND CMAKE_PREFIX_PATH "${sdl3_mixer_SOURCE_DIR}")
-    #find_package(SDL3_mixer 3.2 CONFIG REQUIRED)
   else()
     FetchContent_Declare(
       SDL3_mixer
