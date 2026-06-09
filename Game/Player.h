@@ -37,7 +37,7 @@ namespace Game
 		REC::AnimationDescriptor animDesc{};
 
 		int amountOfLives{ 0 };
-		float maxHealth{ 0.f };
+		//float maxHealth{ 0.f };
 
 		uint8_t renderLayer{ 0 };
 		glm::vec2 startPosition{};
@@ -49,7 +49,7 @@ namespace Game
 	{
 		REC::AnimatedSpriteComponent* animComp{};
 		REC::SpriteRenderComponent* spriteComp{};
-		REC::HealthComponent* healthComp{};
+		//REC::HealthComponent* healthComp{};
 		REC::LivesComponent* livesComp{};
 	};
 

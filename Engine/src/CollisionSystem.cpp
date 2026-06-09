@@ -51,9 +51,15 @@ void REC::CollisionSystem::Subscribe(CollisionComponent* subscriber)
 void REC::CollisionSystem::Unsubscribe(CollisionComponent* subscriber)
 {
 	if (subscriber->IsStatic())
-		m_StaticCollidableObjects.erase(std::remove(m_StaticCollidableObjects.begin(), m_StaticCollidableObjects.end(), subscriber), m_StaticCollidableObjects.end());
+	{
+		if (!m_StaticCollidableObjects.empty())
+			m_StaticCollidableObjects.erase(std::remove(m_StaticCollidableObjects.begin(), m_StaticCollidableObjects.end(), subscriber), m_StaticCollidableObjects.end());
+	}
 	else
-		m_CollidableObjects.erase(std::remove(m_CollidableObjects.begin(), m_CollidableObjects.end(), subscriber), m_CollidableObjects.end());
+	{
+		if (!m_CollidableObjects.empty())
+			m_CollidableObjects.erase(std::remove(m_CollidableObjects.begin(), m_CollidableObjects.end(), subscriber), m_CollidableObjects.end());
+	}
 }
 
 bool REC::CollisionSystem::HasCollidedWithStatic(CollisionComponent* comp1)

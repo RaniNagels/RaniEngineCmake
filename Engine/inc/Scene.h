@@ -16,7 +16,7 @@ namespace REC
 	{
 	public:
 		explicit Scene(SceneId id) : m_Id(id) {}
-		~Scene() = default;
+		~Scene();
 
 		Scene(const Scene&) = delete;
 		Scene(Scene&&) = delete;

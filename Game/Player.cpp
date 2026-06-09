@@ -31,7 +31,7 @@ Game::Player::Player(REC::Scene* scene, const PlayerDescriptor& descriptor)
 	m_pGameObject = scene->CreateGameObject(goDesc);
 	m_Components.spriteComp = m_pGameObject->AddComponent<REC::SpriteRenderComponent>(m_Descriptor.spriteDesc);
 	m_Components.animComp   = m_pGameObject->AddComponent<REC::AnimatedSpriteComponent>(m_Descriptor.animDesc);
-	m_Components.healthComp = m_pGameObject->AddComponent<REC::HealthComponent>(m_Descriptor.maxHealth, m_Descriptor.maxHealth);
+	//m_Components.healthComp = m_pGameObject->AddComponent<REC::HealthComponent>(m_Descriptor.maxHealth, m_Descriptor.maxHealth);
 	m_Components.livesComp  = m_pGameObject->AddComponent<REC::LivesComponent>(m_Descriptor.amountOfLives);
 
 	scene->SetRenderLayer(m_pGameObject, m_Descriptor.renderLayer);

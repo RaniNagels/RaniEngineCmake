@@ -42,13 +42,19 @@ void REC::PhysicsSystem::RemovePhysicsObject(RigidBodyComponent* physicsObject)
 	if (physicsObject == nullptr) return;
 	if (physicsObject->GetOwner()->GetCollisionComponent()->IsStatic())
 	{
-		if (const auto it = std::find(m_StaticRigidBodies.begin(), m_StaticRigidBodies.end(), physicsObject); it != m_StaticRigidBodies.end())
-			m_StaticRigidBodies.erase(it);
+		if (!m_StaticRigidBodies.empty())
+		{
+			if (const auto it = std::find(m_StaticRigidBodies.begin(), m_StaticRigidBodies.end(), physicsObject); it != m_StaticRigidBodies.end())
+				m_StaticRigidBodies.erase(it);
+		}
 	}
 	else
 	{
-		if (const auto it = std::find(m_RigidBodies.begin(), m_RigidBodies.end(), physicsObject); it != m_RigidBodies.end())
-			m_RigidBodies.erase(it);
+		if (!m_RigidBodies.empty())
+		{
+			if (const auto it = std::find(m_RigidBodies.begin(), m_RigidBodies.end(), physicsObject); it != m_RigidBodies.end())
+				m_RigidBodies.erase(it);
+		}
 	}
 }
 

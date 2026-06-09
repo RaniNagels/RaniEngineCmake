@@ -18,7 +18,11 @@ REC::GameObject::GameObject(const GameObjectDescriptor& descriptor)
 	if (descriptor.parent != nullptr) SetParent(descriptor.parent);
 }
 
-REC::GameObject::~GameObject() = default;
+REC::GameObject::~GameObject()
+{
+	Destroy();
+	CleanUpComponents();
+}
 
 void REC::GameObject::Update(float deltaT)
 {

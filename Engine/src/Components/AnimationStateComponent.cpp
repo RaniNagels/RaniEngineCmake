@@ -7,6 +7,14 @@ REC::AnimationStateComponent::AnimationStateComponent(GameObject* owner, std::un
 	m_pCurrentState->Enter();
 }
 
+REC::AnimationStateComponent::~AnimationStateComponent()
+{
+	// the destructor of the state will delete the necessary resources!
+	
+	//m_pCurrentState->Exit(); // don't
+	// can access things already destroyed at this point
+}
+
 void REC::AnimationStateComponent::Update(float deltaTime)
 {
 	if (auto result = m_pCurrentState->Update(deltaTime))

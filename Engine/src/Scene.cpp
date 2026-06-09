@@ -2,6 +2,11 @@
 
 #include <algorithm>
 
+REC::Scene::~Scene()
+{
+	m_Objects.clear();
+}
+
 REC::GameObject* REC::Scene::CreateGameObject(const GameObjectDescriptor& descriptor)
 {
 	m_Objects.emplace_back(std::make_unique<GameObject>(descriptor));

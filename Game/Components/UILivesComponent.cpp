@@ -15,9 +15,6 @@ void Game::UILivesComponent::Notify(REC::Event* event)
 		if (eventArgs != nullptr && eventArgs->sender == m_pConnectedPlayer)
 		{
 			AddToStatValue(-1);
-
-			// when owner lost all lives
-			// UnsubscribeFromEvent({ REC::make_sdbm_hash("LostLiveEvent") });
 		}
 	}
 }

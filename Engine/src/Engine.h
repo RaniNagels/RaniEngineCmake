@@ -39,13 +39,14 @@ namespace REC
 		virtual void SetGameState(std::unique_ptr<GameState>&& state) override;
 
 	private:
+		// initialization order matters! (due to dependencies)
 		std::unique_ptr<TimeSystem> m_pTimeSystem;
 		std::unique_ptr<Window> m_pWindow;
-		std::unique_ptr<SceneManager> m_pSceneManager;
 		std::unique_ptr<InputSystem> m_pInputSystem;
 		std::unique_ptr<EventSystem> m_pEventSystem;
 		std::unique_ptr<CollisionSystem> m_pCollisionSystem;
 		std::unique_ptr<PhysicsSystem> m_pPhysicsSystem;
+		std::unique_ptr<SceneManager> m_pSceneManager; // must be last!!
 
 		EngineContext m_EngineContext{};
 

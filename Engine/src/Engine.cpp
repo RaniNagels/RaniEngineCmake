@@ -84,13 +84,13 @@ REC::Engine::Engine(const std::filesystem::path& dataPath)
 
 	m_pTimeSystem = std::make_unique<TimeSystem>();
 	m_pTimeSystem->SetFrameRate(60);
-	m_pSceneManager = std::make_unique<SceneManager>();
 	m_pInputSystem = std::make_unique<InputSystem>();
 	m_pEventSystem = std::make_unique<EventSystem>();
 	m_pCollisionSystem = std::make_unique<CollisionSystem>();
 	m_pPhysicsSystem = std::make_unique<PhysicsSystem>(m_pCollisionSystem.get());
 	EventBroadcaster::SetEventSystem(m_pEventSystem.get());
 	EventBroadcaster::SetCollisionSystem(m_pCollisionSystem.get());
+	m_pSceneManager = std::make_unique<SceneManager>();
 
 	m_EngineContext.sceneManager = m_pSceneManager.get();
 	m_EngineContext.eventSystem = m_pEventSystem.get();

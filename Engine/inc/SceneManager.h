@@ -12,7 +12,7 @@ namespace REC
 	{
 	public:
 		explicit SceneManager() = default;
-		~SceneManager() = default;
+		~SceneManager();
 
 		SceneManager(const SceneManager&) = delete;
 		SceneManager(SceneManager&&) = delete;

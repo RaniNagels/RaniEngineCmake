@@ -3,6 +3,12 @@
 #include <Scene.h>
 #include "Renderer.h"
 
+REC::SceneManager::~SceneManager()
+{
+	m_pScenes.clear();
+	m_pActiveScene = nullptr;
+}
+
 void REC::SceneManager::Update(float deltaT)
 {
 	m_pActiveScene->Update(deltaT);
@@ -24,7 +30,7 @@ REC::Scene* REC::SceneManager::CreateScene(SceneId id)
 		}
 	}
 
-	m_pScenes.emplace_back(new Scene(id));
+	m_pScenes.emplace_back(std::make_unique<Scene>(id));
 
 	if (m_pActiveScene == nullptr) 
 		m_pActiveScene = m_pScenes.back().get();

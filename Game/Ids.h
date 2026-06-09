@@ -25,6 +25,10 @@ namespace Game
 		constexpr REC::ObjectId Balloom = REC::make_sdbm_hash("Balloom");
 		constexpr REC::ObjectId Bom = REC::make_sdbm_hash("Bom");
 		constexpr REC::ObjectId PickUp = REC::make_sdbm_hash("PickUp");
+
+		// UI elements
+		constexpr REC::ObjectId Player1UI = REC::make_sdbm_hash("Player1UI");
+		constexpr REC::ObjectId Player2UI = REC::make_sdbm_hash("Player2UI");
 	}
 
 	namespace SceneIds

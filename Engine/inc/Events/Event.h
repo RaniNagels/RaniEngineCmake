@@ -15,6 +15,7 @@ namespace REC
 		// add engine events... (for easy game access)
 		constexpr EventId HasZeroHealth = REC::make_sdbm_hash("HasZeroHealthEvent");
 		constexpr EventId LostLive = REC::make_sdbm_hash("LostLiveEvent");
+		constexpr EventId DeathEvent = REC::make_sdbm_hash("DeathEvent");
 	}
 
 	// can be derived from to add more info about the event

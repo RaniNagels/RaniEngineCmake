@@ -12,27 +12,22 @@ REC::LivesComponent::LivesComponent(GameObject* owner, int totalLives)
 	GameObjectEventArgs args{};
 	args.sender = GetOwner();
 	m_LostLiveEvent = std::make_unique<Event>(REC::EventIds::LostLive, args);
-
-	SubscribeToEvent({ REC::EventIds::HasZeroHealth });
+	m_HasDiedEvent = std::make_unique<Event>(REC::EventIds::DeathEvent, args);
 }
 
 REC::LivesComponent::~LivesComponent() = default;
 
 void REC::LivesComponent::Update(float) {}
 
-void REC::LivesComponent::Notify(Event* event)
+void REC::LivesComponent::LostLive()
 {
-	if (event->IsEvent(REC::EventIds::HasZeroHealth))
+	if (m_pHealthComponent) m_pHealthComponent->ResetHealth();
+	if (m_CurrentAmountOfLives > 0)
 	{
-		auto* eventArgs = dynamic_cast<GameObjectEventArgs*>(event->GetArgs());
-		if (eventArgs != nullptr && eventArgs->sender == GetOwner())
-		{
-			m_pHealthComponent->ResetHealth();
-			if (m_CurrentAmountOfLives > 0)
-			{
-				--m_CurrentAmountOfLives;
-				m_LostLiveEvent->Broadcast();
-			}
-		}
+		--m_CurrentAmountOfLives;
+		m_LostLiveEvent->Broadcast();
+
+		if (m_CurrentAmountOfLives == 0)
+			m_HasDiedEvent->Broadcast();
 	}
 }

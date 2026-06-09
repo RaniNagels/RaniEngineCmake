@@ -43,6 +43,8 @@ void REC::SpriteRenderComponent::Update(float) {}
 
 void REC::SpriteRenderComponent::Render(const IRenderer* const renderer)
 {
+	if (m_pTexture == nullptr) return;
+
 	auto* transform = this->GetOwner()->GetTransform();
 
 	Rect src{ GetSrcRect() };

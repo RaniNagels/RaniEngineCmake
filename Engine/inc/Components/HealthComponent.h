@@ -6,6 +6,7 @@
 
 namespace REC
 {
+	// not used
 	class IListener;
 	class HealthComponent final : public Component
 	{

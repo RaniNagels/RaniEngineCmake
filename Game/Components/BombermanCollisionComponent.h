@@ -1,6 +1,8 @@
 #pragma once
 #include <Components/CollisionComponent.h>
 #include <vector>
+#include <Events/Event.h>
+#include <memory>
 
 namespace Game
 {

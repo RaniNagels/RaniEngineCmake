@@ -8,6 +8,7 @@
 #include "../Ids.h"
 
 #include <iostream>
+#include <Components/LivesComponent.h>
 
 Game::BombermanCollisionComponent::BombermanCollisionComponent(REC::GameObject* owner, const REC::CollisionDescriptor& descriptor)
 	: REC::CollisionComponent(owner, descriptor)
@@ -19,6 +20,8 @@ void Game::BombermanCollisionComponent::OnCollision(const REC::GameObject* const
 	if (other->Is(Game::ObjectIds::Balloom))
 	{
 		std::cout << "Bomberman collided with a Balloom!" << std::endl;
+		auto* livesComp = GetOwner()->GetComponent<REC::LivesComponent>();
+		livesComp->LostLive();
 	}
 	else if (other->Is(Game::ObjectIds::Bom))
 	{

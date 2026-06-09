@@ -10,7 +10,7 @@ namespace REC
 	{
 	public:
 		explicit AnimationStateComponent(GameObject* owner, std::unique_ptr<IState>&& initialState);
-		virtual ~AnimationStateComponent() = default;
+		virtual ~AnimationStateComponent();
 
 		AnimationStateComponent(const AnimationStateComponent& other) = delete;
 		AnimationStateComponent(AnimationStateComponent&& other) noexcept = delete;

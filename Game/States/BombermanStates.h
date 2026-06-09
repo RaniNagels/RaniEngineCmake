@@ -17,7 +17,7 @@ namespace Game
 	{
 	public:
 		explicit BombermanDeadState(REC::GameObject* owner);
-		virtual ~BombermanDeadState() = default;
+		virtual ~BombermanDeadState();
 
 		BombermanDeadState(const BombermanDeadState&) = delete;
 		BombermanDeadState(BombermanDeadState&&) noexcept = delete;
@@ -36,7 +36,7 @@ namespace Game
 	{
 	public:
 		explicit BombermanIdleState(REC::GameObject* owner);
-		virtual ~BombermanIdleState() = default;
+		virtual ~BombermanIdleState();
 
 		BombermanIdleState(const BombermanIdleState&) = delete;
 		BombermanIdleState(BombermanIdleState&) noexcept = delete;
@@ -60,7 +60,7 @@ namespace Game
 	{
 	public:
 		explicit BombermanWalkingState(REC::GameObject* owner, glm::vec2 dir);
-		virtual ~BombermanWalkingState() = default;
+		virtual ~BombermanWalkingState();
 
 		BombermanWalkingState(const BombermanWalkingState&) = delete;
 		BombermanWalkingState(BombermanWalkingState&&) noexcept = delete;

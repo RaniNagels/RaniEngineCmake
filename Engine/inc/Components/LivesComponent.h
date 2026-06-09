@@ -8,7 +8,7 @@
 namespace REC
 {
 	class HealthComponent;
-	class LivesComponent final : public Component, public IListener
+	class LivesComponent final : public Component
 	{
 	public:
 		explicit LivesComponent(GameObject* owner, int totalLives);
@@ -20,16 +20,19 @@ namespace REC
 		LivesComponent& operator=(LivesComponent&& other) = delete;
 
 		virtual void Update(float deltaT) override;
-		virtual void Notify(Event* event) override;
 
 		void ResetLives() { m_CurrentAmountOfLives = MAX_LIVES; }
 		bool HasLivesLeft() const { return m_CurrentAmountOfLives > 0; }
+
+		int GetLives() const { return m_CurrentAmountOfLives; }
+		void LostLive();
 
 	private:
 		const int MAX_LIVES;
 		int m_CurrentAmountOfLives;
 
 		std::unique_ptr<Event> m_LostLiveEvent;
+		std::unique_ptr<Event> m_HasDiedEvent;
 		HealthComponent* m_pHealthComponent;
 	};
 }

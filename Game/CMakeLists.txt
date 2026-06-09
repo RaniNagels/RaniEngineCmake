@@ -11,6 +11,7 @@ endif()
 set(SOURCE_FILES
 	"Main.cpp"
     "Player.cpp"
+    "LevelUI.cpp"
 
     "Commands/MoveCommand.cpp"
     "Commands/PlaceBombCommand.cpp"

@@ -17,6 +17,8 @@ Game::BombermanDeadState::BombermanDeadState(REC::GameObject* owner)
 		throw std::runtime_error("BombermanDeadState relies on AnimatedSpriteComponent!");
 }
 
+Game::BombermanDeadState::~BombermanDeadState() = default;
+
 void Game::BombermanDeadState::Enter()
 {
 	REC::AnimationDescriptor animation{};
@@ -41,6 +43,11 @@ Game::BombermanIdleState::BombermanIdleState(REC::GameObject* owner)
 
 	if (m_pAnimatedSpriteComponent == nullptr || m_pLivesComponent == nullptr)
 		throw std::runtime_error("BombermanLeftState relies on AnimatedSpriteComponent && LivesComponent!");
+}
+
+Game::BombermanIdleState::~BombermanIdleState()
+{
+	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent") });
 }
 
 void Game::BombermanIdleState::Notify(REC::Event* event)
@@ -73,7 +80,6 @@ std::optional<std::unique_ptr<REC::IState>> Game::BombermanIdleState::Update(flo
 void Game::BombermanIdleState::Exit()
 {
 	m_pAnimatedSpriteComponent->StartAnimation();
-	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent") });
 }
 
 // ----- WALKING -------------------------------------------------------------------------
@@ -90,6 +96,11 @@ Game::BombermanWalkingState::BombermanWalkingState(REC::GameObject* owner, glm::
 		throw std::runtime_error("BombermanLeftState relies on AnimatedSpriteComponent && LivesComponent!");
 }
 
+Game::BombermanWalkingState::~BombermanWalkingState()
+{
+	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent") });
+}
+
 void Game::BombermanWalkingState::Notify(REC::Event* event)
 {
 	MoveEventArgs* args = dynamic_cast<MoveEventArgs*>(event->GetArgs());
@@ -103,10 +114,10 @@ void Game::BombermanWalkingState::Notify(REC::Event* event)
 	m_Direction = args->direction;
 }
 
+
 void Game::BombermanWalkingState::Enter()
 {
 	ChangeAnimation(m_AnimationKey);
-	SubscribeToEvent({ REC::make_sdbm_hash("MoveEvent") });
 }
 
 std::optional<std::unique_ptr<REC::IState>> Game::BombermanWalkingState::Update(float )
@@ -136,7 +147,6 @@ std::optional<std::unique_ptr<REC::IState>> Game::BombermanWalkingState::Update(
 
 void Game::BombermanWalkingState::Exit()
 {
-	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent") });
 }
 
 std::string Game::BombermanWalkingState::GetAnimationKey(glm::vec2 dir) const

@@ -92,12 +92,12 @@ void Game::LevelState::Enter()
 	SetScene(scene);
 	GetContext().sceneManager->SetActiveScene(scene);
 
-	SubscribeToEvent({ EventIds::BombermanDeathEvent, EventIds::DoorOpenEvent });
+	SubscribeToEvent({ REC::EventIds::LostLive, EventIds::DoorOpenEvent });
 
 	// ---- grid and walls --------------------------------------------------------------------------------
 	Game::GridDescriptor gridDesc{};
-	gridDesc.cellHeight = uint8_t(51); //51
-	gridDesc.cellWidth = uint8_t(51);  //51
+	gridDesc.cellHeight = uint8_t(50); //51
+	gridDesc.cellWidth = uint8_t(50);  //51
 	gridDesc.rows = uint8_t(13);
 	gridDesc.cols = uint8_t(31);
 
@@ -150,9 +150,8 @@ void Game::LevelState::Enter()
 	bombermanDescriptor.amountOfLives = 3;
 	bombermanDescriptor.animDesc = bombermanWalkAnimDesc;
 	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
-	bombermanDescriptor.maxHealth = 100.f;
 	bombermanDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Player);
-	bombermanDescriptor.startPosition = { 250.f, 230.f };
+	bombermanDescriptor.startPosition = { 250.f, 250.f };
 
 	m_Players.reserve(2);
 	m_Players.push_back(std::make_unique<Game::Player>(scene, bombermanDescriptor));
@@ -161,7 +160,7 @@ void Game::LevelState::Enter()
 
 	REC::CollisionDescriptor collisionDescriptor{};
 	collisionDescriptor.collisionType = REC::CollisionType::Dynamic;
-	collisionDescriptor.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ -20.f, -20.f, 40.f, 40.f}, true }); // centered on the player
+	collisionDescriptor.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ -18.f, -18.f, 36.f, 36.f}, true }); // centered on the player
 
 	bombermanGO->AddCollisionComponent<Game::BombermanCollisionComponent>(collisionDescriptor);
 	bombermanGO->AddComponent<REC::RigidBodyComponent>();
@@ -178,7 +177,6 @@ void Game::LevelState::Enter()
 	balloomDescriptor.amountOfLives = 3;
 	balloomDescriptor.animDesc = balloomAnimDesc;
 	balloomDescriptor.spriteDesc = charactersSpriteDescriptors;
-	balloomDescriptor.maxHealth = 100.f;
 	balloomDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Enemies);
 	balloomDescriptor.startPosition = { 330.f, 240.f };
 
@@ -217,13 +215,16 @@ void Game::LevelState::Enter()
 	balloomInputActions_rng.right = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_X, balloomControllerId);
 	balloomInputActions_rng.up = std::make_unique<REC::ControllerRangeAction>(Controller::Range::Gamepad_LeftStick_Y, balloomControllerId);
 	balloom.AddInputActions(balloomInputActions_rng);
+
+	// ---- UI -------------------------------------------------------------------------------------------
+	m_pLevelUI = std::make_unique<LevelUI>(GetContext(), &bomberman, &balloom);
 }
 
 std::optional<std::unique_ptr<REC::GameState>> Game::LevelState::OnEvent(REC::Event* event)
 {
-	if (event->IsEvent(Game::EventIds::BombermanDeathEvent))
+	if (event->IsEvent(REC::EventIds::LostLive))
 	{
-		//TODO
+
 		return std::make_unique<MainMenuState>(GetContext());
 	}
 	else if (event->IsEvent(Game::EventIds::DoorOpenEvent))
@@ -238,6 +239,6 @@ void Game::LevelState::Exit()
 {
 	for (auto& player : m_Players)
 		player->RemoveInputBindings(GetContext().inputSystem);
-	UnsubscribeFromEvent({ EventIds::BombermanDeathEvent, EventIds::DoorOpenEvent });
+	UnsubscribeFromEvent({ REC::EventIds::LostLive, EventIds::DoorOpenEvent });
 	GetScene()->RemoveAll();
 }

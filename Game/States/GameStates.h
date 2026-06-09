@@ -1,6 +1,7 @@
 #pragma once
 #include <State/GameState.h>
 #include "../Player.h"
+#include "../LevelUI.h"
 #include <vector>
 
 namespace REC
@@ -46,5 +47,6 @@ namespace Game
 
 	private:
 		std::vector<std::unique_ptr<Player>> m_Players{};
+		std::unique_ptr<LevelUI> m_pLevelUI{};
 	};
 }
