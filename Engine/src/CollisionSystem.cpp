@@ -11,11 +11,17 @@ void REC::CollisionSystem::CheckCollisions(Scene* const currentScene)
 {
 	for (size_t i{}; i < m_CollidableObjects.size(); ++i)
 	{
+		if (m_CollidableObjects[i] == nullptr || !m_CollidableObjects[i]->Enabled())
+			continue;
+
 		if (!currentScene->Contains(m_CollidableObjects[i]->GetOwner()))
 			continue;
 
 		for (size_t j{ i + 1 }; j < m_CollidableObjects.size(); ++j)
 		{
+			if (m_CollidableObjects[j] == nullptr || !m_CollidableObjects[j]->Enabled())
+				continue;
+
 			if (!currentScene->Contains(m_CollidableObjects[j]->GetOwner()))
 				continue;
 
@@ -28,6 +34,9 @@ void REC::CollisionSystem::CheckCollisions(Scene* const currentScene)
 
 		for (size_t j{}; j < m_StaticCollidableObjects.size(); ++j)
 		{
+			if (m_StaticCollidableObjects[j] == nullptr || !m_StaticCollidableObjects[j]->Enabled())
+				continue;
+
 			if (!currentScene->Contains(m_StaticCollidableObjects[j]->GetOwner()))
 				continue;
 			

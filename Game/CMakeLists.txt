@@ -15,6 +15,7 @@ set(SOURCE_FILES
 
     "Commands/MoveCommand.cpp"
     "Commands/PlaceBombCommand.cpp"
+    "Commands/MoveMarkerCommand.cpp"
 
     "Components/BombComponent.cpp"
     "Components/GridComponent.cpp"
@@ -24,10 +25,12 @@ set(SOURCE_FILES
     "Components/BombermanCollisionComponent.cpp"
     "Components/DebugBoundsRenderComponent.cpp"
     "Components/PickUpComponent.cpp"
+    "Components/MarkerComponent.cpp"
 
     "States/BombermanStates.cpp"
     "States/BalloomStates.cpp"
     "States/GameStates.cpp"
+    "States/GameStates/GameOverState.cpp"
 )
 
 

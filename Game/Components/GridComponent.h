@@ -77,6 +77,10 @@ namespace Game
 		glm::vec2 GetAbsoluteCellPosition(const glm::vec2& pos) { return GetAbsoluteCellPosition(GetCell(pos)); }
 
 		std::vector<REC::CollisionBound> GetWallCollisionBounds();
+		glm::vec2 GetCellSize() const { return glm::vec2{ m_Descriptor.cellWidth, m_Descriptor.cellHeight }; }
+		uint8_t GetRows() const { return m_Descriptor.rows; }
+		uint8_t GetCols() const { return m_Descriptor.cols; }
+		bool IsRowColValid(uint8_t row, uint8_t col) const { return row < m_Descriptor.rows && col < m_Descriptor.cols; }
 
 	private:
 

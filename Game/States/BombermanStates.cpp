@@ -7,6 +7,8 @@
 
 #include "../Commands/MoveCommand.h"
 #include <ServiceLocator.h>
+#include "../Ids.h"
+
 
 // ----- DEAD -------------------------------------------------------------------------
 Game::BombermanDeadState::BombermanDeadState(REC::GameObject* owner)
@@ -15,6 +17,10 @@ Game::BombermanDeadState::BombermanDeadState(REC::GameObject* owner)
 	m_pAnimatedSpriteComponent = GetGameObject()->GetComponent<REC::AnimatedSpriteComponent>();
 	if (m_pAnimatedSpriteComponent == nullptr)
 		throw std::runtime_error("BombermanDeadState relies on AnimatedSpriteComponent!");
+
+	REC::GameObjectEventArgs args{};
+	args.sender = GetGameObject();
+	m_pVeryDeathEvent = std::make_unique<REC::Event>(Game::EventIds::VeryDeathEvent, args);
 }
 
 Game::BombermanDeadState::~BombermanDeadState() = default;
@@ -31,8 +37,15 @@ void Game::BombermanDeadState::Enter()
 
 std::optional<std::unique_ptr<REC::IState>> Game::BombermanDeadState::Update(float)
 {
+	if (!m_pAnimatedSpriteComponent->IsAnimating())
+	{
+		m_pVeryDeathEvent->Broadcast();
+	}
 	return {};
 }
+
+void Game::BombermanDeadState::Exit()
+{}
 
 // ----- IDLE -------------------------------------------------------------------------
 Game::BombermanIdleState::BombermanIdleState(REC::GameObject* owner)

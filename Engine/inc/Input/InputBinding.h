@@ -59,10 +59,13 @@ namespace REC
 
 		// will execute all commands and trigger all events
 		void Execute(float deltaTime, float inputStrength = 1.f) const;
+		void ToggleActive() { m_IsActive = !m_IsActive; }
+		bool IsActive() const { return m_IsActive; }
 
 	private:
 		std::vector<std::unique_ptr<IInputAction>> m_Actions{};
 		std::vector<std::unique_ptr<ICommand>> m_Commands{};
 		std::vector<std::unique_ptr<Event>> m_EventCommands{};
+		bool m_IsActive{ true };
 	};
 }

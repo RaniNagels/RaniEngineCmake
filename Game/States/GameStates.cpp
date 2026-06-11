@@ -6,12 +6,15 @@
 #include <Events/Event.h>
 #include <Input/InputSystem.h>
 #include <Util.h>
+#include <GameObject.h>
 
 #include <Components/SpriteRenderComponent.h>
 #include <Components/TextRenderComponent.h>
 #include <Components/RigidBodyComponent.h>
 #include <Components/AnimatedSpriteComponent.h>
 #include <Components/AnimationStateComponent.h>
+#include <Components/LivesComponent.h>
+#include <Components/CollisionComponent.h>
 
 #include "../Components/DebugGridRenderComponent.h"
 #include "../Components/DebugBoundsRenderComponent.h"
@@ -19,6 +22,7 @@
 #include "../Components/GridComponent.h"
 
 #include "BombermanStates.h"
+#include "GameStates/GameOverState.h"
 
 Game::MainMenuState::MainMenuState(const REC::EngineContext& context)
 	: REC::GameState(context)
@@ -92,7 +96,7 @@ void Game::LevelState::Enter()
 	SetScene(scene);
 	GetContext().sceneManager->SetActiveScene(scene);
 
-	SubscribeToEvent({ REC::EventIds::LostLive, EventIds::DoorOpenEvent });
+	SubscribeToEvent({ REC::EventIds::LostLive, EventIds::VeryDeathEvent });
 
 	// ---- grid and walls --------------------------------------------------------------------------------
 	Game::GridDescriptor gridDesc{};
@@ -224,13 +228,65 @@ std::optional<std::unique_ptr<REC::GameState>> Game::LevelState::OnEvent(REC::Ev
 {
 	if (event->IsEvent(REC::EventIds::LostLive))
 	{
+		// play death animation for the player that lost a life
+		auto* args = event->GetArgs();
+		auto* goArgs = dynamic_cast<REC::GameObjectEventArgs*>(args);
+		goArgs->sender->GetComponent<REC::AnimationStateComponent>()->ChangeState(std::make_unique<Game::BombermanDeadState>(goArgs->sender));
+		// will trigger the veryDeahtEvent after the animation is done, which will reset the players positions
 
-		return std::make_unique<MainMenuState>(GetContext());
+		for (auto& player : m_Players)
+		{
+			player->DisableInputBindings();
+			auto* collisionComp = player->Get()->GetCollisionComponent();
+			if (collisionComp)
+			{
+				if (collisionComp->Enabled())
+					collisionComp->ToggleEnabled(); // disable collision to prevent further deaths while the death animation is playing
+			}
+		}
 	}
-	else if (event->IsEvent(Game::EventIds::DoorOpenEvent))
+	else if (event->IsEvent(Game::EventIds::VeryDeathEvent))
 	{
-		// TODO
-		return std::make_unique<MainMenuState>(GetContext());
+		// reset both players
+		bool bothPlayersDead = true;
+		std::vector<int> indicesOfPlayersToRemove{};
+		int index{ 0 };
+		for (auto& player : m_Players)
+		{
+			auto* livesComp = player->GetComponents().livesComp;
+			if (livesComp->HasLivesLeft())
+			{
+				bothPlayersDead = false;
+				player->ResetPosition();
+				auto* animStateComp = player->Get()->GetComponent<REC::AnimationStateComponent>();
+				if (animStateComp)
+					animStateComp->ChangeState(std::make_unique<Game::BombermanIdleState>(player->Get()));
+				player->EnableInputBindings();
+				auto* collisionComp = player->Get()->GetCollisionComponent();
+				if (collisionComp)
+				{
+					if (!collisionComp->Enabled())
+						collisionComp->ToggleEnabled(); // disable collision to prevent further deaths while the death animation is playing
+				}
+			}
+			else
+			{
+				return std::make_unique<GameOverState>(GetContext()); // TODO: temp
+				//player->Get()->Destroy();
+				//indicesOfPlayersToRemove.push_back(index);
+			}
+			++index;
+		}
+		
+		// remove the players that are out of lives from the player vector
+		for (int i = static_cast<int>(indicesOfPlayersToRemove.size()) - 1; i >= 0; --i) 
+		{
+			m_Players.erase(m_Players.begin() + indicesOfPlayersToRemove[i]);
+		}
+
+		// if both players are death
+		if (bothPlayersDead)
+			return std::make_unique<GameOverState>(GetContext());
 	}
 	return {};
 }
@@ -239,6 +295,9 @@ void Game::LevelState::Exit()
 {
 	for (auto& player : m_Players)
 		player->RemoveInputBindings(GetContext().inputSystem);
-	UnsubscribeFromEvent({ REC::EventIds::LostLive, EventIds::DoorOpenEvent });
+	UnsubscribeFromEvent({ REC::EventIds::LostLive, EventIds::VeryDeathEvent });
 	GetScene()->RemoveAll();
 }
+
+// ============================================================================================================================
+

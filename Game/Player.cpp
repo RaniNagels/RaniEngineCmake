@@ -11,6 +11,7 @@
 #include <Components/AnimatedSpriteComponent.h>
 #include <Components/HealthComponent.h>
 #include <Components/LivesComponent.h>
+#include <Components/TransformComponent.h>
 
 #include "Commands/MoveCommand.h"
 #include "Commands/PlaceBombCommand.h"
@@ -55,4 +56,28 @@ void Game::Player::RemoveInputBindings(REC::InputSystem* inputSystem)
 {
 	for (const auto& inputBinding : m_InputBindings)
 		inputSystem->RemoveInputBinding(inputBinding);
+	// cannot be undone!
+}
+
+void Game::Player::EnableInputBindings()
+{
+	for (const auto& inputBinding : m_InputBindings)
+	{
+		if (!inputBinding->IsActive())
+			inputBinding->ToggleActive();
+	}
+}
+
+void Game::Player::DisableInputBindings()
+{
+	for (const auto& inputBinding : m_InputBindings)
+	{
+		if (inputBinding->IsActive())
+			inputBinding->ToggleActive();
+	}
+}
+
+void Game::Player::ResetPosition()
+{
+	m_pGameObject->GetTransform()->SetLocalPosition(m_Descriptor.startPosition.x, m_Descriptor.startPosition.y);
 }

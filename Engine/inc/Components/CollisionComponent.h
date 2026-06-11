@@ -47,9 +47,12 @@ namespace REC
 		std::vector<CollisionBound>& GetModifiableBounds() { return m_Bounds; }
 
 		bool IsStatic() const;
+		bool Enabled() const { return m_Enabled; }
+		void ToggleEnabled() { m_Enabled = !m_Enabled; }
 
 	private:
 		std::vector<CollisionBound> m_Bounds{}; // a vector allows for multiple collisionboxes per object allowing for more complex shapes
 		const CollisionDescriptor m_Descriptor;
+		bool m_Enabled{ true };
 	};
 }

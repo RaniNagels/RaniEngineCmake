@@ -39,11 +39,12 @@ const Game::GridComponent::Cell& Game::GridComponent::GetCell(uint8_t row, uint8
 
 const Game::GridComponent::Cell& Game::GridComponent::GetCell(const glm::vec2& pos)
 {
+	auto worldPos = GetOwner()->GetTransform()->GetWorldPosition();
+	glm::vec2 worldPos2D{ worldPos.x, worldPos.y };
+	glm::vec2 relativePos = pos - worldPos2D;
+
 	for (const auto& cell : m_Cells)
 	{
-		auto worldPos = GetOwner()->GetTransform()->GetWorldPosition();
-		glm::vec2 worldPos2D{ worldPos.x, worldPos.y };
-		glm::vec2 relativePos = pos - (cell.origin + worldPos2D);
 		if (cell.IsInCell(relativePos))
 			return cell;
 	}

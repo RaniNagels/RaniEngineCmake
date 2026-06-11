@@ -133,6 +133,9 @@ private:
 	{
 		for (auto& binding : m_Bindings)
 		{
+			if (!binding->IsActive())
+				continue;
+
 			HandleKeyboard(deltaTime, binding.get());
 
 			// --- Controllers -------------------------------------------------------------------------------

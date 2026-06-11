@@ -91,6 +91,8 @@ namespace Game
 
 		void CreateInputBindings(REC::InputSystem* inputsystem, REC::SceneManager* sceneManager, float movementSpeed, GridComponent* playfield);
 		void RemoveInputBindings(REC::InputSystem* inputSystem);
+		void EnableInputBindings();
+		void DisableInputBindings();
 
 		template <ActionType AT>
 		void AddInputActions(PlayerInputActions<AT>& inputActions) // inputActions cannot be const due to the move
@@ -101,6 +103,8 @@ namespace Game
 			if (inputActions.right.get() != nullptr)		m_InputBindings[Util::to_underlying(InputBindingIndex::Right)]->AddInputAction(std::move(inputActions.right));
 			if (inputActions.placeBomb.get() != nullptr)	m_InputBindings[Util::to_underlying(InputBindingIndex::PlaceBomb)]->AddInputAction(std::move(inputActions.placeBomb));
 		}
+
+		void ResetPosition();
 
 	private:
 		// only used for indexing the input bindings

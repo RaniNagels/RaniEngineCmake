@@ -267,6 +267,329 @@
       "h": 16,
       "sheet": "General Sprites"
     },
+    "balloom_death_0": {
+      "x": 96,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_death_1": {
+      "x": 112,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_death_2": {
+      "x": 128,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_death_3": {
+      "x": 144,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "balloom_death_4": {
+      "x": 160,
+      "y": 240,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "explosion_center_01":
+    {
+      "x": 32,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_center_02":
+    {
+      "x": 112,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_center_03":
+    {
+      "x": 32,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_center_04":
+    {
+      "x": 112,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_right_middle_01":
+    {
+      "x": 48,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_right_middle_02":
+    {
+      "x": 128,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_right_middle_03":
+    {
+      "x": 48,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_right_middle_04":
+    {
+      "x": 128,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_right_end_01":
+    {
+      "x": 64,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_right_end_02":
+    {
+      "x": 144,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_right_end_03":
+    {
+      "x": 64,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_right_end_04":
+    {
+      "x": 144,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_down_middle_01":
+    {
+      "x": 32,
+      "y": 112,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_down_middle_02":
+    {
+      "x": 112,
+      "y": 112,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_down_middle_03":
+    {
+      "x": 32,
+      "y": 192,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_down_middle_04":
+    {
+      "x": 112,
+      "y": 192,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_down_end_01":
+    {
+      "x": 32,
+      "y": 128,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_down_end_02":
+    {
+      "x": 112,
+      "y": 128,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_down_end_03":
+    {
+      "x": 32,
+      "y": 208,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_down_end_04":
+    {
+      "x": 112,
+      "y": 208,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_left_middle_01":
+    {
+      "x": 16,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_left_middle_02":
+    {
+      "x": 96,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_left_middle_03":
+    {
+      "x": 16,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_left_middle_04":
+    {
+      "x": 96,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_left_end_01":
+    {
+      "x": 0,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_left_end_02":
+    {
+      "x": 80,
+      "y": 96,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_left_end_03":
+    {
+      "x": 0,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_left_end_04":
+    {
+      "x": 80,
+      "y": 176,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_up_middle_01":
+    {
+      "x": 32,
+      "y": 80,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_up_middle_02":
+    {
+      "x": 112,
+      "y": 80,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_up_middle_03":
+    {
+      "x": 32,
+      "y": 160,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_up_middle_04":
+    {
+      "x": 112,
+      "y": 160,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_up_end_01":
+    {
+      "x": 32,
+      "y": 64,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_up_end_02":
+    {
+      "x": 112,
+      "y": 64,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_up_end_03":
+    {
+      "x": 32,
+      "y": 144,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
+    "explosion_up_end_04":
+    {
+      "x": 112,
+      "y": 144,
+      "w": 16,
+      "h": 16,
+      "sheet":"General Sprites"
+    },
     "explosion_01":
     {
       "x": 0,
@@ -401,12 +724,122 @@
       "duration": 1.0,
       "loop": true
     },
+    "balloom_death": {
+      "frames": [
+        "balloom_death_0",
+        "balloom_death_1",
+        "balloom_death_2",
+        "balloom_death_3",
+        "balloom_death_4"
+      ],
+      "duration": 1.0,
+      "loop": false
+    },
     "explosion": {
       "frames": [
         "explosion_01",
         "explosion_02",
         "explosion_03",
         "explosion_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_center":
+    {
+      "frames": [
+        "explosion_center_01",
+        "explosion_center_02",
+        "explosion_center_03",
+        "explosion_center_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_right_middle":
+    {
+      "frames": [
+        "explosion_right_middle_01",
+        "explosion_right_middle_02",
+        "explosion_right_middle_03",
+        "explosion_right_middle_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_right_end":
+    {
+      "frames": [
+        "explosion_right_end_01",
+        "explosion_right_end_02",
+        "explosion_right_end_03",
+        "explosion_right_end_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_down_middle":
+    {
+      "frames": [
+        "explosion_down_middle_01",
+        "explosion_down_middle_02",
+        "explosion_down_middle_03",
+        "explosion_down_middle_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_down_end":
+    {
+      "frames": [
+        "explosion_down_end_01",
+        "explosion_down_end_02",
+        "explosion_down_end_03",
+        "explosion_down_end_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_left_middle":
+    {
+      "frames": [
+        "explosion_left_middle_01",
+        "explosion_left_middle_02",
+        "explosion_left_middle_03",
+        "explosion_left_middle_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_left_end":
+    {
+      "frames": [
+        "explosion_left_end_01",
+        "explosion_left_end_02",
+        "explosion_left_end_03",
+        "explosion_left_end_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_up_middle":
+    {
+      "frames": [
+        "explosion_up_middle_01",
+        "explosion_up_middle_02",
+        "explosion_up_middle_03",
+        "explosion_up_middle_04"
+      ],
+      "duration": 0.8,
+      "loop": false
+    },
+    "explosion_up_end":
+    {
+      "frames": [
+        "explosion_up_end_01",
+        "explosion_up_end_02",
+        "explosion_up_end_03",
+        "explosion_up_end_04"
       ],
       "duration": 0.8,
       "loop": false

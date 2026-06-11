@@ -22,6 +22,7 @@ namespace REC
 		virtual std::optional<std::unique_ptr<REC::GameState>> OnEvent(REC::Event* event) = 0;
 
 		std::vector<Event*> GetNotifiedEvents() const { return NotifiedEvents; }
+		void ClearNotifiedEvents() { NotifiedEvents.clear(); }
 
 	protected:
 		explicit GameState(const EngineContext& context) : IState(), m_Context(context) {}

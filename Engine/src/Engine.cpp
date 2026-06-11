@@ -172,6 +172,7 @@ void REC::Engine::ProcessGameState()
 			break;
 		}
 	}
+	m_pCurrentGameState->ClearNotifiedEvents();
 }
 
 

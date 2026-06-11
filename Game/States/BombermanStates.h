@@ -1,9 +1,11 @@
 #pragma once
 #include <State/IState.h>
 #include <Components/IListener.h>
+#include <Events/Event.h>
 
 #include <glm/glm.hpp>
 #include <string>
+#include <memory>
 
 namespace REC
 {
@@ -26,10 +28,11 @@ namespace Game
 
 		virtual void Enter() override;
 		virtual std::optional<std::unique_ptr<REC::IState>> Update(float deltaTime) override;
-		virtual void Exit() override {};
+		virtual void Exit() override;
 
 	private:
 		REC::AnimatedSpriteComponent* m_pAnimatedSpriteComponent{ nullptr };
+		std::unique_ptr<REC::Event> m_pVeryDeathEvent;
 	};
 
 	class BombermanIdleState : public REC::GameObjectState, public REC::IListener

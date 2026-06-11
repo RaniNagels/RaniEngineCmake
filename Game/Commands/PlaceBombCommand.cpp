@@ -31,17 +31,19 @@ void Game::PlaceBombCommand::Execute(float)
 {
 	auto activeScene = m_pSceneManager->GetActiveScene();
 
-	// TODO: place in grid, not just willy nilly on the GameObject
 	REC::GameObject* go = activeScene->GetGameObject(Game::ObjectIds::Grid);
 	auto* grid = go->GetComponent<Game::GridComponent>();
 
 	auto PlayerPosition = GetGameObject()->GetTransform()->GetWorldPosition();
-	auto bombPosition = grid->GetAbsoluteCellPosition(PlayerPosition); // returns the top left corner
+	glm::vec2 PlayerPosition2D{ PlayerPosition.x, PlayerPosition.y };
+	auto& cell = grid->GetCell(PlayerPosition2D);
+	auto bombPosition = grid->GetAbsoluteCellPosition(cell); // returns the top left corner
+	auto centeredBombPosition = bombPosition + glm::vec2{ grid->GetCell(0,0).width / 2.f, grid->GetCell(0,0).height / 2.f };
 
 	REC::GameObjectDescriptor bombDescriptor{};
 	bombDescriptor.id = Game::ObjectIds::Bom;
-	bombDescriptor.startPosX = PlayerPosition.x;
-	bombDescriptor.startPosY = PlayerPosition.y;
+	bombDescriptor.startPosX = centeredBombPosition.x;
+	bombDescriptor.startPosY = centeredBombPosition.y;
 	bombDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Placables);
 
 	auto bomb = activeScene->CreateGameObject(bombDescriptor);
@@ -51,8 +53,8 @@ void Game::PlaceBombCommand::Execute(float)
 	bombSpriteDescriptor.textureKey = "generalSprites";
 	bombSpriteDescriptor.frameDataFileKey = "characterData";
 	bombSpriteDescriptor.frameKey = "bom_0";
-	bombSpriteDescriptor.drawPointX = 0.f;
-	bombSpriteDescriptor.drawPointY = 0.f;
+	bombSpriteDescriptor.drawPointX = 0.5f;
+	bombSpriteDescriptor.drawPointY = 0.5f;
 
 	bomb->AddComponent<REC::SpriteRenderComponent>(bombSpriteDescriptor);
 
@@ -65,6 +67,8 @@ void Game::PlaceBombCommand::Execute(float)
 
 	Game::BombDescriptor bombCompDesc{};
 	bombCompDesc.lifeTime = 1.3f;
+	bombCompDesc.grid = grid;
+	bombCompDesc.scene = activeScene;
 
 	bomb->AddComponent<Game::BombComponent>(bombCompDesc);
 

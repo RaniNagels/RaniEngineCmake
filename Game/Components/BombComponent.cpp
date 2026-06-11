@@ -4,6 +4,11 @@
 #include <stdexcept>
 #include <Components/SpriteRenderComponent.h>
 #include <ServiceLocator.h>
+#include "GridComponent.h"
+#include <Components/TransformComponent.h>
+#include "../RenderLayers.h"
+#include "DebugBoundsRenderComponent.h"
+#include "../Ids.h"
 
 Game::BombComponent::BombComponent(REC::GameObject* owner, const BombDescriptor& descriptor)
 	: Component(owner)
@@ -41,15 +46,34 @@ void Game::BombComponent::Update(float deltaT)
 
 void Game::BombComponent::Detonate()
 {
+	glm::uvec4 explosionRange{GetExplosionRange()}; // right (x), down (y), left (-x), up (-y)
+	auto size = m_Descriptor.grid->GetCellSize();
+
+	auto scene = m_Descriptor.scene;
+	for (uint8_t i = 1; i <= explosionRange.x; ++i)
+	{
+		CreateExplosionInCell(scene, GetOwner(), { size.x * i, 0 }, i == explosionRange.x);
+	}
+	for (uint8_t i = 1; i <= explosionRange.y; ++i)
+	{
+		CreateExplosionInCell(scene, GetOwner(), { 0, size.y * i }, i == explosionRange.y);
+	}
+	for (uint8_t i = 1; i <= explosionRange.z; ++i)
+	{
+		CreateExplosionInCell(scene, GetOwner(), { -size.x * i, 0 }, i == explosionRange.z);
+	}
+	for (uint8_t i = 1; i <= explosionRange.w; ++i)
+	{
+		CreateExplosionInCell(scene, GetOwner(), { 0, -size.y * i }, i == explosionRange.w);
+	}
+
 	REC::AnimationDescriptor animation{};
 	animation.animationDataFileKey = "characterData";
-	animation.animationKey = "explosion";
+	animation.animationKey = "explosion_center";
 
 	auto& bounds = GetOwner()->GetCollisionComponent()->GetModifiableBounds();
-	bounds.push_back(REC::CollisionBound{ REC::Rect{ -125.f, -25.f, 250.f, 50.f }, true });
-	bounds.push_back(REC::CollisionBound{ REC::Rect{ -25.f, -125.f, 50.f, 250.f }, true });
+	bounds.push_back(REC::CollisionBound{ REC::Rect{ -25.f, -25.f, 50.f, 50.f }, true });
 
-	m_pSpriteRenderComponent->ChangeHeight(250); // TODO: no magic numbers!
 	m_pAnimatedSpriteComponent->ChangeAnimation(animation);
 	m_pAnimatedSpriteComponent->StartAnimation();
 	m_Exploded = true;
@@ -61,5 +85,121 @@ void Game::BombComponent::Reset()
 {
 	m_Timer = 0.f;
 	m_Exploded = false;
+}
+
+glm::uvec4 Game::BombComponent::GetExplosionRange() const
+{
+	auto& bombcell = m_Descriptor.grid->GetCell(GetOwner()->GetTransform()->GetWorldPosition());
+
+	glm::uvec4 explosionRange{}; // right (x), down (y), left (-x), up (-y)
+	for (uint8_t range{ 1 }; range <= m_Descriptor.explosionRange; ++range)
+	{
+		// check right
+		uint8_t cellCol = bombcell.col + range;
+		uint8_t cellRow = bombcell.row;
+
+		if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
+		{
+			if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
+				&& uint8_t(explosionRange.x) == range - uint8_t(1))
+			{
+				explosionRange.x = range;
+			}
+		}
+
+		// check down
+		cellCol = bombcell.col;
+		cellRow = bombcell.row + range;
+
+		if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
+		{
+			if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
+				&& uint8_t(explosionRange.y) == range - uint8_t(1))
+			{
+				explosionRange.y = range;
+			}
+		}
+
+		// check left
+		cellCol = bombcell.col - range;
+		cellRow = bombcell.row;
+
+		if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
+		{
+			if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
+				&& uint8_t(explosionRange.z) == range - uint8_t(1))
+			{
+				explosionRange.z = range;
+			}
+		}
+
+		// check up
+		cellCol = bombcell.col;
+		cellRow = bombcell.row - range;
+
+		if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
+		{
+			if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
+				&& uint8_t(explosionRange.w) == range - uint8_t(1))
+			{
+				explosionRange.w = range;
+			}
+		}
+	}
+	return explosionRange;
+}
+
+void Game::BombComponent::CreateExplosionInCell(REC::Scene* scene, REC::GameObject* root, glm::vec2 offset, bool end) // offset is relative to the root
+{
+	if (offset == glm::vec2{ 0.f, 0.f })
+		return;
+
+	std::string animationkey{};
+	if (offset.x > 0.f)
+		animationkey = "explosion_right";
+	else if (offset.x < 0.f)
+		animationkey = "explosion_left";
+	else if (offset.y > 0.f)
+		animationkey = "explosion_down";
+	else if (offset.y < 0.f)
+		animationkey = "explosion_up";
+
+	if (end)
+		animationkey += "_end";
+	else 
+		animationkey += "_middle";
+
+	REC::GameObjectDescriptor explosionDescriptor{};
+	explosionDescriptor.id = Game::ObjectIds::Bom;
+	explosionDescriptor.startPosX = offset.x;
+	explosionDescriptor.startPosY = offset.y;
+	explosionDescriptor.renderLayer = std::to_underlying(RenderLayer::Placables);
+	explosionDescriptor.parent = root;
+
+	// destroyed upon animation end by the root
+	auto explosion = scene->CreateGameObject(explosionDescriptor);
+
+	REC::SpriteDescriptor explosionSpriteDescriptor{};
+	explosionSpriteDescriptor.drawHeight = 50;
+	explosionSpriteDescriptor.textureKey = "generalSprites";
+	explosionSpriteDescriptor.frameDataFileKey = "characterData";
+	explosionSpriteDescriptor.drawPointX = 0.5f;
+	explosionSpriteDescriptor.drawPointY = 0.5f;
+
+	explosion->AddComponent<REC::SpriteRenderComponent>(explosionSpriteDescriptor);
+
+	REC::AnimationDescriptor animation{};
+	animation.animationDataFileKey = "characterData";
+	animation.animationKey = animationkey;
+	animation.startOnStartup = true;
+
+	explosion->AddComponent<REC::AnimatedSpriteComponent>(animation);
+
+	REC::CollisionDescriptor explosionCollisionDesc{};
+	explosionCollisionDesc.collisionType = REC::CollisionType::Static;
+	explosionCollisionDesc.bounds.push_back(REC::CollisionBound{ REC::Rect{ -25.f, -25.f, 50.f, 50.f }, true });
+
+	explosion->AddCollisionComponent<REC::CollisionComponent>(explosionCollisionDesc);
+	explosion->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255,0,0 });
 }
 
