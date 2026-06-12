@@ -15,6 +15,8 @@
 
 #include "Ids.h"
 #include "States/GameStates/MainMenuState.h"
+#include <Input/InputSystem.h>
+#include "Commands/ToggleSoundCommand.h"
 
 namespace fs = std::filesystem;
 
@@ -104,7 +106,18 @@ static void load(REC::IEngine* engine)
 	stepVerticalSound.filePath = "Sound/step_vertical.wav";
 	if (!RM->AddResource(stepVerticalSound))
 		throw std::runtime_error("Failed to load step vertical sound");
+
+	REC::SoundResourceCreateInfo musicSound{};
+	musicSound.name = "BackgroundMusic";
+	musicSound.filePath = "Sound/bomberman_music.mp3";
+	if (!RM->AddResource(musicSound))
+		throw std::runtime_error("Failed to load step vertical sound");
 #pragma endregion Resources
+
+	auto* input = engine->GetContext().inputSystem;
+	auto* toggleSound = input->CreateInputBinding();
+	toggleSound->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_F2, REC::ButtonState::Up);
+	toggleSound->AddCommand<Game::ToggleSoundCommand>();
 }
 
 int main(int, char*[]) 

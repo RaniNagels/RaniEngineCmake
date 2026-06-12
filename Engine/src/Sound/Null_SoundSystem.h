@@ -12,5 +12,6 @@ namespace REC
 		virtual void Destroy() override {}
 		virtual void Play(const std::string&, float) override {}
 		virtual bool IsPlaying(const std::string&) const override { return false; }
+		virtual void Mute() override {};
 	};
 }

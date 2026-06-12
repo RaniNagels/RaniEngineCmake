@@ -17,6 +17,7 @@ set(SOURCE_FILES
     "Commands/MoveCommand.cpp"
     "Commands/PlaceBombCommand.cpp"
     "Commands/MoveMarkerCommand.cpp"
+    "Commands/ToggleSoundCommand.cpp"
 
     "Components/BombComponent.cpp"
     "Components/BombCollisionComponent.cpp"

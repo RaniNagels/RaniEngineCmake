@@ -10,6 +10,7 @@
 #include <Components/TextRenderComponent.h>
 #include "../../Ids.h"
 #include "PlayerMenuState.h"
+#include <ServiceLocator.h>
 
 Game::MainMenuState::MainMenuState(const REC::EngineContext& context)
 	: REC::GameState(context)
@@ -64,6 +65,8 @@ std::optional<std::unique_ptr<REC::GameState>> Game::MainMenuState::OnEvent(REC:
 {
 	if (event->IsEvent(Game::EventIds::StartGameEvent))
 	{
+		auto& SS = REC::ServiceLocator::GetSoundSystem();
+		SS.Play("stepHorizontalSound", 1.f);
 		return std::make_unique<PlayerMenuState>(GetContext());
 	}
 	return {};

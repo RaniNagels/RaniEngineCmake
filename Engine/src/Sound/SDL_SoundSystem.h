@@ -20,6 +20,7 @@ namespace REC
 		virtual void Destroy() override;
 		virtual void Play(const std::string& id, float volume) override;
 		virtual bool IsPlaying(const std::string& id) const override;
+		virtual void Mute() override;
 
 	private:
 		class Impl;

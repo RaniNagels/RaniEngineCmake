@@ -95,6 +95,26 @@ public:
 		return sound->IsPlaying();
 	}
 
+	bool IsMuted() const
+	{
+		return m_Muted.load(std::memory_order_relaxed);
+	}
+
+	void SetMuted(bool muted)
+	{
+		m_Muted.store(muted, std::memory_order_relaxed);
+
+		if (muted)
+			ClearSoundQueue();
+	}
+
+	void ClearSoundQueue()
+	{
+		std::lock_guard lock(m_QueueMutex);
+		std::queue<SoundEvent> empty;
+		std::swap(m_SoundQueue, empty);
+	}
+
 private:
 	void ProcessQueue()
 	{
@@ -114,8 +134,11 @@ private:
 				event = m_SoundQueue.front();
 				m_SoundQueue.pop();
 			}
-			
-			event.sound->Play(event.volume);
+
+			if (!m_Muted.load(std::memory_order_relaxed))
+			{
+				event.sound->Play(event.volume);
+			}
 		}
 	}
 
@@ -132,6 +155,7 @@ private:
 	std::mutex m_QueueMutex;
 	std::condition_variable m_Condition;
 	bool m_Running{ true };
+	std::atomic<bool> m_Muted{ false };
 };
 
 REC::SDL_SoundSystem::SDL_SoundSystem()
@@ -154,4 +178,9 @@ void REC::SDL_SoundSystem::Play(const std::string& id, float volume)
 bool REC::SDL_SoundSystem::IsPlaying(const std::string& id) const
 {
 	return m_pImpl->IsPlaying(id);
+}
+
+void REC::SDL_SoundSystem::Mute()
+{
+	m_pImpl->SetMuted(!m_pImpl->IsMuted());
 }
