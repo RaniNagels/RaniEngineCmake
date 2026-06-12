@@ -1,6 +1,7 @@
 #pragma once
 #include <Components/Component.h>
 #include <Components/IListener.h>
+#include <glm/glm.hpp>
 
 namespace REC
 {
@@ -25,8 +26,12 @@ namespace Game
 		virtual void Notify(REC::Event* event) override;
 
 	private:
+		void FindNewPosition();
+
 		float m_Speed{ 50.f };
 		GridComponent* m_pGrid{ nullptr };
 		REC::Scene* m_pScene{ nullptr };
+
+		glm::vec2 m_TargetPosition{};
 	};
 }
