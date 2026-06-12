@@ -12,6 +12,7 @@
 
 Game::UIMarker::UIMarker(const UIMarkerDescriptor& descriptor)
 	: m_pScene(descriptor.scene)
+	, m_PositionSize(uint8_t(descriptor.positions.size()))
 {
 	REC::GameObjectDescriptor markerDesc{};
 	markerDesc.id = Game::ObjectIds::Marker;
@@ -67,4 +68,9 @@ void Game::UIMarker::DeleteInputBindings(REC::InputSystem* inputSystem)
 uint8_t Game::UIMarker::GetCurrentIndex() const
 {
 	return m_pMarkerComponent->GetCurrentIndex();
+}
+
+uint8_t Game::UIMarker::GetAmountOfPositions() const
+{
+	return m_PositionSize;
 }

@@ -37,11 +37,13 @@ namespace Game
 		void CreateInputBindings(REC::InputSystem* inputSystem);
 		void DeleteInputBindings(REC::InputSystem* inputSystem);
 		uint8_t GetCurrentIndex() const;
+		uint8_t GetAmountOfPositions() const;
 
 	private:
 		REC::GameObject* m_pMarkerGO{ nullptr };
 		MarkerComponent* m_pMarkerComponent{ nullptr };
 		REC::Scene* m_pScene{ nullptr };
 		std::vector<REC::InputBinding*> m_InputBindings{};
+		uint8_t m_PositionSize{ 0 };
 	};
 }

@@ -50,9 +50,9 @@ static void load(REC::IEngine* engine)
 		throw std::runtime_error("Failed to load general sprites texture");
 
 	REC::FontResourceCreateInfo debugFont{};
-	debugFont.name = "dogicapixel16";
+	debugFont.name = "dogicapixel32";
 	debugFont.filePath = "dogicapixel.otf";
-	debugFont.size = uint8_t(16);
+	debugFont.size = uint8_t(32);
 	if (!RM->AddResource(debugFont))
 		throw std::runtime_error("Failed to load debug font");
 

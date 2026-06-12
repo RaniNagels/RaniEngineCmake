@@ -24,6 +24,8 @@ namespace Game
 		constexpr REC::EventId StartGameEvent = REC::make_sdbm_hash("StartGameEvent");
 		constexpr REC::EventId MarkerSelectedEvent = REC::make_sdbm_hash("MarkerSelectedEvent");
 		constexpr REC::EventId ResetLevelEvent = REC::make_sdbm_hash("ResetLevelEvent");
+		constexpr REC::EventId SkipLevelEvent = REC::make_sdbm_hash("SkipLevelEvent");
+		constexpr REC::EventId SaveScoreEvent = REC::make_sdbm_hash("SaveScoreEvent");
 	}
 
 	namespace ObjectIds
@@ -50,5 +52,6 @@ namespace Game
 		constexpr REC::SceneId LevelScene = REC::make_sdbm_hash("LevelScene");
 		constexpr REC::SceneId GameOverScene = REC::make_sdbm_hash("GameOverScene");
 		constexpr REC::SceneId PlayerMenuScene = REC::make_sdbm_hash("PlayerMenuScene");
+		constexpr REC::SceneId SaveScoreScene = REC::make_sdbm_hash("SaveScoreScene");
 	}
 }

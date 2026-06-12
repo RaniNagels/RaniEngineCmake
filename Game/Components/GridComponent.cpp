@@ -105,7 +105,7 @@ void Game::GridComponent::ResetGrid()
 	}
 }
 
-void Game::GridComponent::ModifyCell(uint8_t row, uint8_t col, bool isDestructableWall, bool hasExit, bool hasPowerUp)
+void Game::GridComponent::ModifyCell(uint8_t row, uint8_t col, bool isDestructableWall, bool hasExit, bool hasPowerUp, uint8_t pickupType)
 {
 	uint32_t index = GetIndex(row, col);
 	m_Cells[index].isDestructableWall = isDestructableWall;
@@ -114,7 +114,10 @@ void Game::GridComponent::ModifyCell(uint8_t row, uint8_t col, bool isDestructab
 		m_Cells[index].hasExit = true;
 
 	if (hasPowerUp)
+	{
 		m_Cells[index].hasPowerUp = true;
+		m_Cells[index].powerUpType = pickupType;
+	}
 }
 
 uint32_t Game::GridComponent::GetIndex(Cell* cell)

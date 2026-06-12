@@ -14,10 +14,13 @@
 
 #include <Input/InputBinding.h>
 #include "MainMenuState.h"
+#include "SaveScoreState.h"
 #include "../../UIMarker.h"
 
-Game::GameOverState::GameOverState(const REC::EngineContext& context)
+Game::GameOverState::GameOverState(const REC::EngineContext& context, uint32_t scoreP1, uint32_t scoreP2)
 	: REC::GameState(context)
+	, m_ScoreP1(scoreP1)
+	, m_ScoreP2(scoreP2)
 {}
 
 void Game::GameOverState::Enter()
@@ -85,7 +88,7 @@ std::optional<std::unique_ptr<REC::GameState>> Game::GameOverState::OnEvent(REC:
 		{
 		case 0:
 			// save score
-			return {};
+			return std::make_unique<SaveScoreState>(GetContext(), m_ScoreP1, m_ScoreP2);
 		case 1:
 			// go to main menu
 			return std::make_unique<MainMenuState>(GetContext());

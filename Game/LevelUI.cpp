@@ -49,6 +49,40 @@ Game::LevelUI::LevelUI(const REC::EngineContext& context, Player* p1, Player* p2
 	levelObj->AddComponent<UICurrentLevelComponent>(levelStat);
 }
 
+uint32_t Game::LevelUI::GetPlayer1Score() const
+{
+	for (auto& child : m_UI->GetChildren())
+	{
+		if (child->Is(ObjectIds::Player1UI))
+		{
+			for (auto& scoreChild : child->GetChildren())
+			{
+				auto* score = scoreChild->GetComponent<UIScoreComponent>();
+				if (score)
+					return static_cast<uint32_t>(score->GetStatValue());
+			}
+		}
+	}
+	return 0;
+}
+
+uint32_t Game::LevelUI::GetPlayer2Score() const
+{
+	for (auto& child : m_UI->GetChildren())
+	{
+		if (child->Is(ObjectIds::Player2UI))
+		{
+			for (auto& scoreChild : child->GetChildren())
+			{
+				auto* score = scoreChild->GetComponent<UIScoreComponent>();
+				if (score)
+					return static_cast<uint32_t>(score->GetStatValue());
+			}
+		}
+	}
+	return 0;
+}
+
 void Game::LevelUI::CreatePlayerUI(REC::Scene* scene, REC::GameObject* parent, Player* player, REC::ObjectId id, const std::string& prefix, float x, float y)
 {
 	REC::GameObjectDescriptor desc{};

@@ -110,7 +110,7 @@ namespace Game
 		bool LoadNextLevel(const REC::EngineContext& context);
 		void ResetGrid();
 
-		void ModifyCell(uint8_t row, uint8_t col, bool isDestructableWall, bool hasExit = false, bool hasPowerUp = false);
+		void ModifyCell(uint8_t row, uint8_t col, bool isDestructableWall, bool hasExit = false, bool hasPowerUp = false, uint8_t pickupType = uint8_t(-1));
 
 	private:
 

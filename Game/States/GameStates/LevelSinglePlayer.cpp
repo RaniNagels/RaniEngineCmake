@@ -2,6 +2,7 @@
 #include "../../Ids.h"
 #include "../../RenderLayers.h"
 #include "../../Components/GridComponent.h"
+#include "../../Components/BombermanComponent.h"
 #include "../../Player.h"
 #include "../../LevelUI.h"
 #include <Input/InputBinding.h>
@@ -61,6 +62,7 @@ void Game::LevelSinglePlayer::Enter()
 	collisionDescriptor.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ -18.f, -18.f, 36.f, 36.f}, true }); // centered on the player
 
 	playerGO->AddCollisionComponent<BombermanCollisionComponent>(collisionDescriptor);
+	playerGO->AddComponent<BombermanComponent>();
 	playerGO->AddComponent<REC::RigidBodyComponent>();
 	playerGO->AddComponent<REC::AnimationStateComponent>(std::make_unique<BombermanIdleState>(playerGO));
 #ifdef _DEBUG

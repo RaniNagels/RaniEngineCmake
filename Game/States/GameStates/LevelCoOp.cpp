@@ -2,6 +2,7 @@
 #include "../../Ids.h"
 #include "../../RenderLayers.h"
 #include "../../Components/GridComponent.h"
+#include "../../Components/BombermanComponent.h"
 #include "../../Player.h"
 #include "../../LevelUI.h"
 #include "../../Components/BombermanCollisionComponent.h"
@@ -37,18 +38,27 @@ void Game::LevelCoOp::Enter()
 	bombermanWalkAnimDesc.animationKey = "bomberman_walk_left";
 	bombermanWalkAnimDesc.startOnStartup = true;
 
+	auto* playfield = GetPlayfield()->GetComponent<GridComponent>();
+	auto startCell = playfield->GetLevelInfo()->player1StartCell;
+	auto startCell2 = playfield->GetLevelInfo()->player2StartCell;
+	auto starPosition = playfield->GetAbsoluteCellPosition(startCell.first, startCell.second);
+	auto startPosition2 = playfield->GetAbsoluteCellPosition(startCell2.first, startCell2.second);
+	float offset = playfield->GetCellSize().x / 2.f; // to center the player in the cell
+	starPosition += glm::vec2{ offset, offset };
+	startPosition2 += glm::vec2{ offset, offset };
+
 	Game::PlayerDescriptor bombermanDescriptor{};
 	bombermanDescriptor.name = Game::ObjectIds::Bomberman;
 	bombermanDescriptor.amountOfLives = 4;
 	bombermanDescriptor.animDesc = bombermanWalkAnimDesc;
 	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
 	bombermanDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Player);
-	bombermanDescriptor.startPosition = { 250.f, 250.f };
+	bombermanDescriptor.startPosition = starPosition;
 
 	auto* player1 = AddPlayer(bombermanDescriptor);
 	auto* player1GO = player1->Get();
 
-	bombermanDescriptor.startPosition = { 350.f, 250.f };
+	bombermanDescriptor.startPosition = startPosition2;
 	auto* player2 = AddPlayer(bombermanDescriptor);
 	auto* player2GO = player2->Get();
 
@@ -58,6 +68,9 @@ void Game::LevelCoOp::Enter()
 
 	player1GO->AddCollisionComponent<BombermanCollisionComponent>(collisionDescriptor);
 	player2GO->AddCollisionComponent<BombermanCollisionComponent>(collisionDescriptor);
+
+	player1GO->AddComponent<BombermanComponent>();
+	player2GO->AddComponent<BombermanComponent>();
 
 	player1GO->AddComponent<REC::RigidBodyComponent>();
 	player2GO->AddComponent<REC::RigidBodyComponent>();

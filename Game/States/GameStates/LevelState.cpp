@@ -17,6 +17,8 @@
 #include <vector>
 #include <Resources/IResourceManager.h>
 #include "../../Components/SoftBlockComponent.h"
+#include <Input/InputSystem.h>
+#include <Input/InputAction.h>
 
 #ifdef _DEBUG
 #include "../../Components/DebugGridRenderComponent.h"
@@ -32,7 +34,7 @@ Game::LevelState::LevelState(const REC::EngineContext& context)
 void Game::LevelState::Enter()
 {
 	auto* scene = CreateScene(Game::SceneIds::LevelScene);
-	SubscribeToEvent({ REC::EventIds::LostLive, EventIds::VeryDeathEvent, EventIds::DoorOpenEvent});
+	SubscribeToEvent({ REC::EventIds::LostLive, EventIds::VeryDeathEvent, EventIds::DoorOpenEvent, EventIds::SkipLevelEvent });
 
 	// ---- grid and walls --------------------------------------------------------------------------------
 	Game::GridDescriptor gridDesc{};
@@ -79,35 +81,9 @@ void Game::LevelState::Enter()
 
 	LoadLevel();
 
-	//// door
-	//auto* levelInfo = playfield->GetLevelInfo();
-	//uint16_t index = levelInfo->exitBrickIndex;
-	//auto cell = levelInfo->bricks[index];
-	//auto doorPosition = playfield->GetAbsoluteCellPosition(cell.first, cell.second);
-	//
-	//REC::GameObjectDescriptor doorDesc{};
-	//doorDesc.id = Game::ObjectIds::Door;
-	//doorDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Placables);
-	//doorDesc.startPosX = doorPosition.x;
-	//doorDesc.startPosY = doorPosition.y;
-	//
-	//auto* door = scene->CreateGameObject(doorDesc);
-	//
-	//REC::CollisionDescriptor doorCollisionDesc{};
-	//doorCollisionDesc.collisionType = REC::CollisionType::Static;
-	//doorCollisionDesc.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ 0.f, 0.f, float(gridDesc.cellWidth), float(gridDesc.cellHeight) }, true }); // the door is the size of a cell and is a trigger
-	//door->AddCollisionComponent<DoorCollisionComponent>(doorCollisionDesc);
-	//
-	//REC::SpriteDescriptor doorSpriteDesc{};
-	//doorSpriteDesc.drawHeight = gridDesc.cellHeight;
-	//doorSpriteDesc.drawWidth = gridDesc.cellWidth;
-	//doorSpriteDesc.frameDataFileKey = "characterData";
-	//doorSpriteDesc.frameKey = "door";
-	//doorSpriteDesc.textureKey = "generalSprites";
-	//door->AddComponent<REC::SpriteRenderComponent>(doorSpriteDesc);
-#ifdef _DEBUG
-	//door->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 0, 255, 255 });
-#endif // _DEBUG
+	auto* skipLevel = GetContext().inputSystem->CreateInputBinding();
+	skipLevel->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_F1, REC::ButtonState::Up);
+	skipLevel->AddEvent<REC::Event>(EventIds::SkipLevelEvent);
 }
 
 std::optional<std::unique_ptr<REC::GameState>> Game::LevelState::OnEvent(REC::Event* event)
@@ -130,7 +106,7 @@ std::optional<std::unique_ptr<REC::GameState>> Game::LevelState::OnEvent(REC::Ev
 				return {};
 			}
 			else
-				return std::make_unique<GameOverState>(GetContext());
+				return std::make_unique<GameOverState>(GetContext(), m_pLevelUI->GetPlayer1Score(), m_pLevelUI->GetPlayer2Score());
 			break;
 		case PlayerMode::CoOp:
 			for (auto& player : m_Players)
@@ -148,7 +124,7 @@ std::optional<std::unique_ptr<REC::GameState>> Game::LevelState::OnEvent(REC::Ev
 				return {};
 			}
 			else
-				return std::make_unique<GameOverState>(GetContext());
+				return std::make_unique<GameOverState>(GetContext(), m_pLevelUI->GetPlayer1Score(), m_pLevelUI->GetPlayer2Score());
 			break;
 		case PlayerMode::Versus:
 			for (auto& player : m_Players)
@@ -156,20 +132,20 @@ std::optional<std::unique_ptr<REC::GameState>> Game::LevelState::OnEvent(REC::Ev
 				livesComp = player->GetComponents().livesComp;
 				if (!livesComp->HasLivesLeft())
 				{
-					return std::make_unique<GameOverState>(GetContext());
+					return std::make_unique<GameOverState>(GetContext(), m_pLevelUI->GetPlayer1Score(), m_pLevelUI->GetPlayer2Score());
 				}
 			}
 			ResetLevel();
 			break;
 		}
 	}
-	else if (event->IsEvent(EventIds::DoorOpenEvent)) // next level
+	else if (event->IsEvent(EventIds::DoorOpenEvent) || event->IsEvent(EventIds::SkipLevelEvent)) // next level
 	{
 		DisablePlayers(); 
 		ResetLevel();
 		auto* playfield = m_pGridObject->GetComponent<Game::GridComponent>();
 		if (!playfield->LoadNextLevel(GetContext()))
-			return std::make_unique<GameOverState>(GetContext());
+			return std::make_unique<GameOverState>(GetContext(), m_pLevelUI->GetPlayer1Score(), m_pLevelUI->GetPlayer2Score());
 
 		LoadLevel();
 	}
@@ -181,7 +157,7 @@ void Game::LevelState::Exit()
 	for (auto& player : m_Players)
 		player->RemoveInputBindings(GetContext().inputSystem);
 
-	UnsubscribeFromEvent({ REC::EventIds::LostLive, EventIds::VeryDeathEvent, EventIds::DoorOpenEvent });
+	UnsubscribeFromEvent({ REC::EventIds::LostLive, EventIds::VeryDeathEvent, EventIds::DoorOpenEvent, EventIds::SkipLevelEvent });
 	m_Players.clear();
 	m_pLevelUI.reset();
 	GetScene()->RemoveAll();
@@ -218,14 +194,48 @@ void Game::LevelState::LoadLevel()
 	playfield->ResetGrid();
 	auto* levelInfo = playfield->GetLevelInfo();
 
-	// destroy soft blocks
+	// destroy soft blocks, doors, and powerups
 	std::vector<REC::GameObject*> softBlocks = GetScene()->GetGameObjects(ObjectIds::DestructableWall);
 	for (auto* softBlock : softBlocks)
 		softBlock->Destroy();
 
+	std::vector<REC::GameObject*> doors = GetScene()->GetGameObjects(ObjectIds::Door); // only one should be in the scene
+	for (auto* door : doors)
+		door->Destroy(); 
+
+	std::vector<REC::GameObject*> powerUps = GetScene()->GetGameObjects(ObjectIds::PickUp);
+	for (auto* powerUp : powerUps)
+		powerUp->Destroy();
+
 	// recreate new soft blocks
 	for (const auto& brick : levelInfo->bricks)
 		CreateSoftBlock(brick.first, brick.second);
+
+	// set cell with exit door
+	auto index = levelInfo->exitBrickIndex;
+	softBlocks.clear();
+	softBlocks = GetScene()->GetGameObjects(ObjectIds::DestructableWall);
+	if (index < softBlocks.size())
+	{
+		auto* softBlockComp = softBlocks[index]->GetComponent<SoftBlockComponent>();
+		playfield->ModifyCell(softBlockComp->GetRow() , softBlockComp->GetCol(), true, true);
+	}
+
+	// idem for pickup
+	auto pickupIndex = levelInfo->powerUps;
+	if (pickupIndex.first < softBlocks.size())
+	{
+		uint8_t pickupType = uint8_t(-1);
+		if (pickupIndex.second == "ExtraBomb")
+			pickupType = 0;
+		else if (pickupIndex.second == "Detonator")
+			pickupType = 1;
+		else if (pickupIndex.second == "Flames")
+			pickupType = 2;
+
+		auto* softBlockComp = softBlocks[pickupIndex.first]->GetComponent<SoftBlockComponent>();
+		playfield->ModifyCell(softBlockComp->GetRow(), softBlockComp->GetCol(), true, false, true, pickupType);
+	}
 }
 
 void Game::LevelState::DisablePlayers()
@@ -249,8 +259,8 @@ void Game::LevelState::EnablePlayers()
 	glm::vec2 startPosition1{};
 	glm::vec2 startPosition2{};
 
-	startPosition1 = playfield->GetAbsoluteCellPosition(levelInfo->player1StartCell.second, levelInfo->player1StartCell.first);
-	startPosition2 = playfield->GetAbsoluteCellPosition(levelInfo->player2StartCell.second, levelInfo->player2StartCell.first);
+	startPosition1 = playfield->GetAbsoluteCellPosition(levelInfo->player1StartCell.first, levelInfo->player1StartCell.second);
+	startPosition2 = playfield->GetAbsoluteCellPosition(levelInfo->player2StartCell.first, levelInfo->player2StartCell.second);
 	float offset = playfield->GetCellSize().x / 2.f; // to center the player in the cell
 	startPosition1 += glm::vec2{ offset, offset };
 	startPosition2 += glm::vec2{ offset, offset };

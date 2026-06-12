@@ -24,6 +24,9 @@ namespace Game
 		LevelUI& operator=(const LevelUI&) = delete;
 		LevelUI& operator=(LevelUI&&) noexcept = delete;
 
+		uint32_t GetPlayer1Score() const;
+		uint32_t GetPlayer2Score() const;
+
 	private:
 		void CreatePlayerUI(REC::Scene* scene, REC::GameObject* parent, Player* player, REC::ObjectId id, const std::string& prefix, float x, float y);
 		REC::GameObject* m_UI{ nullptr };

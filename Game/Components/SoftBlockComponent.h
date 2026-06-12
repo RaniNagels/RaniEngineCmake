@@ -26,6 +26,9 @@ namespace Game
 		virtual void Notify(REC::Event* event) override;
 		virtual void Update(float) override {}
 
+		uint8_t GetRow() const { return m_row; }
+		uint8_t GetCol() const { return m_col; }
+
 	private:
 		void CreateDoor(GridComponent* grid, uint8_t row, uint8_t col);
 		void CreatePowerUp(GridComponent* grid, uint8_t row, uint8_t col);

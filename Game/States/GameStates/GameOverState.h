@@ -13,7 +13,7 @@ namespace Game
 	class GameOverState : public REC::GameState
 	{
 	public:
-		GameOverState(const REC::EngineContext& context);
+		GameOverState(const REC::EngineContext& context, uint32_t scoreP1, uint32_t scoreP2);
 		virtual ~GameOverState() = default;
 
 		GameOverState(const GameOverState&) = delete;
@@ -28,5 +28,8 @@ namespace Game
 	private:
 		std::unique_ptr<UIMarker> m_pUIMarker{ nullptr };
 		std::vector<REC::InputBinding*> m_InputBindings{};
+
+		uint32_t m_ScoreP1{ 0 };
+		uint32_t m_ScoreP2{ 0 };
 	};
 }

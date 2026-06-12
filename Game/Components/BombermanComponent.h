@@ -14,6 +14,8 @@ namespace Game
 		BombermanComponent& operator=(const BombermanComponent& other) = delete;
 		BombermanComponent& operator=(BombermanComponent&& other) = delete;
 
+		virtual void Update(float) override {}
+
 		void SetPickupExtraBomb(bool has) { m_HasPickupExtraBomb = has; }
 		void SetPickupFlames(bool has) { m_HasPickupFlames = has; }
 		void SetPickupDetonator(bool has) { m_HasPickupDetonator = has; }

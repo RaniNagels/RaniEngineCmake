@@ -11,6 +11,7 @@
 #include "../BalloomStates.h"
 #include "../BombermanStates.h"
 #include "../../Components/GridComponent.h"
+#include "../../Components/BombermanComponent.h"
 #include <Input/InputSystem.h>
 
 #ifdef _DEBUG
@@ -38,18 +39,27 @@ void Game::LevelVersus::Enter()
 	bombermanWalkAnimDesc.animationKey = "bomberman_walk_left";
 	bombermanWalkAnimDesc.startOnStartup = true;
 
+	auto* playfield = GetPlayfield()->GetComponent<GridComponent>();
+	auto startCell = playfield->GetLevelInfo()->player1StartCell;
+	auto startCell2 = playfield->GetLevelInfo()->player2StartCell;
+	auto starPosition = playfield->GetAbsoluteCellPosition(startCell.first, startCell.second);
+	auto startPosition2 = playfield->GetAbsoluteCellPosition(startCell2.first, startCell2.second);
+	float offset = playfield->GetCellSize().x / 2.f; // to center the player in the cell
+	starPosition += glm::vec2{ offset, offset };
+	startPosition2 += glm::vec2{ offset, offset };
+
 	Game::PlayerDescriptor bombermanDescriptor{};
 	bombermanDescriptor.name = ObjectIds::Bomberman;
 	bombermanDescriptor.amountOfLives = 4;
 	bombermanDescriptor.animDesc = bombermanWalkAnimDesc;
 	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
 	bombermanDescriptor.renderLayer = Util::to_underlying(RenderLayer::Player);
-	bombermanDescriptor.startPosition = { 250.f, 250.f };
+	bombermanDescriptor.startPosition = starPosition;
 
 	auto* player1 = AddPlayer(bombermanDescriptor);
 	auto* player1GO = player1->Get();
 
-	bombermanDescriptor.startPosition = { 350.f, 250.f };
+	bombermanDescriptor.startPosition = startPosition2;
 	bombermanDescriptor.name = ObjectIds::Balloom;
 	bombermanDescriptor.animDesc.animationKey = "balloom_look_left";
 	auto* player2 = AddPlayer(bombermanDescriptor);
@@ -60,6 +70,7 @@ void Game::LevelVersus::Enter()
 	collisionDescriptor.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ -18.f, -18.f, 36.f, 36.f}, true });
 
 	player1GO->AddCollisionComponent<BombermanCollisionComponent>(collisionDescriptor);
+	player1GO->AddComponent<BombermanComponent>();
 	player2GO->AddCollisionComponent<BalloomCollisionComponent>(collisionDescriptor);
 
 	player1GO->AddComponent<REC::RigidBodyComponent>();
