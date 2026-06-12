@@ -77,7 +77,9 @@ void Game::Player::DisableInputBindings()
 	}
 }
 
-void Game::Player::ResetPosition()
+void Game::Player::ResetPosition(glm::vec2 position)
 {
-	m_pGameObject->GetTransform()->SetLocalPosition(m_Descriptor.startPosition.x, m_Descriptor.startPosition.y);
+	if (position == glm::vec2{})
+		position = m_Descriptor.startPosition;
+	m_pGameObject->GetTransform()->SetLocalPosition(position.x, position.y);
 }

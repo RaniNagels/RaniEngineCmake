@@ -104,7 +104,7 @@ namespace Game
 			if (inputActions.placeBomb.get() != nullptr)	m_InputBindings[Util::to_underlying(InputBindingIndex::PlaceBomb)]->AddInputAction(std::move(inputActions.placeBomb));
 		}
 
-		void ResetPosition();
+		void ResetPosition(glm::vec2 position = {});
 
 	private:
 		// only used for indexing the input bindings

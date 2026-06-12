@@ -7,6 +7,7 @@
 #include "FrameInfo.h"
 #include "AnimationInfo.h"
 #include "TextureFontInfo.h"
+#include <LevelInfo.h>
 
 namespace REC
 {
@@ -27,6 +28,7 @@ namespace REC
 		bool GetFrames(std::unordered_map<std::string, FrameInfo>& out);
 		bool GetAnimations(std::unordered_map<std::string, AnimationInfo>& out);
 		bool GetTextureFonts(std::unordered_map<std::string, TextureFontInfo>& out);
+		bool GetLevels(std::unordered_map<std::string, LevelInfo>& out);
 
 	private:
 		class Impl;

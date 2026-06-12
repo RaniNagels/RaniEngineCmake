@@ -1,5 +1,6 @@
 #pragma once
 #include <Resources/ResourceCreateInfos.h>
+#include <LevelInfo.h>
 
 namespace REC
 {
@@ -8,5 +9,6 @@ namespace REC
 	public:
 		virtual ~IResourceManager() = default;
 		virtual bool AddResource(const ResourceCreateInfo& resource) = 0;
+		virtual LevelInfo* GetLevelInfo(const std::string& key) const = 0;
 	};
 }

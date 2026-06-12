@@ -112,6 +112,15 @@ namespace REC
 
 		std::string GetFullPath(const std::string& relativePath);
 
+		virtual LevelInfo* GetLevelInfo(const std::string& key) const override
+		{
+			auto it = m_DataFileResources.find("levelData");
+			if (it != m_DataFileResources.end())
+				return it->second->GetResource<LevelInfo>(key);
+			assert(false && "Requested resource type is not supported!");
+			return nullptr;
+		}
+
 	private:
 		template <typename T>
 		T* GetResourceFromMap(std::unordered_map<std::string, std::unique_ptr<T>>& in, const std::string& key)

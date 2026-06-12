@@ -10,6 +10,7 @@
 #include "../BombermanStates.h"
 #include <Components/AnimationStateComponent.h>
 #include <Components/RigidBodyComponent.h>
+#include <LevelInfo.h>
 
 #ifdef _DEBUG
 #include "../../Components/DebugBoundsRenderComponent.h"
@@ -38,13 +39,19 @@ void Game::LevelSinglePlayer::Enter()
 	bombermanWalkAnimDesc.animationKey = "bomberman_walk_left";
 	bombermanWalkAnimDesc.startOnStartup = true;
 
+	auto* playfield = GetPlayfield()->GetComponent<GridComponent>();
+	auto startCell = playfield->GetLevelInfo()->player1StartCell;
+	auto starPosition = playfield->GetAbsoluteCellPosition(startCell.first, startCell.second);
+	float offset = playfield->GetCellSize().x / 2.f; // to center the player in the cell
+	starPosition += glm::vec2{ offset, offset };
+
 	Game::PlayerDescriptor bombermanDescriptor{};
 	bombermanDescriptor.name = Game::ObjectIds::Bomberman;
 	bombermanDescriptor.amountOfLives = 4;
 	bombermanDescriptor.animDesc = bombermanWalkAnimDesc;
 	bombermanDescriptor.spriteDesc = charactersSpriteDescriptors;
 	bombermanDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Player);
-	bombermanDescriptor.startPosition = { 250.f, 250.f };
+	bombermanDescriptor.startPosition = starPosition;
 
 	auto* player = AddPlayer(bombermanDescriptor);
 	auto* playerGO = player->Get();

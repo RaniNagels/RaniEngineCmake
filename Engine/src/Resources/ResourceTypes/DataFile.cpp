@@ -32,4 +32,9 @@ void REC::DataFile::Parse(LoadTypes types)
 	{
 		m_Parser->GetTextureFonts(m_TextureFontInfos);
 	}
+
+	if (uint8_t(types & LoadTypes::Levels))
+	{
+		m_Parser->GetLevels(m_Levels);
+	}
 }

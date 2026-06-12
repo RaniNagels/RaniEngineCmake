@@ -302,6 +302,27 @@
       "h": 16,
       "sheet": "General Sprites"
     },
+    "Oneal":{
+      "x": 0,
+      "y": 256,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "Doll":{
+      "x": 0,
+      "y": 272,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "Minvo":{
+      "x": 0,
+      "y": 288,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
     "explosion_center_01":
     {
       "x": 32,
@@ -628,6 +649,27 @@
       "w": 496,
       "h": 208,
       "sheet": "Playfield"
+    },
+    "ExtraBomb": {
+      "x": 0,
+      "y": 204,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "Detonator": {
+      "x": 16,
+      "y": 204,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
+    },
+    "Flames":{
+      "x": 32,
+      "y": 204,
+      "w": 16,
+      "h": 16,
+      "sheet": "General Sprites"
     }
   },
   "animations": {

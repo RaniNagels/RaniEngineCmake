@@ -77,6 +77,13 @@ static void load(REC::IEngine* engine)
 	if (!RM->AddResource(titleScreenDataFile))
 		throw std::runtime_error("Failed to load title screen data file");
 
+	REC::FileResourceCreateInfo levelDataFile{};
+	levelDataFile.name = "levelData";
+	levelDataFile.filePath = "LevelData.json";
+	levelDataFile.dataTypes = REC::LoadTypes::Levels;
+	if (!RM->AddResource(levelDataFile))
+		throw std::runtime_error("Failed to load level data file");
+
 	REC::TextureResourceCreateInfo titleScreen{};
 	titleScreen.name = "titleScreen";
 	titleScreen.filePath = "NES - Bomberman - Miscellaneous - Title Screen & Text.png";

@@ -91,6 +91,51 @@ public:
 		return true;
 	}
 
+	bool ParseLevels(std::unordered_map<std::string, LevelInfo>& out)
+	{
+		auto levelData = m_Json["levels"];
+		if (levelData.empty()) return false;
+
+		for (const auto& value : levelData)
+		{
+			LevelInfo info{};
+
+			info.id = value["id"].get<uint8_t>();
+
+			info.player1StartCell = {
+				value["player1Start"][0].get<uint8_t>(),
+				value["player1Start"][1].get<uint8_t>()
+			};
+
+			info.player2StartCell = {
+				value["player2Start"][0].get<uint8_t>(),
+				value["player2Start"][1].get<uint8_t>()
+			};
+
+			for (const auto& b : value["bricks"])
+				info.bricks.emplace_back(b[0], b[1]);
+
+			for (const auto& e : value["enemies"])
+				info.enemies.emplace_back(
+					CellCo{
+						e["x"].get<uint8_t>(),
+						e["y"].get<uint8_t>()
+					},
+					e["type"].get<std::string>()
+				);
+
+			info.exitBrickIndex = value["exitBrick"].get<uint16_t>();
+
+			info.powerUps = {
+				value["powerUp"]["brick"].get<uint8_t>(),
+				value["powerUp"]["type"]
+			};
+
+			out.emplace(std::to_string(info.id), std::move(info));
+		}
+		return true;
+	}
+
 private:
 	nlohmann::json m_Json{};
 };
@@ -125,4 +170,9 @@ bool REC::JSONParser::GetAnimations(std::unordered_map<std::string, AnimationInf
 bool REC::JSONParser::GetTextureFonts(std::unordered_map<std::string, TextureFontInfo>& out)
 {
 	return m_impl->ParseTextureFonts(out);
+}
+
+bool REC::JSONParser::GetLevels(std::unordered_map<std::string, LevelInfo>& out)
+{
+	return m_impl->ParseLevels(out);
 }

@@ -1,6 +1,8 @@
 #include "GridComponent.h"
 #include <GameObject.h>
 #include <Components/TransformComponent.h>
+#include "../Ids.h"
+#include <Resources/IResourceManager.h>
 
 Game::GridComponent::Cell Game::GridComponent::s_InvalidCell{};
 
@@ -8,6 +10,7 @@ Game::GridComponent::GridComponent(REC::GameObject* owner, const GridDescriptor&
 	: Component(owner)
 	, m_Descriptor{desc}
 	, m_Cells{}
+	, m_pLevelInfo{ desc.levelInfo }
 {
 	uint32_t amountOfCells{ uint32_t(desc.cols) * uint32_t(desc.rows) };
 	m_Cells.resize(amountOfCells);
@@ -28,6 +31,8 @@ Game::GridComponent::GridComponent(REC::GameObject* owner, const GridDescriptor&
 				m_Cells[index].isWall = true;
 		}
 	}
+
+	m_pLevelChangeEvent = std::make_unique<REC::Event>(EventIds::LevelChangeEvent, REC::EventArgs{});
 }
 
 void Game::GridComponent::Update(float) {}
@@ -51,6 +56,11 @@ const Game::GridComponent::Cell& Game::GridComponent::GetCell(const glm::vec2& p
 	return s_InvalidCell;
 }
 
+void Game::GridComponent::GetModifiableCell(uint8_t row, uint8_t col, Cell& cell)
+{
+	cell = m_Cells[GetIndex(row, col)];
+}
+
 glm::vec2 Game::GridComponent::GetAbsoluteCellPosition(const Cell& cell)
 {
 	glm::vec2 worldPos = GetOwner()->GetTransform()->GetWorldPosition();
@@ -69,6 +79,42 @@ std::vector<REC::CollisionBound> Game::GridComponent::GetWallCollisionBounds()
 	}
 
 	return bounds;
+}
+
+void Game::GridComponent::SetNewLevel(REC::LevelInfo* levelInfo)
+{
+	m_pLevelInfo = levelInfo;
+	m_pLevelChangeEvent->Broadcast();
+}
+
+bool Game::GridComponent::LoadNextLevel(const REC::EngineContext& context)
+{
+	auto index = m_pLevelInfo->id + 1;
+	if (index > 3) return false;
+	SetNewLevel(context.resourceManager->GetLevelInfo(std::to_string(index)));
+	return true;
+}
+
+void Game::GridComponent::ResetGrid()
+{
+	for (auto& cell : m_Cells)
+	{
+		cell.isDestructableWall = false;
+		cell.hasExit = false;
+		cell.hasPowerUp = false;
+	}
+}
+
+void Game::GridComponent::ModifyCell(uint8_t row, uint8_t col, bool isDestructableWall, bool hasExit, bool hasPowerUp)
+{
+	uint32_t index = GetIndex(row, col);
+	m_Cells[index].isDestructableWall = isDestructableWall;
+
+	if (hasExit)
+		m_Cells[index].hasExit = true;
+
+	if (hasPowerUp)
+		m_Cells[index].hasPowerUp = true;
 }
 
 uint32_t Game::GridComponent::GetIndex(Cell* cell)

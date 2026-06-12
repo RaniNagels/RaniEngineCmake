@@ -1,10 +1,22 @@
 #include "PickUpComponent.h"
 
 
-Game::PickUpComponent::PickUpComponent(REC::GameObject* owner, Game::PickUpComponent::PickUpType type)
+Game::PickUpComponent::PickUpComponent(REC::GameObject* owner, uint8_t type)
 	: Component(owner)
-	, m_Type{ type }
-{}
+{
+	switch (type)
+	{
+	case 0:
+		m_Type = PickUpType::ExtraBomb;
+		break;
+	case 1:
+		m_Type = PickUpType::Detonator;
+		break;
+	case 2:
+		m_Type = PickUpType::Flames;
+		break;
+	}
+}
 
 Game::PickUpComponent::~PickUpComponent()
 {}

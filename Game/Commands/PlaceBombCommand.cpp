@@ -15,6 +15,7 @@
 #include "../Components/BombCollisionComponent.h"
 #include "../Components/GridComponent.h"
 #include "../Ids.h"
+#include "../Components/BombermanComponent.h"
 
 Game::PlaceBombCommand::PlaceBombCommand(REC::GameObject* actor, REC::SceneManager* sceneManager)
 	: GameObjectInputCommand(actor)
@@ -29,7 +30,14 @@ Game::PlaceBombCommand::~PlaceBombCommand() = default;
 
 void Game::PlaceBombCommand::Execute(float)
 {
+	auto* bomComp = GetGameObject()->GetComponent<BombermanComponent>();
 	auto activeScene = m_pSceneManager->GetActiveScene();
+
+	if (bomComp != nullptr && !bomComp->HasPickupExtraBomb())
+	{
+		REC::GameObject* bomb = activeScene->GetGameObject(ObjectIds::Bom);
+		if (bomb) return;
+	}
 
 	REC::GameObject* go = activeScene->GetGameObject(ObjectIds::Grid);
 	auto* grid = go->GetComponent<Game::GridComponent>();
@@ -69,7 +77,13 @@ void Game::PlaceBombCommand::Execute(float)
 	bombCompDesc.lifeTime = 1.3f;
 	bombCompDesc.grid = grid;
 	bombCompDesc.scene = activeScene;
-	bombCompDesc.explosionRange = 2;
+	int range = 3;
+	if (bomComp)
+	{
+		if (bomComp->HasPickupFlames())
+			++range;
+	}
+	bombCompDesc.explosionRange = range;
 
 	bomb->AddComponent<BombComponent>(bombCompDesc);
 

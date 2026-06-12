@@ -2,7 +2,8 @@
   "levels": [
     {
       "id": 1,
-      "playerStart": [ 1, 1 ],
+      "player1Start": [ 1, 1 ],
+      "player2Start": [ 1, 2 ],
       "bricks": [
         [ 2, 1 ],
         [ 3, 1 ],
@@ -97,13 +98,14 @@
       ],
       "exitBrick": 32,
       "powerUp": {
-        "type": "Fire",
+        "type": "Flames",
         "brick": 18
       }
     },
     {
       "id": 2,
-      "playerStart": [ 1, 1 ],
+      "player1Start": [ 3, 1 ],
+      "player2Start": [ 1, 2 ],
       "bricks": [
         [ 2, 1 ],
         [ 4, 1 ],
@@ -201,13 +203,14 @@
       ],
       "exitBrick": 41,
       "powerUp": {
-        "type": "Bomb",
+        "type": "ExtraBomb",
         "brick": 9
       }
     },
     {
       "id": 3,
-      "playerStart": [ 1, 1 ],
+      "player1Start": [ 5, 1 ],
+      "player2Start": [ 1, 2 ],
       "bricks": [
         [ 2, 1 ],
         [ 3, 1 ],
@@ -310,7 +313,7 @@
       ],
       "exitBrick": 25,
       "powerUp": {
-        "type": "Speed",
+        "type": "Detonator",
         "brick": 37
       }
     }

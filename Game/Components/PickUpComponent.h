@@ -1,5 +1,6 @@
 #pragma once
 #include <Components/Component.h>
+#include <cstdInt>
 
 namespace Game
 {
@@ -13,7 +14,7 @@ namespace Game
 			Flames
 		};
 
-		explicit PickUpComponent(REC::GameObject* owner, Game::PickUpComponent::PickUpType type);
+		explicit PickUpComponent(REC::GameObject* owner, uint8_t type);
 		virtual ~PickUpComponent();
 
 		PickUpComponent(const PickUpComponent&) = delete;

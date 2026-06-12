@@ -8,6 +8,7 @@ namespace REC
 		Frames = 0x01,
 		Animations = 0x02,
 		TextureFont = 0x04,
+		Levels = 0x08
 	};
 
 	inline LoadTypes operator|(LoadTypes a, LoadTypes b)

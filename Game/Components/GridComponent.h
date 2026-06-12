@@ -3,9 +3,25 @@
 #include <cstdint>
 #include <glm/glm.hpp>
 #include <GeneralStructs.h>
+#include <LevelInfo.h>
+#include <Events/Event.h>
+#include <EngineContext.h>
 
 namespace Game
 {
+	struct GridEventArgs final : public REC::EventArgs
+	{
+		uint8_t row{};
+		uint8_t col{};
+		REC::GameObject* grid{ nullptr };
+
+		virtual std::unique_ptr<REC::EventArgs> makeUnique() const override
+		{
+			return std::make_unique<GridEventArgs>(*this);
+		}
+		virtual ~GridEventArgs() = default;
+	};
+
 	struct GridDescriptor final
 	{
 		uint8_t rows;
@@ -15,6 +31,7 @@ namespace Game
 		uint8_t cellHeight;
 
 		glm::vec2 origin;
+		REC::LevelInfo* levelInfo;
 	};
 
 	class GridComponent final : public REC::Component
@@ -41,6 +58,11 @@ namespace Game
 			uint8_t col{uint8_t(-1)};
 
 			bool isWall{ false };
+			bool isDestructableWall{ false };
+			bool hasExit{ false };
+			bool hasPowerUp{ false };
+
+			uint8_t powerUpType{ uint8_t(-1) }; // only valid if hasPowerUp is true
 
 			bool operator==(const Cell& other) const
 			{
@@ -72,6 +94,7 @@ namespace Game
 		const std::vector<Cell>& GetCells() const { return m_Cells; }
 		const Cell& GetCell(uint8_t row, uint8_t col);
 		const Cell& GetCell(const glm::vec2& pos);
+		void GetModifiableCell(uint8_t row, uint8_t col, Cell& cell);
 		glm::vec2 GetAbsoluteCellPosition(const Cell& cell); // returns the world position!, the cell only contains the local position in relation of the grid
 		glm::vec2 GetAbsoluteCellPosition(uint8_t row, uint8_t col) { return GetAbsoluteCellPosition(GetCell(row, col)); }
 		glm::vec2 GetAbsoluteCellPosition(const glm::vec2& pos) { return GetAbsoluteCellPosition(GetCell(pos)); }
@@ -82,13 +105,23 @@ namespace Game
 		uint8_t GetCols() const { return m_Descriptor.cols; }
 		bool IsRowColValid(uint8_t row, uint8_t col) const { return row < m_Descriptor.rows && col < m_Descriptor.cols; }
 
+		void SetNewLevel(REC::LevelInfo* levelInfo);
+		REC::LevelInfo* GetLevelInfo() const { return m_pLevelInfo; }
+		bool LoadNextLevel(const REC::EngineContext& context);
+		void ResetGrid();
+
+		void ModifyCell(uint8_t row, uint8_t col, bool isDestructableWall, bool hasExit = false, bool hasPowerUp = false);
+
 	private:
 
 		GridDescriptor m_Descriptor;
+		REC::LevelInfo* m_pLevelInfo;
 		std::vector<Cell> m_Cells;
 		static Cell s_InvalidCell;
 
 		uint32_t GetIndex(Cell* cell);
 		uint32_t GetIndex(uint8_t row, uint8_t col);
+		
+		std::unique_ptr<REC::Event> m_pLevelChangeEvent{ nullptr };
 	};
 }

@@ -45,12 +45,14 @@ namespace Game
 	private:
 		glm::uvec4 GetExplosionRange() const; // left, top, right, bottom
 		void CreateExplosionInCell(REC::Scene* scene, REC::GameObject* root, glm::vec2 offset, bool end = false);
+		uint8_t ComputeDirection(int rowStep, int colStep, REC::Event* destructionEvent) const;
 
 		const BombDescriptor m_Descriptor;
 		REC::AnimatedSpriteComponent* m_pAnimatedSpriteComponent{ nullptr };
 		REC::SpriteRenderComponent* m_pSpriteRenderComponent{ nullptr };
 
 		std::unique_ptr<REC::Event> m_pDetonateEvent{ nullptr };
+		std::vector<std::unique_ptr<REC::Event>> m_DestructionEvents{}; // softblocks
 
 		float m_Timer{0.f};
 		const float m_LifeTime{ 2.f };

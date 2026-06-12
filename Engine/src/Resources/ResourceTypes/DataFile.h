@@ -5,6 +5,7 @@
 #include "FileParsing/JSON_Parser.h"
 
 #include <DataLoadTypes.h>
+#include <LevelInfo.h>
 
 namespace REC
 {
@@ -36,6 +37,10 @@ namespace REC
 			{
 				return GetResourceFromMap<T>(m_TextureFontInfos, key);
 			}
+			else if constexpr (std::is_same_v<T, LevelInfo>)
+			{
+				return GetResourceFromMap<T>(m_Levels, key);
+			}
 
 			// unreachable code?!
 			//assert(false && "Requested resource type is not supported!");
@@ -60,5 +65,6 @@ namespace REC
 		std::unordered_map<std::string, FrameInfo> m_FrameInfos;
 		std::unordered_map<std::string, AnimationInfo> m_AnimationInfos;
 		std::unordered_map<std::string, TextureFontInfo> m_TextureFontInfos;
+		std::unordered_map<std::string, LevelInfo> m_Levels;
 	};
 }

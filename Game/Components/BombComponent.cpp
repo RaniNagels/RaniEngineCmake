@@ -28,6 +28,17 @@ Game::BombComponent::BombComponent(REC::GameObject* owner, const BombDescriptor&
 	args.sender = GetOwner();
 	m_pDetonateEvent = std::make_unique<REC::Event>(EventIds::BombDetonationEvent, args);
 
+	Game::GridEventArgs gridEventArgs{};
+	gridEventArgs.grid = descriptor.grid->GetOwner();
+	m_DestructionEvents.reserve(4);
+
+	for (uint8_t i{}; i < 4; ++i)
+	{
+		gridEventArgs.row = uint8_t(-1);
+		gridEventArgs.col = uint8_t(-1);
+		m_DestructionEvents.push_back(std::make_unique<REC::Event>(EventIds::DestroySoftBlockEvent, gridEventArgs));
+	}
+
 	SubscribeToEvent({ EventIds::BombDetonationEvent });
 }
 
@@ -105,64 +116,116 @@ void Game::BombComponent::Notify(REC::Event* event)
 
 glm::uvec4 Game::BombComponent::GetExplosionRange() const
 {
-	auto& bombcell = m_Descriptor.grid->GetCell(GetOwner()->GetTransform()->GetWorldPosition());
+	//auto& bombcell = m_Descriptor.grid->GetCell(GetOwner()->GetTransform()->GetWorldPosition());
+	//
+	//glm::uvec4 explosionRange{}; // right (x), down (y), left (-x), up (-y)
+	//for (uint8_t range{ 1 }; range <= m_Descriptor.explosionRange; ++range)
+	//{
+	//	// check right
+	//	uint8_t cellCol = bombcell.col + range;
+	//	uint8_t cellRow = bombcell.row;
+	//
+	//	if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
+	//	{
+	//		if (m_Descriptor.grid->GetCell(cellRow, cellCol).isDestructableWall
+	//			&& uint8_t(explosionRange.x) == range - uint8_t(1))
+	//		{
+	//			auto* args = m_DestructionEvents[0]->GetArgs();
+	//			auto* gridEventArgs = dynamic_cast<GridEventArgs*>(args);
+	//			gridEventArgs->row = cellRow;
+	//			gridEventArgs->col = cellCol;
+	//			m_DestructionEvents[0]->Broadcast();
+	//
+	//			explosionRange.x = range;
+	//		}
+	//		if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
+	//			&& uint8_t(explosionRange.x) == range - uint8_t(1))
+	//		{
+	//			explosionRange.x = range;
+	//		}
+	//	}
+	//
+	//	// check down
+	//	cellCol = bombcell.col;
+	//	cellRow = bombcell.row + range;
+	//
+	//	if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
+	//	{
+	//		if (m_Descriptor.grid->GetCell(cellRow, cellCol).isDestructableWall
+	//			&& uint8_t(explosionRange.y) == range - uint8_t(1))
+	//		{
+	//			auto* args = m_DestructionEvents[1]->GetArgs();
+	//			auto* gridEventArgs = dynamic_cast<Game::GridEventArgs*>(args);
+	//			gridEventArgs->row = cellRow;
+	//			gridEventArgs->col = cellCol;
+	//			m_DestructionEvents[1]->Broadcast();
+	//
+	//			explosionRange.y = range;
+	//		}
+	//		if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
+	//			&& uint8_t(explosionRange.y) == range - uint8_t(1))
+	//		{
+	//			explosionRange.y = range;
+	//		}
+	//	}
+	//
+	//	// check left
+	//	cellCol = bombcell.col - range;
+	//	cellRow = bombcell.row;
+	//
+	//	if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
+	//	{
+	//		if (m_Descriptor.grid->GetCell(cellRow, cellCol).isDestructableWall
+	//			&& uint8_t(explosionRange.z) == range - uint8_t(1))
+	//		{
+	//			auto* args = m_DestructionEvents[2]->GetArgs();
+	//			auto* gridEventArgs = dynamic_cast<Game::GridEventArgs*>(args);
+	//			gridEventArgs->row = cellRow;
+	//			gridEventArgs->col = cellCol;
+	//			m_DestructionEvents[2]->Broadcast();
+	//
+	//			explosionRange.z = range;
+	//		}
+	//		if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
+	//			&& uint8_t(explosionRange.z) == range - uint8_t(1))
+	//		{
+	//			explosionRange.z = range;
+	//		}
+	//	}
+	//
+	//	// check up
+	//	cellCol = bombcell.col;
+	//	cellRow = bombcell.row - range;
+	//
+	//	if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
+	//	{
+	//		if (m_Descriptor.grid->GetCell(cellRow, cellCol).isDestructableWall
+	//			&& uint8_t(explosionRange.w) == range - uint8_t(1))
+	//		{
+	//			auto* args = m_DestructionEvents[3]->GetArgs();
+	//			auto* gridEventArgs = dynamic_cast<Game::GridEventArgs*>(args);
+	//			gridEventArgs->row = cellRow;
+	//			gridEventArgs->col = cellCol;
+	//			m_DestructionEvents[3]->Broadcast();
+	//
+	//			explosionRange.w = range;
+	//		}
+	//		if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
+	//			&& uint8_t(explosionRange.w) == range - uint8_t(1))
+	//		{
+	//			explosionRange.w = range;
+	//		}
+	//	}
+	//}
+	//return explosionRange;
 
-	glm::uvec4 explosionRange{}; // right (x), down (y), left (-x), up (-y)
-	for (uint8_t range{ 1 }; range <= m_Descriptor.explosionRange; ++range)
-	{
-		// check right
-		uint8_t cellCol = bombcell.col + range;
-		uint8_t cellRow = bombcell.row;
-
-		if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
-		{
-			if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
-				&& uint8_t(explosionRange.x) == range - uint8_t(1))
-			{
-				explosionRange.x = range;
-			}
-		}
-
-		// check down
-		cellCol = bombcell.col;
-		cellRow = bombcell.row + range;
-
-		if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
-		{
-			if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
-				&& uint8_t(explosionRange.y) == range - uint8_t(1))
-			{
-				explosionRange.y = range;
-			}
-		}
-
-		// check left
-		cellCol = bombcell.col - range;
-		cellRow = bombcell.row;
-
-		if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
-		{
-			if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
-				&& uint8_t(explosionRange.z) == range - uint8_t(1))
-			{
-				explosionRange.z = range;
-			}
-		}
-
-		// check up
-		cellCol = bombcell.col;
-		cellRow = bombcell.row - range;
-
-		if (m_Descriptor.grid->IsRowColValid(cellRow, cellCol))
-		{
-			if (!m_Descriptor.grid->GetCell(cellRow, cellCol).isWall
-				&& uint8_t(explosionRange.w) == range - uint8_t(1))
-			{
-				explosionRange.w = range;
-			}
-		}
-	}
-	return explosionRange;
+	return {
+		ComputeDirection(0,  1, m_DestructionEvents[0].get()), // right
+		ComputeDirection(1,  0, m_DestructionEvents[1].get()), // down
+		ComputeDirection(0, -1, m_DestructionEvents[2].get()), // left
+		ComputeDirection(-1, 0, m_DestructionEvents[3].get())  // up
+	
+	};
 }
 
 void Game::BombComponent::CreateExplosionInCell(REC::Scene* scene, REC::GameObject* root, glm::vec2 offset, bool end) // offset is relative to the root
@@ -217,5 +280,38 @@ void Game::BombComponent::CreateExplosionInCell(REC::Scene* scene, REC::GameObje
 
 	explosion->AddCollisionComponent<REC::CollisionComponent>(explosionCollisionDesc);
 	explosion->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255,0,0 });
+}
+
+uint8_t Game::BombComponent::ComputeDirection(int rowStep, int colStep, REC::Event* destructionEvent) const
+{
+	auto& bombCell = m_Descriptor.grid->GetCell(
+		GetOwner()->GetTransform()->GetWorldPosition());
+
+	for (uint8_t range = 1; range <= uint8_t(m_Descriptor.explosionRange); ++range)
+	{
+		uint8_t row = uint8_t(bombCell.row + rowStep * range);
+		uint8_t col = uint8_t(bombCell.col + colStep * range);
+
+		if (!m_Descriptor.grid->IsRowColValid(row, col))
+			return range - 1;
+
+		auto& cell = m_Descriptor.grid->GetCell(row, col);
+
+		if (cell.isWall)
+			return range - 1;
+
+		if (cell.isDestructableWall)
+		{
+			auto* args = static_cast<GridEventArgs*>(destructionEvent->GetArgs());
+			args->row = row;
+			args->col = col;
+
+			destructionEvent->Broadcast();
+
+			return range;
+		}
+	}
+
+	return uint8_t(m_Descriptor.explosionRange);
 }
 

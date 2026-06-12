@@ -19,6 +19,10 @@ void Game::UIScoreComponent::Notify(REC::Event* event)
 			AddToStatValue(30);
 		}
 	}
+	if (event->IsEvent(Game::EventIds::DoorOpenEvent)) // go to next level
+	{
+		AddToStatValue(100);
+	}
 }
 
 void Game::UIScoreComponent::Destroy()

@@ -35,6 +35,11 @@ namespace Game
 
 	private:
 		void ResetLevel();
+		void LoadLevel();
+		void DisablePlayers();
+		void EnablePlayers();
+
+		void CreateSoftBlock(uint8_t row, uint8_t col);
 
 		REC::GameObject* m_pGridObject{ nullptr };
 		std::vector<std::unique_ptr<Player>> m_Players{};
