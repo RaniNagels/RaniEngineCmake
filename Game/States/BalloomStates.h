@@ -30,6 +30,7 @@ namespace Game
 		virtual void Notify(REC::Event* event) override;
 
 	private:
+		bool m_DeathNotified{ false };
 		bool m_HasBeenNotified{ false };
 		bool m_ChangedDirection{ false };
 		float m_XDirection{};

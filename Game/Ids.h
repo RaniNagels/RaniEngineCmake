@@ -14,10 +14,12 @@ namespace Game
 		constexpr REC::EventId BombermanDeathEvent = REC::make_sdbm_hash("BombermanDeathEvent");
 		constexpr REC::EventId DoorOpenEvent = REC::make_sdbm_hash("DoorOpenEvent");
 		constexpr REC::EventId VeryDeathEvent = REC::make_sdbm_hash("VeryDeathEvent");
+		constexpr REC::EventId BombDetonationEvent = REC::make_sdbm_hash("BombDetonationEvent");
 
 		// game state events
 		constexpr REC::EventId StartGameEvent = REC::make_sdbm_hash("StartGameEvent");
 		constexpr REC::EventId MarkerSelectedEvent = REC::make_sdbm_hash("MarkerSelectedEvent");
+		constexpr REC::EventId ResetLevelEvent = REC::make_sdbm_hash("ResetLevelEvent");
 	}
 
 	namespace ObjectIds
@@ -26,6 +28,7 @@ namespace Game
 		constexpr REC::ObjectId Bomberman = REC::make_sdbm_hash("Bomberman");
 		constexpr REC::ObjectId Balloom = REC::make_sdbm_hash("Balloom");
 		constexpr REC::ObjectId Bom = REC::make_sdbm_hash("Bom");
+		constexpr REC::ObjectId Explosion = REC::make_sdbm_hash("Explosion");
 		constexpr REC::ObjectId PickUp = REC::make_sdbm_hash("PickUp");
 
 		// UI elements
@@ -40,5 +43,6 @@ namespace Game
 		constexpr REC::SceneId EntryScene = REC::make_sdbm_hash("StartUpScene");
 		constexpr REC::SceneId LevelScene = REC::make_sdbm_hash("LevelScene");
 		constexpr REC::SceneId GameOverScene = REC::make_sdbm_hash("GameOverScene");
+		constexpr REC::SceneId PlayerMenuScene = REC::make_sdbm_hash("PlayerMenuScene");
 	}
 }

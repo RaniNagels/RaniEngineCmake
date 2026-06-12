@@ -23,6 +23,17 @@ Game::BombComponent::BombComponent(REC::GameObject* owner, const BombDescriptor&
 		m_pSpriteRenderComponent = GetOwner()->GetComponent<REC::SpriteRenderComponent>();
 	else
 		throw std::runtime_error("BombComponent relies on SpriteRenderComponent!");
+
+	REC::GameObjectEventArgs args{};
+	args.sender = GetOwner();
+	m_pDetonateEvent = std::make_unique<REC::Event>(EventIds::BombDetonationEvent, args);
+
+	SubscribeToEvent({ EventIds::BombDetonationEvent });
+}
+
+Game::BombComponent::~BombComponent()
+{
+	UnsubscribeFromEvent({ EventIds::BombDetonationEvent });
 }
 
 void Game::BombComponent::Update(float deltaT)
@@ -32,7 +43,7 @@ void Game::BombComponent::Update(float deltaT)
 		m_Timer += deltaT;
 		if (m_Timer >= m_LifeTime)
 		{
-			Detonate();
+			m_pDetonateEvent->Broadcast(); // do not change the object vector during update!!
 		}
 	}
 	else
@@ -71,9 +82,6 @@ void Game::BombComponent::Detonate()
 	animation.animationDataFileKey = "characterData";
 	animation.animationKey = "explosion_center";
 
-	auto& bounds = GetOwner()->GetCollisionComponent()->GetModifiableBounds();
-	bounds.push_back(REC::CollisionBound{ REC::Rect{ -25.f, -25.f, 50.f, 50.f }, true });
-
 	m_pAnimatedSpriteComponent->ChangeAnimation(animation);
 	m_pAnimatedSpriteComponent->StartAnimation();
 	m_Exploded = true;
@@ -85,6 +93,14 @@ void Game::BombComponent::Reset()
 {
 	m_Timer = 0.f;
 	m_Exploded = false;
+}
+
+void Game::BombComponent::Notify(REC::Event* event)
+{
+	if (event->IsEvent(EventIds::BombDetonationEvent))
+	{
+		Detonate();
+	}
 }
 
 glm::uvec4 Game::BombComponent::GetExplosionRange() const
@@ -170,7 +186,7 @@ void Game::BombComponent::CreateExplosionInCell(REC::Scene* scene, REC::GameObje
 		animationkey += "_middle";
 
 	REC::GameObjectDescriptor explosionDescriptor{};
-	explosionDescriptor.id = Game::ObjectIds::Bom;
+	explosionDescriptor.id = Game::ObjectIds::Explosion;
 	explosionDescriptor.startPosX = offset.x;
 	explosionDescriptor.startPosY = offset.y;
 	explosionDescriptor.renderLayer = std::to_underlying(RenderLayer::Placables);

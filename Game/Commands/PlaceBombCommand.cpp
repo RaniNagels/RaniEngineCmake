@@ -4,7 +4,6 @@
 #include <Components/TransformComponent.h>
 #include <Components/SpriteRenderComponent.h>
 #include <Components/AnimatedSpriteComponent.h>
-#include <Components/CollisionComponent.h>
 #include <Events/Event.h>
 #include <SceneManager.h>
 #include <ServiceLocator.h>
@@ -13,6 +12,7 @@
 #include "../RenderLayers.h"
 #include "../Components/BombComponent.h"
 #include "../Components/DebugBoundsRenderComponent.h"
+#include "../Components/BombCollisionComponent.h"
 #include "../Components/GridComponent.h"
 #include "../Ids.h"
 
@@ -31,7 +31,7 @@ void Game::PlaceBombCommand::Execute(float)
 {
 	auto activeScene = m_pSceneManager->GetActiveScene();
 
-	REC::GameObject* go = activeScene->GetGameObject(Game::ObjectIds::Grid);
+	REC::GameObject* go = activeScene->GetGameObject(ObjectIds::Grid);
 	auto* grid = go->GetComponent<Game::GridComponent>();
 
 	auto PlayerPosition = GetGameObject()->GetTransform()->GetWorldPosition();
@@ -41,7 +41,7 @@ void Game::PlaceBombCommand::Execute(float)
 	auto centeredBombPosition = bombPosition + glm::vec2{ grid->GetCell(0,0).width / 2.f, grid->GetCell(0,0).height / 2.f };
 
 	REC::GameObjectDescriptor bombDescriptor{};
-	bombDescriptor.id = Game::ObjectIds::Bom;
+	bombDescriptor.id = ObjectIds::Bom;
 	bombDescriptor.startPosX = centeredBombPosition.x;
 	bombDescriptor.startPosY = centeredBombPosition.y;
 	bombDescriptor.renderLayer = Util::to_underlying(Game::RenderLayer::Placables);
@@ -65,20 +65,20 @@ void Game::PlaceBombCommand::Execute(float)
 
 	bomb->AddComponent<REC::AnimatedSpriteComponent>(animation);
 
-	Game::BombDescriptor bombCompDesc{};
+	BombDescriptor bombCompDesc{};
 	bombCompDesc.lifeTime = 1.3f;
 	bombCompDesc.grid = grid;
 	bombCompDesc.scene = activeScene;
+	bombCompDesc.explosionRange = 2;
 
-	bomb->AddComponent<Game::BombComponent>(bombCompDesc);
+	bomb->AddComponent<BombComponent>(bombCompDesc);
 
 	REC::CollisionDescriptor bombCollisionDesc{};
 	bombCollisionDesc.collisionType = REC::CollisionType::Static;
-	//bombCollisionDesc.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the bomb
-	// no bounds yet, only on detonation the bounds are needed and added
+	bombCollisionDesc.bounds.emplace_back(REC::Rect{ -20.f, -20.f, 40.f, 40.f }); // centered on the bomb
 
-	bomb->AddCollisionComponent<REC::CollisionComponent>(bombCollisionDesc);
-	bomb->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{255,0,0});
+	bomb->AddCollisionComponent<BombCollisionComponent>(bombCollisionDesc);
+	bomb->AddComponent<DebugBoundsRenderComponent>(REC::Color{255,0,0});
 
 	REC::ServiceLocator::GetSoundSystem().Play("placeBombSound", 0.5f);
 

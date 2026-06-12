@@ -1,5 +1,6 @@
 #pragma once
 #include <State/GameState.h>
+#include <vector>
 #include <memory>
 
 namespace REC
@@ -10,16 +11,16 @@ namespace REC
 namespace Game
 {
 	class UIMarker;
-	class GameOverState : public REC::GameState
+	class PlayerMenuState : public REC::GameState
 	{
 	public:
-		GameOverState(const REC::EngineContext& context);
-		virtual ~GameOverState() = default;
+		PlayerMenuState(const REC::EngineContext& context);
+		virtual ~PlayerMenuState() = default;
 
-		GameOverState(const GameOverState&) = delete;
-		GameOverState(GameOverState&&) noexcept = delete;
-		GameOverState& operator=(const GameOverState&) = delete;
-		GameOverState& operator=(GameOverState&&) noexcept = delete;
+		PlayerMenuState(const PlayerMenuState&) = delete;
+		PlayerMenuState(PlayerMenuState&&) noexcept = delete;
+		PlayerMenuState& operator=(const PlayerMenuState&) = delete;
+		PlayerMenuState& operator=(PlayerMenuState&&) noexcept = delete;
 
 		virtual void Enter() override;
 		virtual std::optional<std::unique_ptr<REC::GameState>> OnEvent(REC::Event* event) override;

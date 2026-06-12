@@ -1,9 +1,12 @@
 #pragma once
 #include <EngineContext.h>
+#include <string>
 
 namespace REC
 {
 	class GameObject;
+	class Scene;
+	using ObjectId = unsigned int;
 }
 
 namespace Game
@@ -22,6 +25,7 @@ namespace Game
 		LevelUI& operator=(LevelUI&&) noexcept = delete;
 
 	private:
+		void CreatePlayerUI(REC::Scene* scene, REC::GameObject* parent, Player* player, REC::ObjectId id, const std::string& prefix, float x, float y);
 		REC::GameObject* m_UI{ nullptr };
 	};
 }

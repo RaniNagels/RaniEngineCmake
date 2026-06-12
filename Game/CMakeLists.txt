@@ -12,12 +12,14 @@ set(SOURCE_FILES
 	"Main.cpp"
     "Player.cpp"
     "LevelUI.cpp"
+    "UIMarker.cpp"
 
     "Commands/MoveCommand.cpp"
     "Commands/PlaceBombCommand.cpp"
     "Commands/MoveMarkerCommand.cpp"
 
     "Components/BombComponent.cpp"
+    "Components/BombCollisionComponent.cpp"
     "Components/GridComponent.cpp"
     "Components/DebugGridRenderComponent.cpp"
     "Components/UILivesComponent.cpp"
@@ -26,11 +28,18 @@ set(SOURCE_FILES
     "Components/DebugBoundsRenderComponent.cpp"
     "Components/PickUpComponent.cpp"
     "Components/MarkerComponent.cpp"
+    "Components/BalloomCollisionComponent.cpp"
 
     "States/BombermanStates.cpp"
     "States/BalloomStates.cpp"
-    "States/GameStates.cpp"
     "States/GameStates/GameOverState.cpp"
+    "States/GameStates/MainMenuState.cpp"
+    "States/GameStates/PlayerMenuState.cpp"
+    "States/GameStates/LevelSinglePlayer.cpp"
+    "States/GameStates/LevelCoOp.cpp"
+    "States/GameStates/LevelVersus.cpp"
+    "States/GameStates/LevelState.cpp"
+    "States/GameStates/SaveScoreState.cpp"
 )
 
 

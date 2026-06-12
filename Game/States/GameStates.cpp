@@ -23,67 +23,7 @@
 
 #include "BombermanStates.h"
 #include "GameStates/GameOverState.h"
-
-Game::MainMenuState::MainMenuState(const REC::EngineContext& context)
-	: REC::GameState(context)
-{}
-
-void Game::MainMenuState::Enter()
-{
-	auto* scene = GetContext().sceneManager->CreateScene(Game::SceneIds::EntryScene);
-	SetScene(scene);
-	GetContext().sceneManager->SetActiveScene(scene);
-
-	m_pStartGameInputBinding = GetContext().inputSystem->CreateInputBinding();
-	m_pStartGameInputBinding->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_5, REC::ButtonState::Up);
-	m_pStartGameInputBinding->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keypad_5, REC::ButtonState::Up);
-	m_pStartGameInputBinding->AddEvent<REC::Event>(EventIds::StartGameEvent);
-
-	SubscribeToEvent({ EventIds::StartGameEvent });
-
-	REC::SpriteDescriptor startScreenBackdrop{};
-	startScreenBackdrop.drawHeight = 750;
-	startScreenBackdrop.textureKey = "titleScreen";
-	startScreenBackdrop.frameDataFileKey = "startScreenData";
-	startScreenBackdrop.frameKey = "start_up_screen_1987";
-
-	REC::GameObjectDescriptor startScreenBackdropDesc{};
-	startScreenBackdropDesc.startPosX = 125.f;
-	startScreenBackdropDesc.startPosY = 0.f;
-	startScreenBackdropDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Background); // C++23 feature
-
-	auto* backdrop = scene->CreateGameObject(startScreenBackdropDesc);
-	backdrop->AddComponent<REC::SpriteRenderComponent>(startScreenBackdrop);
-
-	REC::TextDescriptor startScreenTextInstructionDesc{};
-	startScreenTextInstructionDesc.color = REC::Color{ 0,255,255 };
-	startScreenTextInstructionDesc.fontKey = "dogicapixel20";
-	startScreenTextInstructionDesc.text = "Press '5' to start";
-
-	REC::GameObjectDescriptor startScreenInstructionDesc{};
-	startScreenInstructionDesc.startPosX = 75.f;
-	startScreenInstructionDesc.startPosY = 320.f;
-	startScreenInstructionDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Ui); // C++23 feature
-
-	auto* stscInstruction = scene->CreateGameObject(startScreenInstructionDesc);
-	stscInstruction->AddComponent<REC::TextRenderComponent>(startScreenTextInstructionDesc);
-}
-
-std::optional<std::unique_ptr<REC::GameState>> Game::MainMenuState::OnEvent(REC::Event* event)
-{
-	if (event->IsEvent(Game::EventIds::StartGameEvent))
-	{
-		return std::make_unique<LevelState>(GetContext());
-	}
-	return {};
-}
-
-void Game::MainMenuState::Exit()
-{
-	UnsubscribeFromEvent({ Game::EventIds::StartGameEvent });
-	GetContext().inputSystem->RemoveInputBinding(m_pStartGameInputBinding);
-	GetScene()->RemoveAll();
-}
+#include "GameStates/MainMenuState.h"
 
 // ============================================================================================================================
 Game::LevelState::LevelState(const REC::EngineContext& context)
@@ -92,9 +32,7 @@ Game::LevelState::LevelState(const REC::EngineContext& context)
 
 void Game::LevelState::Enter()
 {
-	auto* scene = GetContext().sceneManager->CreateScene(Game::SceneIds::LevelScene);
-	SetScene(scene);
-	GetContext().sceneManager->SetActiveScene(scene);
+	auto* scene = CreateScene(Game::SceneIds::LevelScene);
 
 	SubscribeToEvent({ REC::EventIds::LostLive, EventIds::VeryDeathEvent });
 
@@ -300,4 +238,5 @@ void Game::LevelState::Exit()
 }
 
 // ============================================================================================================================
+
 

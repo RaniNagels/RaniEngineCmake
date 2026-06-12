@@ -30,6 +30,7 @@ namespace REC
 	private:
 		const int MAX_LIVES;
 		int m_CurrentAmountOfLives;
+		bool m_LostLivesOnceInAFrame{ false };
 
 		std::unique_ptr<Event> m_LostLiveEvent;
 		std::unique_ptr<Event> m_HasDiedEvent;

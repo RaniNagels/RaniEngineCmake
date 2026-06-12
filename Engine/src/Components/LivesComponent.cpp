@@ -17,10 +17,14 @@ REC::LivesComponent::LivesComponent(GameObject* owner, int totalLives)
 
 REC::LivesComponent::~LivesComponent() = default;
 
-void REC::LivesComponent::Update(float) {}
+void REC::LivesComponent::Update(float)
+{
+	m_LostLivesOnceInAFrame = false;
+}
 
 void REC::LivesComponent::LostLive()
 {
+	if (m_LostLivesOnceInAFrame) return;
 	if (m_pHealthComponent) m_pHealthComponent->ResetHealth();
 	if (m_CurrentAmountOfLives > 0)
 	{
@@ -30,4 +34,5 @@ void REC::LivesComponent::LostLive()
 		if (m_CurrentAmountOfLives == 0)
 			m_HasDiedEvent->Broadcast();
 	}
+	m_LostLivesOnceInAFrame = true;
 }

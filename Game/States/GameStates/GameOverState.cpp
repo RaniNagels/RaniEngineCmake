@@ -10,9 +10,11 @@
 #include <Components/LabeledStatComponent.h>
 #include "../../Commands/MoveMarkerCommand.h"
 #include "../../Components/MarkerComponent.h"
+#include <Components/SpriteRenderComponent.h>
 
-#include "../GameStates.h"
 #include <Input/InputBinding.h>
+#include "MainMenuState.h"
+#include "../../UIMarker.h"
 
 Game::GameOverState::GameOverState(const REC::EngineContext& context)
 	: REC::GameState(context)
@@ -20,9 +22,7 @@ Game::GameOverState::GameOverState(const REC::EngineContext& context)
 
 void Game::GameOverState::Enter()
 {
-	auto* scene = GetContext().sceneManager->CreateScene(Game::SceneIds::GameOverScene);
-	SetScene(scene);
-	GetContext().sceneManager->SetActiveScene(scene);
+	REC::Scene* scene = CreateScene(Game::SceneIds::GameOverScene);
 
 	SubscribeToEvent({ Game::EventIds::MarkerSelectedEvent });
 
@@ -36,38 +36,14 @@ void Game::GameOverState::Enter()
 	auto* root = scene->CreateGameObject(instrDesc);
 
 	// marker
-	glm::vec2 startPos{ 50.f, 100.f };
-	REC::GameObjectDescriptor markerDesc{};
-	markerDesc.id = Game::ObjectIds::Marker;
-	markerDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Player);
-	markerDesc.startPosX = startPos.x;
-	markerDesc.startPosY = startPos.y;
-	markerDesc.parent = root;
+	UIMarkerDescriptor markerDesc{};
+	markerDesc.positions = { {50.f, 100.f}, {50.f, 150.f} };
+	markerDesc.scene = scene;
+	markerDesc.root = root;
+	markerDesc.drawSize = { 20.f, 20.f };
 
-	MarkerDescriptor markerCompDesc{};
-	markerCompDesc.positions = { startPos, {50.f, 150.f} };
-	
-	auto* marker = scene->CreateGameObject(markerDesc);
-	marker->AddComponent<REC::TextRenderComponent>(">", "dogicapixel20", REC::Color(255, 0, 0));
-	m_pMarkerComponent = marker->AddComponent<Game::MarkerComponent>(markerCompDesc);
-
-	auto* moveUpMarker = GetContext().inputSystem->CreateInputBinding();
-	moveUpMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_W, REC::ButtonState::Up);
-	moveUpMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Up, REC::ButtonState::Up);
-	moveUpMarker->AddCommand<Game::MoveMarkerCommand>(marker, true);
-	
-	auto* moveDownMarker = GetContext().inputSystem->CreateInputBinding();
-	moveDownMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_S, REC::ButtonState::Up);
-	moveDownMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Down, REC::ButtonState::Up);
-	moveDownMarker->AddCommand<Game::MoveMarkerCommand>(marker, false);
-
-	auto* selectMarker = GetContext().inputSystem->CreateInputBinding();
-	selectMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Return, REC::ButtonState::Up);
-	selectMarker->AddEvent<REC::Event>(Game::EventIds::MarkerSelectedEvent);
-
-	m_InputBindings.push_back(moveUpMarker);
-	m_InputBindings.push_back(moveDownMarker);
-	m_InputBindings.push_back(selectMarker);
+	m_pUIMarker = std::make_unique<UIMarker>(markerDesc);
+	m_pUIMarker->CreateInputBindings(GetContext().inputSystem);
 
 	// safe score instructions
 	REC::TextDescriptor safeScoreDesc{};
@@ -104,7 +80,7 @@ std::optional<std::unique_ptr<REC::GameState>> Game::GameOverState::OnEvent(REC:
 {
 	if (event->IsEvent(Game::EventIds::MarkerSelectedEvent))
 	{
-		uint8_t markIndex = m_pMarkerComponent->GetCurrentIndex();
+		uint8_t markIndex = m_pUIMarker->GetCurrentIndex();
 		switch (markIndex)
 		{
 		case 0:
@@ -122,6 +98,8 @@ void Game::GameOverState::Exit()
 {
 	for (auto* inputBinding : m_InputBindings)
 		GetContext().inputSystem->RemoveInputBinding(inputBinding);
+
+	m_pUIMarker->DeleteInputBindings(GetContext().inputSystem);
 
 	UnsubscribeFromEvent({ Game::EventIds::MarkerSelectedEvent });
 	GetScene()->RemoveAll();

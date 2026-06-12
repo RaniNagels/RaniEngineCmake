@@ -14,7 +14,7 @@
 #include <iostream>
 
 #include "Ids.h"
-#include "States/GameStates.h"
+#include "States/GameStates/MainMenuState.h"
 
 namespace fs = std::filesystem;
 
@@ -24,7 +24,7 @@ static void load(REC::IEngine* engine)
 	REC::EngineSettings engineData{};
 	engineData.frameRate = uint8_t(60);
 	engineData.windowTitle = "Bomberman";
-	engineData.windowWidth = uint16_t(1000);
+	engineData.windowWidth = uint16_t(1488);
 	engineData.windowHeight = uint16_t(750);
 	engine->SetEngineSettings(engineData);
 	engine->SetGameState(std::make_unique<Game::MainMenuState>(engine->GetContext()));

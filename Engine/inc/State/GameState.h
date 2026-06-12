@@ -7,6 +7,7 @@
 namespace REC
 {
 	class Scene;
+	using SceneId = unsigned int;
 
 	class GameState : public IState, public IListener
 	{
@@ -29,13 +30,13 @@ namespace REC
 		Scene* GetScene() const { return m_pScene; }
 		EngineContext GetContext() const { return m_Context; }
 
-		// can only be set once!
-		void SetScene(Scene* scene) { if (!m_IsSceneSet) m_pScene = scene; m_IsSceneSet = true; }
+		Scene* CreateScene(SceneId id);
+		//// can only be set once!
+		//void SetScene(Scene* scene) { if (!m_IsSceneSet) m_pScene = scene; m_IsSceneSet = true; }
 
 	private:
 		virtual std::optional<std::unique_ptr<REC::IState>> Update(float) final override { return {}; };
 
-		bool m_IsSceneSet{ false };
 		Scene* m_pScene{ nullptr };
 		EngineContext m_Context{ nullptr };
 

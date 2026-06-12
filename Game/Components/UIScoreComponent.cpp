@@ -10,6 +10,7 @@ Game::UIScoreComponent::UIScoreComponent(REC::GameObject* owner, const REC::Labe
 
 void Game::UIScoreComponent::Notify(REC::Event* event)
 {
+	//TODO
 	if (event->IsEvent(Game::EventIds::HasPlaceBombEvent))
 	{
 		auto* eventArgs = dynamic_cast<REC::GameObjectEventArgs*>(event->GetArgs());

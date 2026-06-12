@@ -35,6 +35,8 @@ set(SOURCE_FILES
     "src/Sound/SDL_SoundSystem.cpp"
     "src/Sound/SDL_Sound.cpp"
 
+    "src/State/GameState.cpp"
+
     "src/Events/EventSystem.cpp"
     "src/Events/Event.cpp"
     "src/Events/EventBroadcaster.cpp"

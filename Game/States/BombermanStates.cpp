@@ -60,28 +60,41 @@ Game::BombermanIdleState::BombermanIdleState(REC::GameObject* owner)
 
 Game::BombermanIdleState::~BombermanIdleState()
 {
-	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent") });
+	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent"), REC::EventIds::LostLive });
 }
 
 void Game::BombermanIdleState::Notify(REC::Event* event)
 {
-	MoveEventArgs* args = dynamic_cast<MoveEventArgs*>(event->GetArgs());
-	if (args == nullptr) return;
-	if (args->actor != GetGameObject()) return;
-	m_HasBeenNotified = true;
-	m_Direction = args->direction;
+	if (event->IsEvent(REC::EventIds::LostLive))
+	{
+		REC::GameObjectEventArgs* args = dynamic_cast<REC::GameObjectEventArgs*>(event->GetArgs());
+		if (args == nullptr) return;
+		if (args->sender != GetGameObject()) return;
+
+		m_DeathNotified = true;
+		return;
+	}
+	else if (!event->IsEvent(REC::make_sdbm_hash("MoveEvent")))
+	{
+		MoveEventArgs* args = dynamic_cast<MoveEventArgs*>(event->GetArgs());
+		if (args == nullptr) return;
+		if (args->actor != GetGameObject()) return;
+
+		m_HasBeenNotified = true;
+		m_Direction = args->direction;
+	}
 }
 
 void Game::BombermanIdleState::Enter()
 {
 	m_pAnimatedSpriteComponent->StopAnimation();
 	m_pAnimatedSpriteComponent->ResetAnimation();
-	SubscribeToEvent({ REC::make_sdbm_hash("MoveEvent") });
+	SubscribeToEvent({ REC::make_sdbm_hash("MoveEvent"), REC::EventIds::LostLive });
 }
 
 std::optional<std::unique_ptr<REC::IState>> Game::BombermanIdleState::Update(float)
 {
-	if (!m_pLivesComponent->HasLivesLeft())
+	if (!m_pLivesComponent->HasLivesLeft() || m_DeathNotified)
 		return std::make_unique<BombermanDeadState>(GetGameObject());
 
 	if (m_HasBeenNotified)
@@ -111,7 +124,7 @@ Game::BombermanWalkingState::BombermanWalkingState(REC::GameObject* owner, glm::
 
 Game::BombermanWalkingState::~BombermanWalkingState()
 {
-	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent") });
+	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent"), REC::EventIds::LostLive });
 }
 
 void Game::BombermanWalkingState::Notify(REC::Event* event)
@@ -120,22 +133,31 @@ void Game::BombermanWalkingState::Notify(REC::Event* event)
 	if (args == nullptr) return;
 	if (args->actor != GetGameObject()) return;
 
-	m_HasBeenNotified = true;
-	if (m_Direction == args->direction) return; 
+	if (event->IsEvent(REC::EventIds::LostLive))
+	{
+		m_DeathNotified = true;
+		return;
+	}
+	else if (!event->IsEvent(REC::make_sdbm_hash("MoveEvent")))
+	{
+		m_HasBeenNotified = true;
+		if (m_Direction == args->direction) return;
 
-	m_ChangedDirection = true;
-	m_Direction = args->direction;
+		m_ChangedDirection = true;
+		m_Direction = args->direction;
+	}
 }
 
 
 void Game::BombermanWalkingState::Enter()
 {
+	SubscribeToEvent({ REC::make_sdbm_hash("MoveEvent"), REC::EventIds::LostLive });
 	ChangeAnimation(m_AnimationKey);
 }
 
 std::optional<std::unique_ptr<REC::IState>> Game::BombermanWalkingState::Update(float )
 {
-	if (!m_pLivesComponent->HasLivesLeft())
+	if (!m_pLivesComponent->HasLivesLeft() || m_DeathNotified)
 		return std::make_unique<BombermanDeadState>(GetGameObject());
 
 	if (!m_HasBeenNotified)

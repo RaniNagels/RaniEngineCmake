@@ -17,15 +17,10 @@ Game::BombermanCollisionComponent::BombermanCollisionComponent(REC::GameObject* 
 
 void Game::BombermanCollisionComponent::OnCollision(const REC::GameObject* const other)
 {
-	if (other->Is(Game::ObjectIds::Balloom))
+	if (other->Is(Game::ObjectIds::Balloom) || other->Is(Game::ObjectIds::Explosion))
 	{
-		std::cout << "Bomberman collided with a Balloom!" << std::endl;
 		auto* livesComp = GetOwner()->GetComponent<REC::LivesComponent>();
 		livesComp->LostLive();
-	}
-	else if (other->Is(Game::ObjectIds::Bom))
-	{
-		std::cout << "Bomberman collided with a Bomb!" << std::endl;
 	}
 	else if (other->Is(Game::ObjectIds::PickUp))
 	{

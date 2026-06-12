@@ -18,7 +18,7 @@ Game::BalloomFloatingState::BalloomFloatingState(REC::GameObject* owner)
 
 Game::BalloomFloatingState::~BalloomFloatingState()
 {
-	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent") });
+	UnsubscribeFromEvent({ REC::make_sdbm_hash("MoveEvent"), REC::EventIds::LostLive });
 }
 
 void Game::BalloomFloatingState::Enter()
@@ -30,12 +30,12 @@ void Game::BalloomFloatingState::Enter()
 
 	m_pAnimatedSpriteComponent->ChangeAnimation(animation);
 
-	SubscribeToEvent({ REC::make_sdbm_hash("MoveEvent") });
+	SubscribeToEvent({ REC::make_sdbm_hash("MoveEvent"), REC::EventIds::LostLive });
 }
 
 std::optional<std::unique_ptr<REC::IState>> Game::BalloomFloatingState::Update(float)
 {
-	if (!m_pLivesComponent->HasLivesLeft())
+	if (!m_pLivesComponent->HasLivesLeft() || m_DeathNotified)
 		return std::make_unique<BalloomDeadState>(GetGameObject());
 
 	if (m_ChangedDirection)
@@ -62,15 +62,25 @@ void Game::BalloomFloatingState::Exit()
 
 void Game::BalloomFloatingState::Notify(REC::Event* event)
 {
-	MoveEventArgs* args = dynamic_cast<MoveEventArgs*>(event->GetArgs());
-	if (args == nullptr) return;
-	if (args->actor != GetGameObject()) return;
+	if (event->IsEvent(REC::EventIds::LostLive))
+	{
+		REC::GameObjectEventArgs* args = dynamic_cast<REC::GameObjectEventArgs*>(event->GetArgs());
+		if (args == nullptr) return;
+		if (args->sender != GetGameObject()) return;
+		m_DeathNotified = true;
+	}
+	else if (event->IsEvent(REC::make_sdbm_hash("MoveEvent")))
+	{
+		MoveEventArgs* args = dynamic_cast<MoveEventArgs*>(event->GetArgs());
+		if (args == nullptr) return;
+		if (args->actor != GetGameObject()) return;
 
-	m_HasBeenNotified = true;
-	if (m_XDirection == args->direction.x) return;
+		m_HasBeenNotified = true;
+		if (m_XDirection == args->direction.x) return;
 
-	m_ChangedDirection = true;
-	m_XDirection = args->direction.x;
+		m_ChangedDirection = true;
+		m_XDirection = args->direction.x;
+	}
 }
 
 Game::BalloomDeadState::BalloomDeadState(REC::GameObject* owner)

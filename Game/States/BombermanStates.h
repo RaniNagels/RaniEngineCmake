@@ -53,6 +53,7 @@ namespace Game
 		virtual void Exit() override;
 
 	private:
+		bool m_DeathNotified{ false };
 		bool m_HasBeenNotified{ false };
 		glm::vec2 m_Direction{};
 		REC::AnimatedSpriteComponent* m_pAnimatedSpriteComponent{ nullptr };
@@ -80,6 +81,7 @@ namespace Game
 		std::string GetAnimationKey(glm::vec2 dir) const;
 		void ChangeAnimation(const std::string& key);
 
+		bool m_DeathNotified{ false };
 		bool m_HasBeenNotified{ false };
 		bool m_ChangedDirection{ false };
 		std::string m_AnimationKey{};

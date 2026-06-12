@@ -1,6 +1,8 @@
 #pragma once
 #include <Components/Component.h>
 #include <glm/glm.hpp>
+#include <Components/IListener.h>
+#include <memory>
 
 namespace REC
 {
@@ -23,11 +25,11 @@ namespace Game
 		REC::Scene* scene{ nullptr };
 	};
 
-	class BombComponent final : public REC::Component
+	class BombComponent final : public REC::Component, public REC::IListener
 	{
 	public:
 		explicit BombComponent(REC::GameObject* owner, const BombDescriptor& descriptor);
-		~BombComponent() = default;
+		~BombComponent();
 
 		BombComponent(const BombComponent& other) = delete;
 		BombComponent(BombComponent&& other) = delete;
@@ -38,6 +40,8 @@ namespace Game
 		void Detonate(); // can also be called by the player when in possession of a powerup
 		void Reset(); // for reuse of bomb objects in allocator pools
 
+		virtual void Notify(REC::Event* event) override;
+
 	private:
 		glm::uvec4 GetExplosionRange() const; // left, top, right, bottom
 		void CreateExplosionInCell(REC::Scene* scene, REC::GameObject* root, glm::vec2 offset, bool end = false);
@@ -45,6 +49,8 @@ namespace Game
 		const BombDescriptor m_Descriptor;
 		REC::AnimatedSpriteComponent* m_pAnimatedSpriteComponent{ nullptr };
 		REC::SpriteRenderComponent* m_pSpriteRenderComponent{ nullptr };
+
+		std::unique_ptr<REC::Event> m_pDetonateEvent{ nullptr };
 
 		float m_Timer{0.f};
 		const float m_LifeTime{ 2.f };
