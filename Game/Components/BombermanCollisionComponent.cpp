@@ -19,7 +19,9 @@ Game::BombermanCollisionComponent::BombermanCollisionComponent(REC::GameObject* 
 
 void Game::BombermanCollisionComponent::OnCollision(const REC::GameObject* const other)
 {
-	if (other->Is(Game::ObjectIds::Balloom) || other->Is(Game::ObjectIds::Explosion))
+	if (other->Is(ObjectIds::Balloom) || other->Is(ObjectIds::Explosion)
+		|| other->Is(ObjectIds::Doll) || other->Is(ObjectIds::Minvo)
+		|| other->Is(ObjectIds::Oneal))
 	{
 		auto* livesComp = GetOwner()->GetComponent<REC::LivesComponent>();
 		livesComp->LostLive();

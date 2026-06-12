@@ -40,6 +40,7 @@ namespace Game
 		void EnablePlayers();
 
 		void CreateSoftBlock(uint8_t row, uint8_t col);
+		void CreateEnemy(uint8_t row, uint8_t col, std::string type);
 
 		REC::GameObject* m_pGridObject{ nullptr };
 		std::vector<std::unique_ptr<Player>> m_Players{};

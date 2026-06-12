@@ -33,6 +33,9 @@ namespace Game
 		constexpr REC::ObjectId Grid = REC::make_sdbm_hash("Grid");
 		constexpr REC::ObjectId Bomberman = REC::make_sdbm_hash("Bomberman");
 		constexpr REC::ObjectId Balloom = REC::make_sdbm_hash("Balloom");
+		constexpr REC::ObjectId Oneal = REC::make_sdbm_hash("Oneal");
+		constexpr REC::ObjectId Doll = REC::make_sdbm_hash("Doll");
+		constexpr REC::ObjectId Minvo = REC::make_sdbm_hash("Minvo");
 		constexpr REC::ObjectId Bom = REC::make_sdbm_hash("Bom");
 		constexpr REC::ObjectId Explosion = REC::make_sdbm_hash("Explosion");
 		constexpr REC::ObjectId PickUp = REC::make_sdbm_hash("PickUp");

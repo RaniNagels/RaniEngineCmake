@@ -2,4 +2,6 @@
 
 Game::BombermanComponent::BombermanComponent(REC::GameObject* owner)
 	: Component(owner)
-{}
+{
+}
+

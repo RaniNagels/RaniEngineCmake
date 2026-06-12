@@ -76,7 +76,7 @@ void Game::SoftBlockComponent::CreateDoor(GridComponent* grid, uint8_t row, uint
 	REC::CollisionDescriptor doorCollisionDesc{};
 	doorCollisionDesc.collisionType = REC::CollisionType::Static;
 	doorCollisionDesc.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ 0.f, 0.f, float(grid->GetCellSize().x), float(grid->GetCellSize().y) }, false });
-	door->AddCollisionComponent<DoorCollisionComponent>(doorCollisionDesc);
+	door->AddCollisionComponent<DoorCollisionComponent>(doorCollisionDesc, m_pScene);
 }
 
 void Game::SoftBlockComponent::CreatePowerUp(GridComponent* grid, uint8_t row, uint8_t col)

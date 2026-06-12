@@ -34,6 +34,7 @@ set(SOURCE_FILES
     "Components/DoorCollisionComponent.cpp"
     "Components/SoftBlockComponent.cpp"
     "Components/BombermanComponent.cpp"
+    "Components/EnemyMovementComponent.cpp"
 
     "States/BombermanStates.cpp"
     "States/BalloomStates.cpp"

@@ -19,6 +19,8 @@
 #include "../../Components/SoftBlockComponent.h"
 #include <Input/InputSystem.h>
 #include <Input/InputAction.h>
+#include "../../Components/BalloomCollisionComponent.h"
+#include "../../Components/EnemyMovementComponent.h"
 
 #ifdef _DEBUG
 #include "../../Components/DebugGridRenderComponent.h"
@@ -90,7 +92,20 @@ std::optional<std::unique_ptr<REC::GameState>> Game::LevelState::OnEvent(REC::Ev
 {
 	if (event->IsEvent(REC::EventIds::LostLive)) // freese level
 	{
-		DisablePlayers();
+		// check if the event comes from the players
+		auto* args = event->GetArgs();
+		auto* gameObjectArgs = static_cast<REC::GameObjectEventArgs*>(args);
+		if (gameObjectArgs && gameObjectArgs->sender)
+		{
+			for (auto& player : m_Players)
+			{
+				if (player->Get() == gameObjectArgs->sender)
+				{
+					DisablePlayers();
+					break;
+				}
+			}
+		}
 	}
 	else if (event->IsEvent(Game::EventIds::VeryDeathEvent)) // reset level OR Game over
 	{
@@ -236,6 +251,27 @@ void Game::LevelState::LoadLevel()
 		auto* softBlockComp = softBlocks[pickupIndex.first]->GetComponent<SoftBlockComponent>();
 		playfield->ModifyCell(softBlockComp->GetRow(), softBlockComp->GetCol(), true, false, true, pickupType);
 	}
+
+	// delete enemies
+	std::vector<REC::GameObject*> enemies = GetScene()->GetGameObjects(ObjectIds::Balloom);
+	for (auto* enemy : enemies)
+		enemy->Destroy();
+
+	enemies = GetScene()->GetGameObjects(ObjectIds::Oneal);
+	for (auto* enemy : enemies)
+		enemy->Destroy();
+	
+	enemies = GetScene()->GetGameObjects(ObjectIds::Doll);
+	for (auto* enemy : enemies)
+		enemy->Destroy();
+
+	enemies = GetScene()->GetGameObjects(ObjectIds::Minvo);
+	for (auto* enemy : enemies)
+		enemy->Destroy();
+
+	auto enemyPositions = levelInfo->enemies;
+	for (const auto& enemyPos : enemyPositions)
+		CreateEnemy(enemyPos.first.first, enemyPos.first.second, enemyPos.second);
 }
 
 void Game::LevelState::DisablePlayers()
@@ -318,4 +354,62 @@ void Game::LevelState::CreateSoftBlock(uint8_t col, uint8_t row)
 	softBlock->AddCollisionComponent<REC::CollisionComponent>(softBlockCollisionDesc);
 	softBlock->AddComponent<REC::RigidBodyComponent>();
 	softBlock->AddComponent<SoftBlockComponent>(GetScene(), row, col);
+}
+
+void Game::LevelState::CreateEnemy(uint8_t col, uint8_t row, std::string type)
+{
+	auto* grid = m_pGridObject->GetComponent<Game::GridComponent>();
+	auto position = grid->GetAbsoluteCellPosition(row, col);
+	position += grid->GetCellSize() / 2.f; // to center the enemy in the cell
+
+	REC::GameObjectDescriptor enemyDesc{};
+	enemyDesc.renderLayer = Util::to_underlying(Game::RenderLayer::Enemies);
+	enemyDesc.startPosX = position.x;
+	enemyDesc.startPosY = position.y;
+
+	REC::SpriteDescriptor enemySpriteDesc{};
+	enemySpriteDesc.drawHeight = uint16_t(grid->GetCellSize().y);
+	enemySpriteDesc.drawWidth = uint16_t(grid->GetCellSize().x);
+	enemySpriteDesc.textureKey = "generalSprites";
+	enemySpriteDesc.frameDataFileKey = "characterData";
+	enemySpriteDesc.drawPointX = 0.5f;
+	enemySpriteDesc.drawPointY = 0.5f;
+
+	float speed = 100.f; // default speed
+	if (type == "Balloom")
+	{
+		enemyDesc.id = Game::ObjectIds::Balloom;
+		enemySpriteDesc.frameKey = "balloom_look_right_0";
+	}
+	else if (type == "Oneal")
+	{
+		enemyDesc.id = Game::ObjectIds::Oneal;
+		enemySpriteDesc.frameKey = "Oneal";
+		speed = 150.f;
+	}
+	else if (type == "Doll")
+	{
+		enemyDesc.id = Game::ObjectIds::Doll;
+		enemySpriteDesc.frameKey = "Doll";
+		speed = 150.f;
+	}
+	else if (type == "Minvo")
+	{
+		enemyDesc.id = Game::ObjectIds::Minvo;
+		enemySpriteDesc.frameKey = "Minvo";
+		speed = 200.f;
+	}
+
+	auto* enemy = GetScene()->CreateGameObject(enemyDesc);
+	enemy->AddComponent<REC::SpriteRenderComponent>(enemySpriteDesc);
+	
+	REC::CollisionDescriptor enemyCollisionDesc{};
+	enemyCollisionDesc.collisionType = REC::CollisionType::Dynamic;
+	enemyCollisionDesc.bounds.emplace_back(REC::CollisionBound{ REC::Rect{ -18.f, -18.f, 36.f, 36.f }, true }); // centered on the enemy
+	enemy->AddCollisionComponent<BalloomCollisionComponent>(enemyCollisionDesc);
+#ifdef _DEBUG
+	enemy->AddComponent<Game::DebugBoundsRenderComponent>(REC::Color{ 255,50,0 });
+#endif // DEBUG
+	enemy->AddComponent<EnemyMovementComponent>(grid, GetScene(), speed);
+	enemy->AddComponent<REC::LivesComponent>(1);
 }
