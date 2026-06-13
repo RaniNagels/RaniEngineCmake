@@ -41,6 +41,8 @@ public:
 		if (!m_pTrack || !m_pAudio)
 			throw std::runtime_error("Audio not loaded or mixer not set.");
 
+		m_Volume = std::clamp(volume, 0.f, 1.f);
+
 		MIX_SetTrackAudio(m_pTrack, m_pAudio);
 		MIX_SetTrackLoops(m_pTrack, loops);
 		MIX_SetTrackGain(m_pTrack, volume);
@@ -61,10 +63,18 @@ public:
 		return MIX_TrackPlaying(m_pTrack);
 	}
 
+	void Mute(bool mute) const
+	{
+		if (!m_pTrack)
+			return;
+		MIX_SetTrackGain(m_pTrack, mute ? 0.f : m_Volume);
+	}
+
 private:
 	const std::string m_FilePath;
 	MIX_Audio* m_pAudio{ nullptr };
 	MIX_Track* m_pTrack{ nullptr };
+	mutable float m_Volume{ 1.f }; // shuss
 };
 
 REC::SDL_Sound::SDL_Sound(const std::string& filePath)
@@ -100,4 +110,9 @@ bool REC::SDL_Sound::IsLoaded() const
 bool REC::SDL_Sound::IsPlaying() const
 {
 	return m_pImpl->IsPlaying();
+}
+
+void REC::SDL_Sound::Mute(bool mute) const
+{
+	m_pImpl->Mute(mute);
 }

@@ -18,6 +18,7 @@ namespace REC
 		virtual void Play(float volume = 1.f, int loops = 0) const override;
 		virtual bool IsLoaded() const override;
 		virtual bool IsPlaying() const override;
+		virtual void Mute(bool mute) const override;
 
 	private:
 		class Impl;

@@ -60,6 +60,9 @@ void Game::MainMenuState::Enter()
 
 	auto* marker = scene->CreateGameObject(markerDesc);
 	marker->AddComponent<REC::SpriteRenderComponent>(markerSpriteDesc);
+
+	auto& SS = REC::ServiceLocator::GetSoundSystem();
+	SS.Play("BackgroundMusic", 0.5f);
 }
 
 std::optional<std::unique_ptr<REC::GameState>> Game::MainMenuState::OnEvent(REC::Event* event)

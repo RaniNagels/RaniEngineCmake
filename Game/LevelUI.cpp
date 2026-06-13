@@ -1,7 +1,6 @@
 #include "LevelUI.h"
 
 #include "Player.h"
-#include "States/GameStates.h"
 #include "Ids.h"
 #include "RenderLayers.h"
 #include "Components/UILivesComponent.h"

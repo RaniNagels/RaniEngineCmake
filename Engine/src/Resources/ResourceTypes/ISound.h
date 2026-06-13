@@ -11,5 +11,6 @@ namespace REC
 		virtual void Play(float volume = 1.f, int loops = 0) const = 0;
 		virtual bool IsLoaded() const = 0;
 		virtual bool IsPlaying() const = 0;
+		virtual void Mute(bool mute) const = 0;
 	};
 }

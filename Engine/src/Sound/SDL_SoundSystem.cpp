@@ -105,7 +105,10 @@ public:
 		m_Muted.store(muted, std::memory_order_relaxed);
 
 		if (muted)
+		{
 			ClearSoundQueue();
+			MIX_StopAllTracks(m_pMixer, Sint64(1000));
+		}
 	}
 
 	void ClearSoundQueue()
