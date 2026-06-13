@@ -1,1 +1,1 @@
-Rani 1200,Liam 750,
+RANI 1200,LIAM 750,

@@ -77,7 +77,7 @@ void Game::PlaceBombCommand::Execute(float)
 	bombCompDesc.lifeTime = 1.3f;
 	bombCompDesc.grid = grid;
 	bombCompDesc.scene = activeScene;
-	int range = 3;
+	int range = 1;
 	if (bomComp)
 	{
 		if (bomComp->HasPickupFlames())

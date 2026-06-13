@@ -94,7 +94,10 @@ void REC::SpriteRenderComponent::Render(const IRenderer* const renderer)
 
 	const Renderer* fullRenderer = static_cast<const Renderer*>(renderer);
 	fullRenderer->RenderTexture(*m_pTexture, src, dst);
+#ifdef _DEBUG
 	fullRenderer->RenderCircle({ 255,0,0 }, transform->GetWorldPosition(), 5.f);
+#endif // _DEBUG
+
 }
 
 void REC::SpriteRenderComponent::SetTexture(Texture2D* texture)

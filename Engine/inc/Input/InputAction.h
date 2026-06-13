@@ -22,7 +22,7 @@ namespace REC
 
 	struct ControllerButtonAction final : public IInputAction
 	{
-		ControllerButtonAction(Input::Controller::Button btn, ButtonState st = ButtonState::Pressed, uint8_t plIdx = -1)
+		ControllerButtonAction(Input::Controller::Button btn, ButtonState st = ButtonState::Pressed, uint8_t plIdx = 0)
 			: button{ btn }, state{ st }, playerIndex{ plIdx }
 		{
 		}

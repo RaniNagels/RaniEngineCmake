@@ -22,6 +22,7 @@ void Game::MainMenuState::Enter()
 
 	m_pStartGameInputBinding = GetContext().inputSystem->CreateInputBinding();
 	m_pStartGameInputBinding->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Return, REC::ButtonState::Up);
+	m_pStartGameInputBinding->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::Gamepad_A, REC::ButtonState::Up);
 	m_pStartGameInputBinding->AddEvent<REC::Event>(EventIds::StartGameEvent);
 
 	SubscribeToEvent({ EventIds::StartGameEvent });

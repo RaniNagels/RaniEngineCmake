@@ -43,15 +43,18 @@ void Game::UIMarker::CreateInputBindings(REC::InputSystem* inputSystem)
 	auto* moveUpMarker = inputSystem->CreateInputBinding();
 	moveUpMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_W, REC::ButtonState::Up);
 	moveUpMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Up, REC::ButtonState::Up);
+	moveUpMarker->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Up, REC::ButtonState::Up);
 	moveUpMarker->AddCommand<Game::MoveMarkerCommand>(m_pMarkerGO, true);
 
 	auto* moveDownMarker = inputSystem->CreateInputBinding();
 	moveDownMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_S, REC::ButtonState::Up);
 	moveDownMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Down, REC::ButtonState::Up);
+	moveDownMarker->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::GamePad_DPad_Down, REC::ButtonState::Up);
 	moveDownMarker->AddCommand<Game::MoveMarkerCommand>(m_pMarkerGO, false);
 
 	auto* selectMarker = inputSystem->CreateInputBinding();
 	selectMarker->AddInputAction<REC::KeyboardButtonAction>(REC::Input::Keyboard::Button::Keyboard_Return, REC::ButtonState::Up);
+	selectMarker->AddInputAction<REC::ControllerButtonAction>(REC::Input::Controller::Button::Gamepad_A, REC::ButtonState::Up);
 	selectMarker->AddEvent<REC::Event>(Game::EventIds::MarkerSelectedEvent);
 
 	m_InputBindings.push_back(moveUpMarker);
