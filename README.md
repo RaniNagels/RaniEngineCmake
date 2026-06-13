@@ -1,10 +1,13 @@
-﻿# Bomberman 
+﻿# RaniEngineCmake
+made by Rani Nagels for the course Programming 4 at Digital Arts and Entertainment, Howest.
+https://raninagels.github.io/RaniEngineCmake/
+
+# Bomberman 
 
 [![CMake](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/cmake.yml)
 [![Emscripten](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/emscripten.yml/badge.svg)](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/emscripten.yml)
 [![pages-build-deployment](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/RaniNagels/RaniEngineCmake/actions/workflows/pages/pages-build-deployment)
 
-https://raninagels.github.io/RaniEngineCmake/
 
 ## Introduction
 
@@ -63,3 +66,27 @@ I use a lot of Vulkan terminology:
 relative paths are avoided in includes, unless the private header is in the same folder as the current private file
 "" does not necessarily mean that the path is relative, but it does mean that this header is private!
 <> only refers to public headers, and will use absolute paths exclusivly.
+
+### CollisionSystem and PhysicsSystem
+a gameObject can have a collision component which will automatically subscribe it to the collision system
+the collision system will check for collisions between gameobjects with a collision component and will call the OnCollisionEnter function of the gameobjects when a collision is detected.
+
+when a gameobject has a rigidbody component, it will automatically subscribe to the physics system.
+the physics system will use the collision component bounds to detect any phisical collisions.
+it will only take the bounds that have not been marked as trigger, and will ignore any collision component that is marked as trigger.
+
+### InputSystem
+the input system has a list of input bindings, which are created by the user.
+inputbindings can contain multiple inputActions, and can be triggered by any of the inputs in the binding.
+inputbindings also take commands and events that will be executed and Broadcasted when the binding is triggered.
+
+### Ids
+gameobjects, scenes, events... are all identified by an Id, which is a simple wrapper around an unsigned int.
+gameobjects do not need to have a unique id, it functions more like a tag for convienince reasons.
+Resources to be followed. They are still identified by a string (for now)
+it allows for easy lookup access. for example you could request all gameobjects with a certain id.
+
+### ResourceManager
+resources are identified by a string, and stored in a map with the string as the key and the resource as the value.
+the game has no knowledge of the resources, it only knows the string identifier, and the resource manager will handle the loading and unloading of the resources.
+the game can only access the resource manager through an Interface and has very limited access to it.
